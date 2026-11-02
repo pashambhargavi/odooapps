@@ -22,7 +22,7 @@ Key Features
     """,
     'author': 'Bhargavi Odoo Labs',
     'maintainer': 'Bhargavi Odoo Labs',
-    'support': 'support@example.com',
+    'website': 'https://github.com/pashambhargavi/odooapps/issues/new/choose',
     'license': 'LGPL-3',
     'price': 49.00,
     'currency': 'USD',
