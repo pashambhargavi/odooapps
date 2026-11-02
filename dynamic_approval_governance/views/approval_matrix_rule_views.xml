@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="approval_matrix_rule_view_search" model="ir.ui.view">
+        <field name="name">approval.matrix.rule.search</field>
+        <field name="model">approval.matrix.rule</field>
+        <field name="arch" type="xml">
+            <search string="Search Matrix Rules">
+                <field name="name"/>
+                <field name="target_model"/>
+                <filter string="Sales Orders" name="filter_sale" domain="[('target_model', '=', 'sale_order')]"/>
+                <filter string="Purchase Orders" name="filter_purchase" domain="[('target_model', '=', 'purchase_order')]"/>
+                <filter string="Customer Invoices" name="filter_out_invoice" domain="[('target_model', '=', 'out_invoice')]"/>
+                <filter string="Vendor Bills" name="filter_in_invoice" domain="[('target_model', '=', 'in_invoice')]"/>
+                <separator/>
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                <group>
+                    <filter string="Target Document" name="group_target" context="{'group_by': 'target_model'}"/>
+                    <filter string="Company" name="group_company" context="{'group_by': 'company_id'}" groups="base.group_multi_company"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="approval_matrix_rule_view_list" model="ir.ui.view">
+        <field name="name">approval.matrix.rule.list</field>
+        <field name="model">approval.matrix.rule</field>
+        <field name="arch" type="xml">
+            <list string="Dynamic Approval Matrix Rules">
+                <field name="sequence" widget="handle"/>
+                <field name="name" decoration-bf="1"/>
+                <field name="target_model" widget="badge"
+                       decoration-info="target_model == 'sale_order'"
+                       decoration-primary="target_model == 'purchase_order'"
+                       decoration-success="target_model == 'out_invoice'"
+                       decoration-warning="target_model == 'in_invoice'"/>
+                <field name="amount_basis"/>
+                <field name="min_amount" widget="monetary"/>
+                <field name="max_amount" widget="monetary"/>
+                <field name="currency_id" column_invisible="True"/>
+                <field name="check_discount_limit" optional="show"/>
+                <field name="max_discount_percent" optional="show"/>
+                <field name="enforce_sequential"/>
+                <field name="auto_confirm_on_approve"/>
+                <field name="company_id" groups="base.group_multi_company" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="approval_matrix_rule_view_form" model="ir.ui.view">
+        <field name="name">approval.matrix.rule.form</field>
+        <field name="model">approval.matrix.rule</field>
+        <field name="arch" type="xml">
+            <form string="Approval Matrix Rule">
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+                    <field name="active" invisible="1"/>
+                    <div class="oe_title">
+                        <label for="name" string="Matrix Rule Name"/>
+                        <h1>
+                            <field name="name" placeholder="e.g. High-Value Purchase Governance (&gt; $5,000)"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Target &amp; Threshold Conditions">
+                            <field name="target_model"/>
+                            <field name="amount_basis"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="min_amount" widget="monetary"/>
+                            <field name="max_amount" widget="monetary"/>
+                            <field name="check_discount_limit" invisible="target_model != 'sale_order'"/>
+                            <field name="max_discount_percent" invisible="target_model != 'sale_order' or not check_discount_limit"/>
+                        </group>
+                        <group string="Execution Behavior">
+                            <field name="sequence"/>
+                            <field name="enforce_sequential"/>
+                            <field name="auto_confirm_on_approve"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Multi-Level Approval Tiers" name="tiers">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="tier_name" placeholder="e.g. Tier 1 - Department Head"/>
+                                    <field name="approver_ids" widget="many2many_avatar_user"/>
+                                    <field name="minimum_approvals"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="approval_document_step_view_list" model="ir.ui.view">
+        <field name="name">approval.document.step.list</field>
+        <field name="model">approval.document.step</field>
+        <field name="arch" type="xml">
+            <list string="Document Approval Queue" create="0" edit="0"
+                  decoration-warning="status == 'pending'"
+                  decoration-success="status == 'approved'"
+                  decoration-danger="status == 'rejected'">
+                <field name="sequence"/>
+                <field name="tier_name" decoration-bf="1"/>
+                <field name="rule_id"/>
+                <field name="sale_order_id" optional="show"/>
+                <field name="purchase_order_id" optional="show"/>
+                <field name="move_id" optional="show"/>
+                <field name="approver_ids" widget="many2many_avatar_user"/>
+                <field name="approved_user_ids" widget="many2many_avatar_user"/>
+                <field name="minimum_approvals"/>
+                <field name="status" widget="badge"
+                       decoration-info="status == 'waiting'"
+                       decoration-warning="status == 'pending'"
+                       decoration-success="status == 'approved'"
+                       decoration-danger="status == 'rejected'"/>
+                <field name="action_date"/>
+                <field name="note" optional="show"/>
+                <button name="action_open_source_document" string="Open Document" type="object" icon="fa-external-link" class="btn-link"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="approval_document_step_view_form" model="ir.ui.view">
+        <field name="name">approval.document.step.form</field>
+        <field name="model">approval.document.step</field>
+        <field name="arch" type="xml">
+            <form string="Document Approval Tier" create="0" edit="0">
+                <header>
+                    <button name="action_open_source_document" string="Open Source Document" type="object" class="btn-primary" icon="fa-external-link"/>
+                    <field name="status" widget="statusbar" statusbar_visible="waiting,pending,approved,rejected"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Tier Details">
+                            <field name="tier_name"/>
+                            <field name="sequence"/>
+                            <field name="rule_id"/>
+                            <field name="minimum_approvals"/>
+                        </group>
+                        <group string="Linked Document">
+                            <field name="sale_order_id" invisible="not sale_order_id"/>
+                            <field name="purchase_order_id" invisible="not purchase_order_id"/>
+                            <field name="move_id" invisible="not move_id"/>
+                            <field name="action_date"/>
+                            <field name="note" invisible="not note"/>
+                        </group>
+                    </group>
+                    <group string="Approvers">
+                        <field name="approver_ids" widget="many2many_avatar_user"/>
+                        <field name="approved_user_ids" widget="many2many_avatar_user"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="approval_document_step_view_search" model="ir.ui.view">
+        <field name="name">approval.document.step.search</field>
+        <field name="model">approval.document.step</field>
+        <field name="arch" type="xml">
+            <search string="Search Document Approvals">
+                <field name="tier_name"/>
+                <field name="rule_id"/>
+                <field name="sale_order_id"/>
+                <field name="purchase_order_id"/>
+                <field name="move_id"/>
+                <filter string="My Pending Tiers" name="my_pending_tiers"
+                        domain="[('status', '=', 'pending'), ('approver_ids', 'in', [uid])]"/>
+                <filter string="Pending" name="filter_pending" domain="[('status', '=', 'pending')]"/>
+                <filter string="Approved" name="filter_approved" domain="[('status', '=', 'approved')]"/>
+                <filter string="Rejected" name="filter_rejected" domain="[('status', '=', 'rejected')]"/>
+                <group>
+                    <filter string="Matched Rule" name="group_rule" context="{'group_by': 'rule_id'}"/>
+                    <filter string="Status" name="group_status" context="{'group_by': 'status'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="approval_matrix_rule_action" model="ir.actions.act_window">
+        <field name="name">Dynamic Matrix Rules</field>
+        <field name="res_model">approval.matrix.rule</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="approval_document_step_action_queue" model="ir.actions.act_window">
+        <field name="name">Document Approval Queue</field>
+        <field name="res_model">approval.document.step</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_my_pending_tiers': 1}</field>
+    </record>
+</odoo>

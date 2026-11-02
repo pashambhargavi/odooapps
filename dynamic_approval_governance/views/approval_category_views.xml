@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="approval_category_view_kanban" model="ir.ui.view">
+        <field name="name">approval.category.kanban</field>
+        <field name="model">approval.category</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_dashboard" create="0" sample="1">
+                <field name="name"/>
+                <field name="description"/>
+                <field name="color"/>
+                <field name="request_to_validate_count"/>
+                <field name="request_total_count"/>
+                <templates>
+                    <t t-name="card" t-attf-class="oe_kanban_color_#{kanban_getcolor(record.color.raw_value)}">
+                        <div class="d-flex flex-column justify-content-between h-100 p-2">
+                            <div>
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h4 class="fw-bold mb-0">
+                                        <field name="name"/>
+                                    </h4>
+                                    <span t-if="record.request_to_validate_count.raw_value &gt; 0"
+                                          class="badge text-bg-warning">
+                                        <field name="request_to_validate_count"/> to review
+                                    </span>
+                                </div>
+                                <p class="text-muted small mb-3" t-if="record.description.raw_value">
+                                    <field name="description"/>
+                                </p>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mt-2 pt-2 border-top">
+                                <button name="create_request" type="object" class="btn btn-primary btn-sm">
+                                    New Request
+                                </button>
+                                <span class="text-muted small">
+                                    Total: <field name="request_total_count"/>
+                                </span>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="approval_category_view_list" model="ir.ui.view">
+        <field name="name">approval.category.list</field>
+        <field name="model">approval.category</field>
+        <field name="arch" type="xml">
+            <list string="Approval Categories">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="approval_minimum"/>
+                <field name="enforce_sequential"/>
+                <field name="request_to_validate_count"/>
+                <field name="company_id" groups="base.group_multi_company" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="approval_category_view_form" model="ir.ui.view">
+        <field name="name">approval.category.form</field>
+        <field name="model">approval.category</field>
+        <field name="arch" type="xml">
+            <form string="Approval Category">
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+                    <field name="active" invisible="1"/>
+                    <field name="image" widget="image" class="oe_avatar"/>
+                    <div class="oe_title">
+                        <label for="name" string="Category Name"/>
+                        <h1>
+                            <field name="name" placeholder="e.g. Business Travel Request"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="General Settings">
+                            <field name="sequence"/>
+                            <field name="color" widget="color_picker"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group string="Approval Policy">
+                            <field name="approval_minimum"/>
+                            <field name="enforce_sequential"/>
+                            <field name="manager_approval"/>
+                        </group>
+                    </group>
+                    <field name="description" placeholder="Describe when employees should use this approval category..."/>
+                    <notebook>
+                        <page string="Form Fields &amp; Options" name="options">
+                            <group string="Dynamic Request Fields">
+                                <group>
+                                    <field name="has_date" widget="radio" options="{'horizontal': true}"/>
+                                    <field name="has_period" widget="radio" options="{'horizontal': true}"/>
+                                    <field name="has_product" widget="radio" options="{'horizontal': true}"/>
+                                    <field name="has_quantity" widget="radio" options="{'horizontal': true}"/>
+                                    <field name="has_amount" widget="radio" options="{'horizontal': true}"/>
+                                </group>
+                                <group>
+                                    <field name="has_reference" widget="radio" options="{'horizontal': true}"/>
+                                    <field name="has_partner" widget="radio" options="{'horizontal': true}"/>
+                                    <field name="has_payment_method" widget="radio" options="{'horizontal': true}"/>
+                                    <field name="has_location" widget="radio" options="{'horizontal': true}"/>
+                                    <field name="requirer_document" widget="radio" options="{'horizontal': true}"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Default Approvers" name="approvers">
+                            <field name="approver_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="role_title" placeholder="e.g. Level 1 - Line Manager"/>
+                                    <field name="user_id" widget="many2one_avatar_user"/>
+                                    <field name="required"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="approval_category_action_dashboard" model="ir.actions.act_window">
+        <field name="name">Approval Dashboard</field>
+        <field name="res_model">approval.category</field>
+        <field name="view_mode">kanban,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No approval categories found
+            </p>
+            <p>
+                Configure approval categories to let your team submit structured approval requests.
+            </p>
+        </field>
+    </record>
+
+    <record id="approval_category_action_config" model="ir.actions.act_window">
+        <field name="name">Approval Categories</field>
+        <field name="res_model">approval.category</field>
+        <field name="view_mode">list,form,kanban</field>
+    </record>
+</odoo>

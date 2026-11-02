@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="purchase_order_form_inherit_approval_matrix" model="ir.ui.view">
+        <field name="name">purchase.order.form.inherit.approval.matrix</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <field name="approval_state" invisible="1"/>
+                <field name="is_current_matrix_approver" invisible="1"/>
+                <button name="action_approve_matrix" string="Approve PO Tier" type="object"
+                        class="btn-success" invisible="not is_current_matrix_approver"/>
+                <button name="action_open_reject_wizard" string="Reject Approval" type="object"
+                        class="btn-danger" invisible="not is_current_matrix_approver"/>
+                <button name="action_reset_approval" string="Reset Approval" type="object"
+                        invisible="approval_state not in ('pending', 'rejected')"/>
+            </xpath>
+            <xpath expr="//sheet" position="before">
+                <div class="alert alert-info" role="alert" invisible="approval_state != 'pending'">
+                    <i class="fa fa-shield me-2" title="Approval Pending"/>
+                    <strong>Waiting for Multi-Level Approval:</strong>
+                    This Purchase Order matched governance rule <field name="approval_rule_id" readonly="1" class="fw-bold d-inline"/>.
+                </div>
+                <div class="alert alert-danger" role="alert" invisible="approval_state != 'rejected'">
+                    <i class="fa fa-times-circle me-2" title="Approval Rejected"/>
+                    <strong>Approval Rejected:</strong> <field name="rejection_reason" class="d-inline"/>
+                </div>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="Approval Matrix" name="approval_matrix" invisible="approval_state == 'not_required' and not approval_step_ids">
+                    <group>
+                        <group>
+                            <field name="approval_state" widget="badge"
+                                   decoration-info="approval_state == 'not_required'"
+                                   decoration-warning="approval_state == 'pending'"
+                                   decoration-success="approval_state == 'approved'"
+                                   decoration-danger="approval_state == 'rejected'"/>
+                            <field name="approval_rule_id"/>
+                        </group>
+                        <group>
+                            <field name="rejection_reason" invisible="not rejection_reason"/>
+                        </group>
+                    </group>
+                    <field name="approval_step_ids" readonly="1">
+                        <list decoration-warning="status == 'pending'"
+                              decoration-success="status == 'approved'"
+                              decoration-danger="status == 'rejected'">
+                            <field name="sequence"/>
+                            <field name="tier_name"/>
+                            <field name="approver_ids" widget="many2many_avatar_user"/>
+                            <field name="approved_user_ids" widget="many2many_avatar_user"/>
+                            <field name="minimum_approvals"/>
+                            <field name="status" widget="badge"
+                                   decoration-info="status == 'waiting'"
+                                   decoration-warning="status == 'pending'"
+                                   decoration-success="status == 'approved'"
+                                   decoration-danger="status == 'rejected'"/>
+                            <field name="action_date"/>
+                            <field name="note"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

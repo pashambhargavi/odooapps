@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="approval_request_view_search" model="ir.ui.view">
+        <field name="name">approval.request.search</field>
+        <field name="model">approval.request</field>
+        <field name="arch" type="xml">
+            <search string="Search Approval Requests">
+                <field name="name" filter_domain="['|', ('name', 'ilike', self), ('reference_code', 'ilike', self)]"/>
+                <field name="reference_code"/>
+                <field name="request_owner_id"/>
+                <field name="category_id"/>
+                <field name="partner_id"/>
+                <filter string="My Requests" name="my_requests" domain="[('request_owner_id', '=', uid)]"/>
+                <filter string="To Approve by Me" name="to_approve_by_me"
+                        domain="[('approver_ids.user_id', '=', uid), ('approver_ids.status', '=', 'pending'), ('request_status', '=', 'pending')]"/>
+                <separator/>
+                <filter string="To Submit" name="filter_new" domain="[('request_status', '=', 'new')]"/>
+                <filter string="Submitted / Pending" name="filter_pending" domain="[('request_status', '=', 'pending')]"/>
+                <filter string="Approved" name="filter_approved" domain="[('request_status', '=', 'approved')]"/>
+                <filter string="Refused" name="filter_refused" domain="[('request_status', '=', 'refused')]"/>
+                <group>
+                    <filter string="Request Owner" name="group_owner" context="{'group_by': 'request_owner_id'}"/>
+                    <filter string="Category" name="group_category" context="{'group_by': 'category_id'}"/>
+                    <filter string="Status" name="group_status" context="{'group_by': 'request_status'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="approval_request_view_list" model="ir.ui.view">
+        <field name="name">approval.request.list</field>
+        <field name="model">approval.request</field>
+        <field name="arch" type="xml">
+            <list string="Approval Requests" sample="1"
+                  decoration-info="request_status == 'new'"
+                  decoration-warning="request_status == 'pending'"
+                  decoration-success="request_status == 'approved'"
+                  decoration-danger="request_status == 'refused'"
+                  decoration-muted="request_status == 'cancel'">
+                <field name="priority" widget="priority" nolabel="1"/>
+                <field name="reference_code" decoration-bf="1"/>
+                <field name="name"/>
+                <field name="request_owner_id" widget="many2one_avatar_user"/>
+                <field name="category_id"/>
+                <field name="partner_id" optional="show"/>
+                <field name="amount" widget="monetary" sum="Total Amount" optional="show"/>
+                <field name="currency_id" column_invisible="True"/>
+                <field name="date_confirmed" optional="show"/>
+                <field name="activity_ids" widget="list_activity" optional="show"/>
+                <field name="request_status" widget="badge"
+                       decoration-info="request_status == 'new'"
+                       decoration-warning="request_status == 'pending'"
+                       decoration-success="request_status == 'approved'"
+                       decoration-danger="request_status == 'refused'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="approval_request_view_kanban" model="ir.ui.view">
+        <field name="name">approval.request.kanban</field>
+        <field name="model">approval.request</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="request_status" class="o_kanban_mobile" sample="1">
+                <field name="reference_code"/>
+                <field name="name"/>
+                <field name="request_owner_id"/>
+                <field name="category_id"/>
+                <field name="amount"/>
+                <field name="currency_id"/>
+                <field name="request_status"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="d-flex justify-content-between align-items-baseline mb-1">
+                            <span class="fw-bold text-primary"><field name="reference_code"/></span>
+                            <field name="priority" widget="priority"/>
+                        </div>
+                        <div class="fw-bolder mb-1">
+                            <field name="name"/>
+                        </div>
+                        <div class="text-muted small mb-2">
+                            <field name="category_id"/>
+                        </div>
+                        <footer class="d-flex justify-content-between align-items-center mt-auto pt-1">
+                            <div class="d-flex align-items-center gap-2">
+                                <field name="request_owner_id" widget="many2one_avatar_user"/>
+                                <field name="activity_ids" widget="kanban_activity"/>
+                            </div>
+                            <field name="amount" widget="monetary" class="fw-bold" invisible="amount == 0"/>
+                        </footer>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="approval_request_view_pivot" model="ir.ui.view">
+        <field name="name">approval.request.pivot</field>
+        <field name="model">approval.request</field>
+        <field name="arch" type="xml">
+            <pivot string="Approval Requests Analysis" sample="1">
+                <field name="category_id" type="row"/>
+                <field name="request_status" type="col"/>
+                <field name="amount" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="approval_request_view_graph" model="ir.ui.view">
+        <field name="name">approval.request.graph</field>
+        <field name="model">approval.request</field>
+        <field name="arch" type="xml">
+            <graph string="Approval Requests Analysis" sample="1">
+                <field name="category_id"/>
+                <field name="amount" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="approval_request_view_form" model="ir.ui.view">
+        <field name="name">approval.request.form</field>
+        <field name="model">approval.request</field>
+        <field name="arch" type="xml">
+            <form string="Approval Request">
+                <header>
+                    <field name="is_current_approver" invisible="1"/>
+                    <field name="user_status" invisible="1"/>
+                    <button name="action_confirm" string="Submit for Approval" type="object"
+                            class="btn-primary" invisible="request_status != 'new'" data-hotkey="q"/>
+                    <button name="action_approve" string="Approve" type="object"
+                            class="btn-success" invisible="not is_current_approver" data-hotkey="v"/>
+                    <button name="action_open_reject_wizard" string="Refuse" type="object"
+                            class="btn-danger" invisible="not is_current_approver" data-hotkey="r"/>
+                    <button name="action_withdraw" string="Reset to Draft" type="object"
+                            invisible="request_status not in ('pending', 'refused', 'cancel')"/>
+                    <button name="action_cancel" string="Cancel" type="object"
+                            invisible="request_status in ('new', 'cancel')"/>
+                    <field name="request_status" widget="statusbar" statusbar_visible="new,pending,approved,refused"/>
+                </header>
+                <div class="alert alert-danger" role="alert" invisible="request_status != 'refused' or not rejection_reason">
+                    <strong>Refusal Reason: </strong> <field name="rejection_reason" class="d-inline"/>
+                </div>
+                <sheet>
+                    <field name="has_date" invisible="1"/>
+                    <field name="has_period" invisible="1"/>
+                    <field name="has_quantity" invisible="1"/>
+                    <field name="has_amount" invisible="1"/>
+                    <field name="has_reference" invisible="1"/>
+                    <field name="has_partner" invisible="1"/>
+                    <field name="has_payment_method" invisible="1"/>
+                    <field name="has_location" invisible="1"/>
+                    <field name="has_product" invisible="1"/>
+                    <field name="requirer_document" invisible="1"/>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_get_attachment_view" type="object"
+                                class="oe_stat_button" icon="fa-book">
+                            <field name="attachment_number" widget="statinfo" string="Documents"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <span class="o_form_label"><field name="reference_code" readonly="1"/></span>
+                        <h1 class="d-flex align-items-center">
+                            <field name="priority" widget="priority" class="me-3"/>
+                            <field name="name" placeholder="e.g. Q4 Client Visit to Mumbai"
+                                   readonly="request_status != 'new'"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="request_owner_id" widget="many2one_avatar_user"
+                                   readonly="request_status != 'new'"/>
+                            <field name="category_id" readonly="request_status != 'new'"/>
+                            <field name="date_confirmed" invisible="not date_confirmed"/>
+                            <field name="date_approved" invisible="not date_approved"/>
+                            <field name="company_id" groups="base.group_multi_company"
+                                   readonly="request_status != 'new'"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="date"
+                                   invisible="has_date == 'no'"
+                                   required="has_date == 'required'"
+                                   readonly="request_status != 'new'"/>
+                            <field name="date_start"
+                                   invisible="has_period == 'no'"
+                                   required="has_period == 'required'"
+                                   readonly="request_status != 'new'"/>
+                            <field name="date_end"
+                                   invisible="has_period == 'no'"
+                                   required="has_period == 'required'"
+                                   readonly="request_status != 'new'"/>
+                            <field name="location"
+                                   invisible="has_location == 'no'"
+                                   required="has_location == 'required'"
+                                   readonly="request_status != 'new'"/>
+                            <field name="partner_id"
+                                   invisible="has_partner == 'no'"
+                                   required="has_partner == 'required'"
+                                   readonly="request_status != 'new'"/>
+                            <field name="amount" widget="monetary"
+                                   invisible="has_amount == 'no'"
+                                   required="has_amount == 'required'"
+                                   readonly="request_status != 'new'"/>
+                            <field name="quantity"
+                                   invisible="has_quantity == 'no'"
+                                   required="has_quantity == 'required'"
+                                   readonly="request_status != 'new'"/>
+                            <field name="reference"
+                                   invisible="has_reference == 'no'"
+                                   required="has_reference == 'required'"
+                                   readonly="request_status != 'new'"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Products / Items" name="products" invisible="has_product == 'no'">
+                            <field name="line_ids" readonly="request_status != 'new'">
+                                <list editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="description"/>
+                                    <field name="quantity"/>
+                                    <field name="product_uom_id" groups="uom.group_uom"/>
+                                    <field name="currency_id" column_invisible="True"/>
+                                    <field name="price_unit"/>
+                                    <field name="price_subtotal" sum="Total"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Description &amp; Justification" name="description">
+                            <field name="reason" placeholder="Provide detailed justification, cost breakdown, or notes for approvers..."
+                                   readonly="request_status != 'new'"/>
+                        </page>
+                        <page string="Approval Chain" name="approvers">
+                            <field name="approver_ids" readonly="request_status != 'new'">
+                                <list editable="bottom"
+                                      decoration-success="status == 'approved'"
+                                      decoration-warning="status == 'pending'"
+                                      decoration-danger="status == 'refused'">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="role_title"/>
+                                    <field name="user_id" widget="many2one_avatar_user"/>
+                                    <field name="required"/>
+                                    <field name="status" widget="badge"
+                                           decoration-info="status in ('new', 'waiting')"
+                                           decoration-warning="status == 'pending'"
+                                           decoration-success="status == 'approved'"
+                                           decoration-danger="status == 'refused'"/>
+                                    <field name="action_date"/>
+                                    <field name="note"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="approval_request_action_my" model="ir.actions.act_window">
+        <field name="name">My Approval Requests</field>
+        <field name="res_model">approval.request</field>
+        <field name="view_mode">list,kanban,form,pivot,graph,activity</field>
+        <field name="context">{'search_default_my_requests': 1}</field>
+    </record>
+
+    <record id="approval_request_action_to_review" model="ir.actions.act_window">
+        <field name="name">Approvals to Review</field>
+        <field name="res_model">approval.request</field>
+        <field name="view_mode">list,kanban,form,pivot,graph,activity</field>
+        <field name="context">{'search_default_to_approve_by_me': 1}</field>
+    </record>
+
+    <record id="approval_request_action_all" model="ir.actions.act_window">
+        <field name="name">All Approval Requests</field>
+        <field name="res_model">approval.request</field>
+        <field name="view_mode">list,kanban,form,pivot,graph,activity</field>
+    </record>
+</odoo>

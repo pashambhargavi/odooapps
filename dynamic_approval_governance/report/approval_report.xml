@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_approval_request" model="ir.actions.report">
+        <field name="name">Approval Certificate</field>
+        <field name="model">approval.request</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">dynamic_approval_governance.report_approval_request_certificate</field>
+        <field name="report_file">dynamic_approval_governance.report_approval_request_certificate</field>
+        <field name="print_report_name">'Approval_Certificate_%s' % (object.reference_code.replace('/', '_'))</field>
+        <field name="binding_model_id" ref="model_approval_request"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="approval_category_data_business_trip" model="approval.category">
+            <field name="name">Business Travel</field>
+            <field name="sequence">10</field>
+            <field name="color">4</field>
+            <field name="description">Request pre-approval for domestic or international business trips, flights, and hotel stays.</field>
+            <field name="has_period">required</field>
+            <field name="has_location">required</field>
+            <field name="has_amount">optional</field>
+            <field name="approval_minimum">1</field>
+            <field name="enforce_sequential" eval="True"/>
+            <field name="approver_ids" eval="[
+                (0, 0, {'sequence': 10, 'user_id': ref('base.user_admin'), 'role_title': 'Operations Manager', 'required': True})
+            ]"/>
+        </record>
+
+        <record id="approval_category_data_expense_reimbursement" model="approval.category">
+            <field name="name">Expense &amp; Reimbursement</field>
+            <field name="sequence">20</field>
+            <field name="color">10</field>
+            <field name="description">Submit out-of-pocket expenses or vendor reimbursements with supporting receipts.</field>
+            <field name="has_date">required</field>
+            <field name="has_amount">required</field>
+            <field name="has_partner">optional</field>
+            <field name="has_reference">optional</field>
+            <field name="requirer_document">optional</field>
+            <field name="approval_minimum">1</field>
+            <field name="enforce_sequential" eval="True"/>
+            <field name="approver_ids" eval="[
+                (0, 0, {'sequence': 10, 'user_id': ref('base.user_admin'), 'role_title': 'Finance Controller', 'required': True})
+            ]"/>
+        </record>
+
+        <record id="approval_category_data_procurement" model="approval.category">
+            <field name="name">Procurement &amp; CapEx Request</field>
+            <field name="sequence">30</field>
+            <field name="color">2</field>
+            <field name="description">Request capital expenditure, IT equipment, or special item purchases before issuing a PO.</field>
+            <field name="has_date">optional</field>
+            <field name="has_amount">required</field>
+            <field name="has_partner">optional</field>
+            <field name="has_product">required</field>
+            <field name="approval_minimum">1</field>
+            <field name="enforce_sequential" eval="True"/>
+            <field name="approver_ids" eval="[
+                (0, 0, {'sequence': 10, 'user_id': ref('base.user_admin'), 'role_title': 'Procurement Head', 'required': True})
+            ]"/>
+        </record>
+
+        <record id="approval_category_data_contract_signoff" model="approval.category">
+            <field name="name">Contract &amp; Legal Sign-Off</field>
+            <field name="sequence">40</field>
+            <field name="color">6</field>
+            <field name="description">Submit vendor or customer contracts, NDAs, and SLAs for management sign-off.</field>
+            <field name="has_partner">required</field>
+            <field name="has_period">optional</field>
+            <field name="has_reference">required</field>
+            <field name="has_amount">optional</field>
+            <field name="approval_minimum">1</field>
+            <field name="enforce_sequential" eval="True"/>
+            <field name="approver_ids" eval="[
+                (0, 0, {'sequence': 10, 'user_id': ref('base.user_admin'), 'role_title': 'Legal &amp; Compliance Reviewer', 'required': True})
+            ]"/>
+        </record>
+
+        <record id="approval_category_data_payment_release" model="approval.category">
+            <field name="name">Special Payment Release</field>
+            <field name="sequence">50</field>
+            <field name="color">3</field>
+            <field name="description">Authorize urgent vendor advance payments, wire transfers, or credit releases.</field>
+            <field name="has_date">required</field>
+            <field name="has_partner">required</field>
+            <field name="has_amount">required</field>
+            <field name="has_reference">optional</field>
+            <field name="approval_minimum">1</field>
+            <field name="enforce_sequential" eval="True"/>
+            <field name="approver_ids" eval="[
+                (0, 0, {'sequence': 10, 'user_id': ref('base.user_admin'), 'role_title': 'Finance Director', 'required': True})
+            ]"/>
+        </record>
+
+        <record id="approval_category_data_general" model="approval.category">
+            <field name="name">General Management Approval</field>
+            <field name="sequence">60</field>
+            <field name="color">1</field>
+            <field name="description">General internal request requiring formal management approval and audit trail.</field>
+            <field name="has_date">optional</field>
+            <field name="has_amount">optional</field>
+            <field name="has_reference">optional</field>
+            <field name="approval_minimum">1</field>
+            <field name="enforce_sequential" eval="True"/>
+            <field name="approver_ids" eval="[
+                (0, 0, {'sequence': 10, 'user_id': ref('base.user_admin'), 'role_title': 'General Manager', 'required': True})
+            ]"/>
+        </record>
+
+        <!-- Default Dynamic Approval Matrix Rules -->
+        <record id="default_matrix_rule_sale_high_value" model="approval.matrix.rule">
+            <field name="name">Sales Order Governance (&gt;= $5,000 or &gt; 15% Line Discount)</field>
+            <field name="sequence">50</field>
+            <field name="target_model">sale_order</field>
+            <field name="amount_basis">amount_total</field>
+            <field name="min_amount">5000.0</field>
+            <field name="max_amount">0.0</field>
+            <field name="check_discount_limit" eval="True"/>
+            <field name="max_discount_percent">15.0</field>
+            <field name="enforce_sequential" eval="True"/>
+            <field name="auto_confirm_on_approve" eval="True"/>
+            <field name="line_ids" eval="[
+                (0, 0, {
+                    'sequence': 10,
+                    'tier_name': 'Tier 1 - Sales Manager',
+                    'approver_ids': [(4, ref('base.user_admin'))],
+                    'minimum_approvals': 1,
+                })
+            ]"/>
+        </record>
+
+        <record id="default_matrix_rule_purchase_capex" model="approval.matrix.rule">
+            <field name="name">Purchase Order Budget Governance (&gt;= $2,500)</field>
+            <field name="sequence">50</field>
+            <field name="target_model">purchase_order</field>
+            <field name="amount_basis">amount_total</field>
+            <field name="min_amount">2500.0</field>
+            <field name="max_amount">0.0</field>
+            <field name="enforce_sequential" eval="True"/>
+            <field name="auto_confirm_on_approve" eval="True"/>
+            <field name="line_ids" eval="[
+                (0, 0, {
+                    'sequence': 10,
+                    'tier_name': 'Tier 1 - Procurement Director',
+                    'approver_ids': [(4, ref('base.user_admin'))],
+                    'minimum_approvals': 1,
+                })
+            ]"/>
+        </record>
+
+        <record id="default_matrix_rule_vendor_bill" model="approval.matrix.rule">
+            <field name="name">Vendor Bill Pre-Posting Sign-Off (&gt;= $3,000)</field>
+            <field name="sequence">50</field>
+            <field name="target_model">in_invoice</field>
+            <field name="amount_basis">amount_total</field>
+            <field name="min_amount">3000.0</field>
+            <field name="max_amount">0.0</field>
+            <field name="enforce_sequential" eval="True"/>
+            <field name="auto_confirm_on_approve" eval="True"/>
+            <field name="line_ids" eval="[
+                (0, 0, {
+                    'sequence': 10,
+                    'tier_name': 'Tier 1 - Finance Controller',
+                    'approver_ids': [(4, ref('base.user_admin'))],
+                    'minimum_approvals': 1,
+                })
+            ]"/>
+        </record>
+    </data>
+</odoo>

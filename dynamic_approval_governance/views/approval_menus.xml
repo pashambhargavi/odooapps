@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_approval_root"
+              name="Approval Matrix"
+              web_icon="dynamic_approval_governance,static/description/icon.png"
+              sequence="45"/>
+
+    <menuitem id="menu_approval_dashboard"
+              name="Dashboard"
+              parent="menu_approval_root"
+              action="approval_category_action_dashboard"
+              sequence="10"/>
+
+    <menuitem id="menu_approval_requests_parent"
+              name="Approval Requests"
+              parent="menu_approval_root"
+              sequence="20"/>
+
+    <menuitem id="menu_approval_my_requests"
+              name="My Requests"
+              parent="menu_approval_requests_parent"
+              action="approval_request_action_my"
+              sequence="10"/>
+
+    <menuitem id="menu_approval_to_review"
+              name="Approvals to Review"
+              parent="menu_approval_requests_parent"
+              action="approval_request_action_to_review"
+              sequence="20"/>
+
+    <menuitem id="menu_approval_all_requests"
+              name="All Requests"
+              parent="menu_approval_requests_parent"
+              action="approval_request_action_all"
+              groups="dynamic_approval_governance.group_approval_manager"
+              sequence="30"/>
+
+    <menuitem id="menu_approval_document_queue"
+              name="Document Approval Queue"
+              parent="menu_approval_root"
+              action="approval_document_step_action_queue"
+              sequence="30"/>
+
+    <menuitem id="menu_approval_config"
+              name="Configuration"
+              parent="menu_approval_root"
+              groups="dynamic_approval_governance.group_approval_manager"
+              sequence="90"/>
+
+    <menuitem id="menu_approval_category_config"
+              name="Approval Categories"
+              parent="menu_approval_config"
+              action="approval_category_action_config"
+              sequence="10"/>
+
+    <menuitem id="menu_approval_matrix_rule_config"
+              name="Dynamic Matrix Rules"
+              parent="menu_approval_config"
+              action="approval_matrix_rule_action"
+              sequence="20"/>
+</odoo>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_approval_request_certificate">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="oe_structure"/>
+                        <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
+                            <div>
+                                <h2 class="mb-1">Approval Certificate</h2>
+                                <h5 class="text-muted mb-0">
+                                    Reference: <span t-field="doc.reference_code"/>
+                                </h5>
+                            </div>
+                            <div>
+                                <span t-if="doc.request_status == 'approved'" class="badge text-bg-success fs-5 p-2">APPROVED</span>
+                                <span t-elif="doc.request_status == 'pending'" class="badge text-bg-warning fs-5 p-2">PENDING</span>
+                                <span t-elif="doc.request_status == 'refused'" class="badge text-bg-danger fs-5 p-2">REFUSED</span>
+                                <span t-else="" class="badge text-bg-secondary fs-5 p-2" t-field="doc.request_status"/>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-6">
+                                <strong>Subject:</strong> <span t-field="doc.name"/><br/>
+                                <strong>Category:</strong> <span t-field="doc.category_id.name"/><br/>
+                                <strong>Request Owner:</strong> <span t-field="doc.request_owner_id.name"/><br/>
+                                <t t-if="doc.partner_id">
+                                    <strong>Contact / Vendor:</strong> <span t-field="doc.partner_id.name"/><br/>
+                                </t>
+                            </div>
+                            <div class="col-6">
+                                <t t-if="doc.date_confirmed">
+                                    <strong>Submitted On:</strong> <span t-field="doc.date_confirmed"/><br/>
+                                </t>
+                                <t t-if="doc.date_approved">
+                                    <strong>Approved On:</strong> <span t-field="doc.date_approved"/><br/>
+                                </t>
+                                <t t-if="doc.amount">
+                                    <strong>Amount:</strong> <span t-field="doc.amount" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/><br/>
+                                </t>
+                                <t t-if="doc.location">
+                                    <strong>Location:</strong> <span t-field="doc.location"/><br/>
+                                </t>
+                                <t t-if="doc.reference">
+                                    <strong>External Reference:</strong> <span t-field="doc.reference"/><br/>
+                                </t>
+                            </div>
+                        </div>
+
+                        <t t-if="doc.reason">
+                            <div class="mb-4">
+                                <h5>Business Justification</h5>
+                                <div class="p-3 bg-light border rounded" t-field="doc.reason"/>
+                            </div>
+                        </t>
+
+                        <t t-if="doc.line_ids">
+                            <h5 class="mb-2">Requested Items</h5>
+                            <table class="table table-sm table-bordered mb-4">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Description</th>
+                                        <th class="text-end">Qty</th>
+                                        <th class="text-end">Unit Price</th>
+                                        <th class="text-end">Subtotal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="doc.line_ids" t-as="line">
+                                        <td><span t-field="line.product_id.name"/></td>
+                                        <td><span t-field="line.description"/></td>
+                                        <td class="text-end"><span t-field="line.quantity"/></td>
+                                        <td class="text-end"><span t-field="line.price_unit" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></td>
+                                        <td class="text-end"><span t-field="line.price_subtotal" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </t>
+
+                        <h5 class="mb-2">Multi-Level Approval Sign-Off</h5>
+                        <table class="table table-sm table-bordered">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Seq</th>
+                                    <th>Role / Tier</th>
+                                    <th>Approver</th>
+                                    <th>Status</th>
+                                    <th>Decision Date</th>
+                                    <th>Remarks</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="doc.approver_ids" t-as="app">
+                                    <td><span t-field="app.sequence"/></td>
+                                    <td><span t-field="app.role_title"/></td>
+                                    <td><span t-field="app.user_id.name"/></td>
+                                    <td><span t-field="app.status"/></td>
+                                    <td><span t-field="app.action_date"/></td>
+                                    <td><span t-field="app.note"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
