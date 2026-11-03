@@ -1,0 +1,12 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_commission_plan_user,commission.plan.user,model_commission_plan,base.group_user,1,0,0,0
+access_commission_plan_manager,commission.plan.manager,model_commission_plan,group_commission_manager,1,1,1,1
+access_commission_plan_tier_user,commission.plan.tier.user,model_commission_plan_tier,base.group_user,1,0,0,0
+access_commission_plan_tier_manager,commission.plan.tier.manager,model_commission_plan_tier,group_commission_manager,1,1,1,1
+access_commission_plan_rule_user,commission.plan.rule.user,model_commission_plan_rule,base.group_user,1,0,0,0
+access_commission_plan_rule_manager,commission.plan.rule.manager,model_commission_plan_rule,group_commission_manager,1,1,1,1
+access_commission_worksheet_user,commission.worksheet.user,model_commission_worksheet,base.group_user,1,1,1,0
+access_commission_worksheet_manager,commission.worksheet.manager,model_commission_worksheet,group_commission_manager,1,1,1,1
+access_commission_line_user,commission.line.user,model_commission_line,base.group_user,1,1,1,0
+access_commission_line_manager,commission.line.manager,model_commission_line,group_commission_manager,1,1,1,1
+access_commission_make_invoice_wizard_user,commission.make.invoice.wizard.user,model_commission_make_invoice_wizard,base.group_user,1,1,1,1

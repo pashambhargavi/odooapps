@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_commission_partner_agents" model="ir.actions.act_window">
+        <field name="name">Commission Agents &amp; Partners</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="domain">[('is_commission_agent', '=', True)]</field>
+        <field name="context">{'default_is_commission_agent': True}</field>
+    </record>
+
+    <!-- Top-Level App Menu -->
+    <menuitem id="menu_commission_root"
+              name="Commissions"
+              web_icon="sales_commission_incentive_engine,static/description/icon.png"
+              sequence="28"
+              groups="sales_commission_incentive_engine.group_commission_user"/>
+
+    <!-- Worksheets Menu -->
+    <menuitem id="menu_commission_worksheets"
+              name="Settlement Worksheets"
+              parent="menu_commission_root"
+              action="action_commission_worksheet"
+              sequence="10"/>
+
+    <!-- Ledger Lines Menu -->
+    <menuitem id="menu_commission_lines"
+              name="Commission Ledger"
+              parent="menu_commission_root"
+              action="action_commission_line"
+              sequence="20"/>
+
+    <!-- Agents Menu -->
+    <menuitem id="menu_commission_agents"
+              name="Affiliate Agents"
+              parent="menu_commission_root"
+              action="action_commission_partner_agents"
+              sequence="30"/>
+
+    <!-- Configuration Menu -->
+    <menuitem id="menu_commission_config"
+              name="Configuration"
+              parent="menu_commission_root"
+              sequence="90"
+              groups="sales_commission_incentive_engine.group_commission_manager"/>
+
+    <menuitem id="menu_commission_plans"
+              name="Commission Plans"
+              parent="menu_commission_config"
+              action="action_commission_plan"
+              sequence="10"/>
+</odoo>

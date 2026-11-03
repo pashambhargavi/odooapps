@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_commission_make_invoice_wizard_form" model="ir.ui.view">
+        <field name="name">commission.make.invoice.wizard.form</field>
+        <field name="model">commission.make.invoice.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Generate Settlement Vendor Bill">
+                <group>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="worksheet_id" readonly="1"/>
+                    <field name="commission_amount" widget="monetary" class="fw-bold"/>
+                    <field name="partner_id"/>
+                    <field name="journal_id"/>
+                    <field name="invoice_date"/>
+                </group>
+                <footer>
+                    <button name="action_create_vendor_bill" string="Create &amp; View Vendor Bill" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_commission_make_invoice_wizard" model="ir.actions.act_window">
+        <field name="name">Generate Settlement Vendor Bill</field>
+        <field name="res_model">commission.make.invoice.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

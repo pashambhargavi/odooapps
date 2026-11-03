@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_move_form_inherit_commission" model="ir.ui.view">
+        <field name="name">account.move.form.inherit.commission</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_commissions" type="object"
+                        class="oe_stat_button" icon="fa-money"
+                        invisible="commission_line_count == 0">
+                    <field name="commission_line_count" widget="statinfo" string="Commissions"/>
+                </button>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="Commissions" name="commissions" invisible="move_type not in ('out_invoice', 'out_refund')">
+                    <group>
+                        <group string="Applied Commission Plan">
+                            <field name="commission_plan_id" readonly="state == 'posted'"/>
+                            <field name="sales_manager_id" readonly="state == 'posted'"/>
+                            <field name="referral_agent_id" readonly="state == 'posted'"/>
+                        </group>
+                    </group>
+                    <field name="commission_line_ids" readonly="1">
+                        <list>
+                            <field name="date"/>
+                            <field name="beneficiary_type" widget="badge"/>
+                            <field name="salesperson_id"/>
+                            <field name="agent_partner_id"/>
+                            <field name="base_amount" widget="monetary"/>
+                            <field name="rate" string="Rate (%)"/>
+                            <field name="commission_amount" widget="monetary" sum="Total"/>
+                            <field name="state" widget="badge"
+                                   decoration-info="state == 'draft'"
+                                   decoration-success="state == 'approved'"
+                                   decoration-muted="state == 'paid'"/>
+                            <field name="currency_id" column_invisible="True"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

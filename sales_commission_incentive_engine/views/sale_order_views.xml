@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_order_form_inherit_commission" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.commission</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_commissions" type="object"
+                        class="oe_stat_button" icon="fa-money"
+                        invisible="commission_line_count == 0">
+                    <field name="commission_line_count" widget="statinfo" string="Commissions"/>
+                </button>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="Sales Commissions" name="commissions">
+                    <group>
+                        <group string="Commission Plan &amp; Beneficiaries">
+                            <field name="commission_plan_id"/>
+                            <field name="sales_manager_id"/>
+                            <field name="referral_agent_id"/>
+                        </group>
+                        <group string="Incentive Financial Totals">
+                            <field name="salesperson_commission_amount" widget="monetary" class="fw-bold"/>
+                            <field name="manager_commission_amount" widget="monetary"/>
+                            <field name="total_commission_amount" widget="monetary" class="fw-bold text-success fs-5"/>
+                        </group>
+                    </group>
+                    <field name="commission_line_ids" readonly="1">
+                        <list>
+                            <field name="date"/>
+                            <field name="beneficiary_type" widget="badge"/>
+                            <field name="salesperson_id"/>
+                            <field name="agent_partner_id"/>
+                            <field name="base_amount" widget="monetary"/>
+                            <field name="rate" string="Rate (%)"/>
+                            <field name="commission_amount" widget="monetary" sum="Total"/>
+                            <field name="state" widget="badge"
+                                   decoration-info="state == 'draft'"
+                                   decoration-success="state == 'approved'"
+                                   decoration-muted="state == 'paid'"/>
+                            <field name="currency_id" column_invisible="True"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>
