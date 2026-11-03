@@ -1,350 +1,242 @@
-<section class="oe_container" style="font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #1e293b; line-height: 1.6;">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Multi-Tier Approval Matrix – Odoo 19</title>
+    <style>
+        :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+        html{scroll-padding-top:env(safe-area-inset-top,0px)}
+        *{box-sizing:border-box}
+        body{margin:0;background:#f1f5f9;font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#1e293b;line-height:1.6}
+        a{text-decoration:none}
+        .wrap{max-width:1080px;margin:0 auto;padding:24px 16px}
+        .grid{display:grid;gap:16px}
+        .chip{display:inline-block;padding:7px 14px;border-radius:30px;font-size:13px;font-weight:700}
+        .card{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:24px;box-shadow:0 4px 16px rgba(15,23,42,.05)}
+        h2{font-size:28px;font-weight:800;color:#0f172a;margin:10px 0}
+        .center{text-align:center}
+        .shot{border:1px solid #cbd5e1;border-radius:12px;background:#f8fafc;min-height:120px;overflow:hidden}
+        .shot img{width:100%;display:block}
+        .btn{display:inline-block;padding:13px 22px;border-radius:10px;font-weight:700;font-size:15px}
+    </style>
+</head>
+<body>
+<section class="wrap">
 
-    <!-- ================= 1. HERO BANNER ================= -->
-    <div class="row mt32 mb32 align-items-center" style="background: linear-gradient(135deg, #3b0764 0%, #714B67 52%, #0f766e 100%); border-radius: 20px; padding: 52px 40px; color: #ffffff; box-shadow: 0 14px 34px rgba(15, 23, 42, 0.18);">
-        <div class="col-lg-8">
-            <div style="margin-bottom: 16px;">
-                <span class="badge" style="background-color: rgba(255,255,255,0.2); color: #ffffff; font-size: 13px; padding: 8px 16px; border-radius: 30px; font-weight: 700; letter-spacing: 0.6px;">
-                    ODOO 19.0 COMMUNITY EDITION • ALL-IN-ONE APPROVAL ENGINE
-                </span>
-            </div>
-            <h1 style="font-weight: 800; font-size: 38px; margin-top: 10px; margin-bottom: 16px; color: #ffffff; line-height: 1.2;">
-                Multi-Tier Approval Matrix &amp; Workflow Governance
-            </h1>
-            <p style="font-size: 18px; color: #f1f5f9; margin-bottom: 26px;">
-                Bring complete enterprise-level approval control to <strong>Odoo 19 Community</strong>.
-                Manage <strong>Standalone Internal Approval Requests</strong> AND enforce automated
-                <strong>Multi-Tier Approval Matrices</strong> on <strong>Sales Orders</strong>,
-                <strong>Purchase Orders</strong>, <strong>Customer Invoices</strong>, and <strong>Vendor Bills</strong>.
-            </p>
-            <div class="d-flex flex-wrap" style="gap: 10px;">
-                <span style="background: rgba(255,255,255,0.16); padding: 8px 16px; border-radius: 8px; font-size: 14px; font-weight: 600;">
-                    <i class="fa fa-sitemap me-1"></i> Sequential &amp; Parallel Tiers
-                </span>
-                <span style="background: rgba(255,255,255,0.16); padding: 8px 16px; border-radius: 8px; font-size: 14px; font-weight: 600;">
-                    <i class="fa fa-sliders me-1"></i> Amount &amp; Line Discount % Rules
-                </span>
-                <span style="background: rgba(255,255,255,0.16); padding: 8px 16px; border-radius: 8px; font-size: 14px; font-weight: 600;">
-                    <i class="fa fa-ban me-1"></i> Mandatory Rejection Wizard
-                </span>
-                <span style="background: rgba(255,255,255,0.16); padding: 8px 16px; border-radius: 8px; font-size: 14px; font-weight: 600;">
-                    <i class="fa fa-file-pdf-o me-1"></i> Official PDF Certificates
-                </span>
-            </div>
-        </div>
-        <div class="col-lg-4 text-center mt-4 mt-lg-0">
-            <div style="background: #ffffff; color: #0f172a; border-radius: 16px; padding: 28px 22px; box-shadow: 0 12px 30px rgba(0,0,0,0.22);">
-                <div style="width: 68px; height: 68px; border-radius: 16px; background: #f3e8ff; color: #714B67; display: inline-flex; align-items: center; justify-content: center; font-size: 32px; margin-bottom: 14px;">
-                    <i class="fa fa-shield"></i>
+    <!-- HERO -->
+    <div style="background:linear-gradient(135deg,#3b0764,#714B67 55%,#0f766e);border-radius:22px;padding:48px 36px;color:#fff;box-shadow:0 14px 34px rgba(15,23,42,.2)">
+        <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr));align-items:center;gap:28px">
+            <div>
+                <span class="chip" style="background:rgba(255,255,255,.2)">ODOO 19.0 COMMUNITY • APPROVAL ENGINE</span>
+                <h1 style="font-size:38px;font-weight:800;line-height:1.2;margin:16px 0 14px">Multi-Tier Approval Matrix
+                    &amp; Workflow Governance</h1>
+                <p style="font-size:17px;color:#e2e8f0;margin:0 0 22px">Enterprise-grade approval control for Odoo 19
+                    Community. Run internal requests and enforce automated approval chains on Sales Orders, Purchase
+                    Orders, Invoices and Vendor Bills.</p>
+                <div style="display:flex;flex-wrap:wrap;gap:10px">
+                    <span class="chip" style="background:rgba(255,255,255,.16);border-radius:8px">🔀 Sequential &amp; Parallel Tiers</span>
+                    <span class="chip" style="background:rgba(255,255,255,.16);border-radius:8px">🎚️ Amount &amp; Discount Rules</span>
+                    <span class="chip" style="background:rgba(255,255,255,.16);border-radius:8px">🚫 Mandatory Rejection Reason</span>
+                    <span class="chip"
+                          style="background:rgba(255,255,255,.16);border-radius:8px">📄 PDF Certificates</span>
                 </div>
-                <h4 style="font-weight: 800; margin-bottom: 8px; color: #0f172a;">5 Modules Unified in 1</h4>
-                <p style="font-size: 14px; color: #475569; margin-bottom: 14px;">
-                    1. Internal Approval Hub<br/>
-                    2. Sales Order Approval Matrix<br/>
-                    3. Purchase Order Approval Matrix<br/>
-                    4. Customer Invoice Gate<br/>
-                    5. Vendor Bill Posting Gate
-                </p>
-                <span class="badge" style="background-color: #dcfce7; color: #15803d; font-size: 13px; padding: 6px 14px; border-radius: 20px; font-weight: 700;">
-                    100% Native Odoo 19 OWL Views
-                </span>
+            </div>
+            <div style="background:#fff;color:#0f172a;border-radius:18px;padding:26px;box-shadow:0 12px 30px rgba(0,0,0,.25)">
+                <div style="font-size:34px">🛡️</div>
+                <h3 style="margin:6px 0 12px;font-weight:800">5 Modules in 1</h3>
+                <div style="font-size:14px;color:#475569;line-height:2">
+                    ✅ Internal Approval Hub<br>✅ Sales Order Matrix<br>✅ Purchase Order Matrix<br>✅ Customer Invoice
+                    Gate<br>✅ Vendor Bill Posting Gate
+                </div>
+                <span class="chip"
+                      style="background:#dcfce7;color:#15803d;margin-top:14px">100% Native Odoo 19 Views</span>
             </div>
         </div>
     </div>
 
-    <!-- ================= 2. VISUAL END-TO-END FLOW DIAGRAM ================= -->
-    <div class="mt48 mb48" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 18px; padding: 40px 32px;">
-        <div class="text-center mb32">
-            <span class="badge" style="background-color: #ede9fe; color: #6d28d9; font-size: 13px; padding: 6px 14px; border-radius: 20px; font-weight: 700;">
-                UNDERSTAND THE FULL WORKFLOW AT A GLANCE
-            </span>
-            <h2 style="font-weight: 800; font-size: 30px; color: #0f172a; margin-top: 12px;">
-                How the End-to-End Approval Flow Works
-            </h2>
-            <p style="font-size: 16px; color: #475569; max-width: 780px; margin: 0 auto;">
-                Whether a user is confirming a high-value Sales/Purchase Order, posting a Vendor Bill, or submitting an internal CapEx/Travel request, the governance engine follows a clear 5-stage lifecycle:
-            </p>
+    <!-- FLOW -->
+    <div style="margin-top:36px;background:#fff;border:1px solid #e2e8f0;border-radius:18px;padding:36px 24px">
+        <div class="center">
+            <span class="chip" style="background:#ede9fe;color:#6d28d9">THE WORKFLOW AT A GLANCE</span>
+            <h2>How the Approval Flow Works</h2>
+            <p style="color:#475569;max-width:700px;margin:0 auto 24px">Every document follows a clear 5-stage
+                lifecycle, from rule definition to automatic confirmation.</p>
         </div>
+        <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr))">
+            <div class="card center" style="padding:20px 14px">
+                <div style="width:42px;height:42px;line-height:42px;border-radius:50%;background:#4c1d95;color:#fff;font-weight:800;margin:0 auto 10px">
+                    1
+                </div>
+                <b>Define Rule</b>
+                <p style="font-size:13px;color:#64748b;margin:6px 0 0">Set amount or discount thresholds and assign Tier
+                    1–3 approvers.</p></div>
+            <div class="card center" style="padding:20px 14px">
+                <div style="width:42px;height:42px;line-height:42px;border-radius:50%;background:#714B67;color:#fff;font-weight:800;margin:0 auto 10px">
+                    2
+                </div>
+                <b>User Confirms</b>
+                <p style="font-size:13px;color:#64748b;margin:6px 0 0">Salesperson, buyer or accountant clicks
+                    Confirm.</p></div>
+            <div class="card center" style="padding:20px 14px;background:#fffbeb;border-color:#f59e0b">
+                <div style="width:42px;height:42px;line-height:42px;border-radius:50%;background:#d97706;color:#fff;font-weight:800;margin:0 auto 10px">
+                    3
+                </div>
+                <b style="color:#92400e">Auto-Hold</b>
+                <p style="font-size:13px;color:#78350f;margin:6px 0 0">Matching documents pause and Tier 1 gets a
+                    To-Do.</p></div>
+            <div class="card center" style="padding:20px 14px;background:#eff6ff;border-color:#3b82f6">
+                <div style="width:42px;height:42px;line-height:42px;border-radius:50%;background:#2563eb;color:#fff;font-weight:800;margin:0 auto 10px">
+                    4
+                </div>
+                <b style="color:#1e40af">Tier Decision</b>
+                <p style="font-size:13px;color:#1e3a8a;margin:6px 0 0">Approve to advance, or reject with a required
+                    reason.</p></div>
+            <div class="card center" style="padding:20px 14px;background:#f0fdf4;border-color:#22c55e">
+                <div style="width:42px;height:42px;line-height:42px;border-radius:50%;background:#16a34a;color:#fff;font-weight:800;margin:0 auto 10px">
+                    5
+                </div>
+                <b style="color:#166534">Auto-Confirm</b>
+                <p style="font-size:13px;color:#14532d;margin:6px 0 0">Final approval confirms the document with a full
+                    audit log.</p></div>
+        </div>
+    </div>
 
-        <div class="row text-center">
-            <div class="col-md-2 col-sm-6 mb16">
-                <div class="h-100" style="background: #ffffff; border: 2px solid #cbd5e1; border-radius: 14px; padding: 20px 14px;">
-                    <div style="width: 44px; height: 44px; border-radius: 50%; background: #4c1d95; color: #ffffff; font-weight: 800; font-size: 18px; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 12px;">1</div>
-                    <h5 style="font-weight: 700; font-size: 16px; color: #0f172a;">Define Matrix Rule</h5>
-                    <p style="font-size: 13px; color: #64748b; margin-bottom: 0;">
-                        Admin sets Min/Max Amount or Discount % rules &amp; assigns Tier 1, Tier 2, Tier 3 approvers.
-                    </p>
-                </div>
+    <!-- TOUR -->
+    <div class="center" style="margin:44px 0 20px">
+        <span class="chip" style="background:#dcfce7;color:#15803d">VISUAL PRODUCT TOUR</span>
+        <h2>Step-by-Step Screen Walkthrough</h2>
+        <p style="color:#475569;max-width:700px;margin:0 auto">Every screen below ships out of the box with <code>dynamic_approval_governance</code>.
+        </p>
+    </div>
+
+    <div class="grid">
+        <div class="card">
+            <span class="chip" style="background:#4c1d95;color:#fff;border-radius:6px">SCREEN 1 OF 6</span>
+            <h3 style="font-size:22px;font-weight:800;margin:10px 0 6px">Approval Categories Dashboard</h3>
+            <p style="color:#475569;margin:0 0 16px">Go to <b>Smart Approvals → Configuration → Approval Categories</b>.
+                Ready-made templates for Business Travel, Expense Reimbursement, CapEx &amp; Procurement, Contract
+                Sign-Off and Special Payment Release. Set each field (Date, Amount, Quantity, Partner, Location,
+                Reference, Product Lines) to Required, Optional or Hidden.</p>
+            <div class="shot"><img src="screenshots/01_approval_categories_dashboard.png"
+                                   alt="Approval Categories Dashboard"></div>
+        </div>
+        <div class="card">
+            <span class="chip" style="background:#4c1d95;color:#fff;border-radius:6px">SCREEN 2 OF 6</span>
+            <h3 style="font-size:22px;font-weight:800;margin:10px 0 6px">Dynamic Multi-Tier Matrix Rules</h3>
+            <p style="color:#475569;margin:0 0 16px">Go to <b>Smart Approvals → Configuration → Dynamic Matrix Rules</b>.
+                Pick Sales Order, Purchase Order, Customer Invoice or Vendor Bill, set a min/max amount or maximum line
+                discount %, then build an unlimited chain of tiers (e.g. Regional Manager → Finance Director → CEO).</p>
+            <div class="shot"><img src="screenshots/02_matrix_rule_configuration.png"
+                                   alt="Dynamic Matrix Rule Configuration"></div>
+        </div>
+        <div class="card">
+            <span class="chip" style="background:#4c1d95;color:#fff;border-radius:6px">SCREEN 3 OF 6</span>
+            <h3 style="font-size:22px;font-weight:800;margin:10px 0 6px">Live Interception &amp; Approval Matrix
+                Tab</h3>
+            <p style="color:#475569;margin:0 0 16px">When a document matches a rule, confirmation is intercepted and a
+                governance banner appears. Approve and Reject buttons show only to the active tier’s approvers, and
+                every tier’s status is tracked in the Approval Matrix tab.</p>
+            <div class="shot"><img src="screenshots/03_sales_order_interception.png" alt="Sales Order Interception">
             </div>
-            <div class="col-md-2 col-sm-6 mb16">
-                <div class="h-100" style="background: #ffffff; border: 2px solid #cbd5e1; border-radius: 14px; padding: 20px 14px;">
-                    <div style="width: 44px; height: 44px; border-radius: 50%; background: #714B67; color: #ffffff; font-weight: 800; font-size: 18px; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 12px;">2</div>
-                    <h5 style="font-weight: 700; font-size: 16px; color: #0f172a;">User Clicks Confirm</h5>
-                    <p style="font-size: 13px; color: #64748b; margin-bottom: 0;">
-                        Salesperson, Buyer, or Accountant clicks <strong>Confirm</strong> on SO, PO, Invoice, or Bill.
-                    </p>
-                </div>
-            </div>
-            <div class="col-md-3 col-sm-6 mb16">
-                <div class="h-100" style="background: #fffbeb; border: 2px solid #f59e0b; border-radius: 14px; padding: 20px 14px;">
-                    <div style="width: 44px; height: 44px; border-radius: 50%; background: #d97706; color: #ffffff; font-weight: 800; font-size: 18px; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 12px;">3</div>
-                    <h5 style="font-weight: 700; font-size: 16px; color: #92400e;">Auto-Hold &amp; Notify</h5>
-                    <p style="font-size: 13px; color: #78350f; margin-bottom: 0;">
-                        If thresholds match, confirmation pauses automatically, creates approval steps &amp; assigns To-Do activities to <strong>Tier 1</strong>.
-                    </p>
-                </div>
-            </div>
-            <div class="col-md-3 col-sm-6 mb16">
-                <div class="h-100" style="background: #eff6ff; border: 2px solid #3b82f6; border-radius: 14px; padding: 20px 14px;">
-                    <div style="width: 44px; height: 44px; border-radius: 50%; background: #2563eb; color: #ffffff; font-weight: 800; font-size: 18px; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 12px;">4</div>
-                    <h5 style="font-weight: 700; font-size: 16px; color: #1e40af;">Tier-by-Tier Decision</h5>
-                    <p style="font-size: 13px; color: #1e3a8a; margin-bottom: 0;">
-                        Tier 1 clicks <strong>Approve</strong> (advances to Tier 2) or <strong>Reject</strong> (opens Mandatory Reason Wizard).
-                    </p>
-                </div>
-            </div>
-            <div class="col-md-2 col-sm-12 mb16">
-                <div class="h-100" style="background: #f0fdf4; border: 2px solid #22c55e; border-radius: 14px; padding: 20px 14px;">
-                    <div style="width: 44px; height: 44px; border-radius: 50%; background: #16a34a; color: #ffffff; font-weight: 800; font-size: 18px; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 12px;">5</div>
-                    <h5 style="font-weight: 700; font-size: 16px; color: #166534;">Auto-Confirm &amp; PDF</h5>
-                    <p style="font-size: 13px; color: #14532d; margin-bottom: 0;">
-                        When the final tier approves, the Order/Invoice confirms automatically with a full audit log.
-                    </p>
-                </div>
+        </div>
+        <div class="card">
+            <span class="chip" style="background:#4c1d95;color:#fff;border-radius:6px">SCREEN 4 OF 6</span>
+            <h3 style="font-size:22px;font-weight:800;margin:10px 0 6px">Mandatory Rejection Reason Wizard</h3>
+            <p style="color:#475569;margin:0 0 16px">No silent rejections. A popup enforces a written reason, marks the
+                tier as Rejected, shows a red alert banner and logs everything in the chatter.</p>
+            <div class="shot"><img src="screenshots/04_rejection_reason_wizard.png" alt="Rejection Reason Wizard"></div>
+        </div>
+        <div class="card">
+            <span class="chip" style="background:#4c1d95;color:#fff;border-radius:6px">SCREEN 5 OF 6</span>
+            <h3 style="font-size:22px;font-weight:800;margin:10px 0 6px">Standalone Internal Approval Request</h3>
+            <p style="color:#475569;margin:0 0 16px">Employees submit requests with product lines, quantities, partner
+                links and attachments. Sequential or parallel approvers get automatic To-Do activities and sign off in
+                one click.</p>
+            <div class="shot"><img src="screenshots/05_standalone_approval_request.png"
+                                   alt="Standalone Approval Request"></div>
+        </div>
+        <div class="card">
+            <span class="chip" style="background:#4c1d95;color:#fff;border-radius:6px">SCREEN 6 OF 6</span>
+            <h3 style="font-size:22px;font-weight:800;margin:10px 0 6px">Official PDF Approval Certificate</h3>
+            <p style="color:#475569;margin:0 0 16px">An auditor-ready certificate with reference, requester, category,
+                totals, itemized lines and a timestamped sign-off table.</p>
+            <div class="shot"><img src="screenshots/06_pdf_approval_certificate.png" alt="PDF Approval Certificate">
             </div>
         </div>
     </div>
 
-    <!-- ================= 3. STEP-BY-STEP VISUAL SCREENSHOT WALKTHROUGH ================= -->
-    <div class="mt48 mb48">
-        <div class="text-center mb32">
-            <span class="badge" style="background-color: #dcfce7; color: #15803d; font-size: 13px; padding: 6px 14px; border-radius: 20px; font-weight: 700;">
-                COMPLETE VISUAL PRODUCT TOUR
-            </span>
-            <h2 style="font-weight: 800; font-size: 30px; color: #0f172a; margin-top: 12px;">
-                Step-by-Step Screen Walkthrough
-            </h2>
-            <p style="font-size: 16px; color: #475569; max-width: 760px; margin: 0 auto;">
-                Every screen below is included out of the box when you install <code>dynamic_approval_governance</code> in Odoo 19 Community Edition.
-            </p>
-        </div>
-
-        <!-- SCREENSHOT 1 -->
-        <div class="mb48" style="border: 1px solid #e2e8f0; border-radius: 16px; padding: 32px; background: #ffffff; box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);">
-            <div class="row align-items-center mb24">
-                <div class="col-lg-12">
-                    <span class="badge" style="background-color: #4c1d95; color: #ffffff; font-size: 13px; padding: 6px 12px; border-radius: 6px;">SCREEN 1 OF 6</span>
-                    <h3 style="font-weight: 800; font-size: 24px; color: #0f172a; margin-top: 10px;">
-                        1. Standalone Approval Categories Dashboard
-                    </h3>
-                    <p style="font-size: 15px; color: #475569; margin-bottom: 0;">
-                        Go to <strong>Smart Approvals &rarr; Configuration &rarr; Approval Categories</strong>. Out of the box, you get pre-configured templates for
-                        <strong>Business Travel</strong>, <strong>Expense Reimbursement</strong>, <strong>CapEx &amp; Procurement</strong>,
-                        <strong>Contract Sign-Off</strong>, and <strong>Special Payment Release</strong>. For each category, configure whether
-                        <em>Date, Date Period, Amount, Quantity, Contact/Partner, Location, Reference, or Product Lines</em> are
-                        <strong>Required</strong>, <strong>Optional</strong>, or <strong>Hidden</strong>.
-                    </p>
-                </div>
-            </div>
-            <div class="text-center">
-                <img src="screenshots/01_approval_categories_dashboard.png" alt="Approval Categories Dashboard" class="img-fluid rounded shadow-sm" style="border: 1px solid #cbd5e1; max-width: 100%;"/>
-            </div>
-        </div>
-
-        <!-- SCREENSHOT 2 -->
-        <div class="mb48" style="border: 1px solid #e2e8f0; border-radius: 16px; padding: 32px; background: #ffffff; box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);">
-            <div class="row align-items-center mb24">
-                <div class="col-lg-12">
-                    <span class="badge" style="background-color: #4c1d95; color: #ffffff; font-size: 13px; padding: 6px 12px; border-radius: 6px;">SCREEN 2 OF 6</span>
-                    <h3 style="font-weight: 800; font-size: 24px; color: #0f172a; margin-top: 10px;">
-                        2. Dynamic Multi-Tier Matrix Rules for Sales, Purchase &amp; Accounting
-                    </h3>
-                    <p style="font-size: 15px; color: #475569; margin-bottom: 0;">
-                        Go to <strong>Smart Approvals &rarr; Configuration &rarr; Dynamic Matrix Rules</strong>. Select the target model
-                        (<strong>Sales Order</strong>, <strong>Purchase Order</strong>, <strong>Customer Invoice</strong>, or <strong>Vendor Bill</strong>),
-                        define your <strong>Minimum / Maximum Amount</strong> or <strong>Maximum Line Discount %</strong> trigger, and build an unlimited chain of
-                        sequential approval tiers (e.g., <em>Tier 1: Regional Manager &rarr; Tier 2: Finance Director &rarr; Tier 3: CEO</em>).
-                    </p>
-                </div>
-            </div>
-            <div class="text-center">
-                <img src="screenshots/02_matrix_rule_configuration.png" alt="Dynamic Matrix Rule Configuration" class="img-fluid rounded shadow-sm" style="border: 1px solid #cbd5e1; max-width: 100%;"/>
-            </div>
-        </div>
-
-        <!-- SCREENSHOT 3 -->
-        <div class="mb48" style="border: 1px solid #e2e8f0; border-radius: 16px; padding: 32px; background: #ffffff; box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);">
-            <div class="row align-items-center mb24">
-                <div class="col-lg-12">
-                    <span class="badge" style="background-color: #4c1d95; color: #ffffff; font-size: 13px; padding: 6px 12px; border-radius: 6px;">SCREEN 3 OF 6</span>
-                    <h3 style="font-weight: 800; font-size: 24px; color: #0f172a; margin-top: 10px;">
-                        3. Real-Time Order &amp; Invoice Interception with Live Approval Matrix Tab
-                    </h3>
-                    <p style="font-size: 15px; color: #475569; margin-bottom: 0;">
-                        When a user clicks <strong>Confirm</strong> on a Sales Order, Purchase Order, Invoice, or Bill that matches a rule, the module intercepts confirmation, displays a clear governance alert banner, reveals the <strong>Approve</strong> &amp; <strong>Reject Approval</strong> buttons only to the active tier's authorized approvers, and tracks every tier's status in the <strong>Approval Matrix</strong> tab.
-                    </p>
-                </div>
-            </div>
-            <div class="text-center">
-                <img src="screenshots/03_sales_order_interception.png" alt="Sales Order Interception and Approval Matrix Tab" class="img-fluid rounded shadow-sm" style="border: 1px solid #cbd5e1; max-width: 100%;"/>
-            </div>
-        </div>
-
-        <!-- SCREENSHOT 4 -->
-        <div class="mb48" style="border: 1px solid #e2e8f0; border-radius: 16px; padding: 32px; background: #ffffff; box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);">
-            <div class="row align-items-center mb24">
-                <div class="col-lg-12">
-                    <span class="badge" style="background-color: #4c1d95; color: #ffffff; font-size: 13px; padding: 6px 12px; border-radius: 6px;">SCREEN 4 OF 6</span>
-                    <h3 style="font-weight: 800; font-size: 24px; color: #0f172a; margin-top: 10px;">
-                        4. Mandatory Rejection Reason Wizard &amp; Chatter Audit Trail
-                    </h3>
-                    <p style="font-size: 15px; color: #475569; margin-bottom: 0;">
-                        Approvers can never reject a request or order silently. Clicking <strong>Reject Approval</strong> opens a dedicated popup wizard that enforces a clear written reason, updates the tier status to <em>Rejected</em>, displays a red alert banner on the document, and posts the rejection details in the document's chatter.
-                    </p>
-                </div>
-            </div>
-            <div class="text-center">
-                <img src="screenshots/04_rejection_reason_wizard.png" alt="Mandatory Rejection Reason Wizard" class="img-fluid rounded shadow-sm" style="border: 1px solid #cbd5e1; max-width: 100%;"/>
-            </div>
-        </div>
-
-        <!-- SCREENSHOT 5 -->
-        <div class="mb48" style="border: 1px solid #e2e8f0; border-radius: 16px; padding: 32px; background: #ffffff; box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);">
-            <div class="row align-items-center mb24">
-                <div class="col-lg-12">
-                    <span class="badge" style="background-color: #4c1d95; color: #ffffff; font-size: 13px; padding: 6px 12px; border-radius: 6px;">SCREEN 5 OF 6</span>
-                    <h3 style="font-weight: 800; font-size: 24px; color: #0f172a; margin-top: 10px;">
-                        5. Standalone Internal Approval Request Form (`APR/2026/0001`)
-                    </h3>
-                    <p style="font-size: 15px; color: #475569; margin-bottom: 0;">
-                        Employees submit internal requests with itemized product lines, quantities, partner links, and supporting documents. Sequential or parallel approvers receive automated Odoo To-Do activities and sign off with a single click.
-                    </p>
-                </div>
-            </div>
-            <div class="text-center">
-                <img src="screenshots/05_standalone_approval_request.png" alt="Standalone Internal Approval Request" class="img-fluid rounded shadow-sm" style="border: 1px solid #cbd5e1; max-width: 100%;"/>
-            </div>
-        </div>
-
-        <!-- SCREENSHOT 6 -->
-        <div class="mb48" style="border: 1px solid #e2e8f0; border-radius: 16px; padding: 32px; background: #ffffff; box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);">
-            <div class="row align-items-center mb24">
-                <div class="col-lg-12">
-                    <span class="badge" style="background-color: #4c1d95; color: #ffffff; font-size: 13px; padding: 6px 12px; border-radius: 6px;">SCREEN 6 OF 6</span>
-                    <h3 style="font-weight: 800; font-size: 24px; color: #0f172a; margin-top: 10px;">
-                        6. Printable Official PDF Approval Certificate
-                    </h3>
-                    <p style="font-size: 15px; color: #475569; margin-bottom: 0;">
-                        Generate a clean, auditor-ready <strong>PDF Approval Certificate</strong> showing the request reference, requester, category, financial totals, itemized lines, and the complete timestamped digital sign-off table.
-                    </p>
-                </div>
-            </div>
-            <div class="text-center">
-                <img src="screenshots/06_pdf_approval_certificate.png" alt="Printable PDF Approval Certificate" class="img-fluid rounded shadow-sm" style="border: 1px solid #cbd5e1; max-width: 100%;"/>
-            </div>
-        </div>
-    </div>
-
-    <!-- ================= 4. COMPARISON TABLE ================= -->
-    <div class="mt48 mb48">
-        <div class="text-center mb24">
-            <h2 style="font-weight: 800; font-size: 28px; color: #0f172a;">
-                Standard Odoo 19 Community vs. This Governance Suite
-            </h2>
-        </div>
-        <div class="table-responsive">
-            <table class="table table-bordered" style="border-radius: 12px; overflow: hidden;">
-                <thead style="background-color: #0f172a; color: #ffffff;">
-                    <tr>
-                        <th style="padding: 16px;">Governance Capability</th>
-                        <th class="text-center" style="padding: 16px;">Standard Odoo 19 Community</th>
-                        <th class="text-center" style="padding: 16px; background-color: #4c1d95;">With Multi-Tier Approval Matrix</th>
-                    </tr>
+    <!-- COMPARISON -->
+    <div style="margin-top:44px">
+        <h2 class="center">Standard Odoo 19 vs. This Governance Suite</h2>
+        <div style="overflow-x:auto;border-radius:14px;border:1px solid #e2e8f0;background:#fff">
+            <table style="width:100%;border-collapse:collapse;min-width:620px;font-size:15px">
+                <thead>
+                <tr style="background:#0f172a;color:#fff">
+                    <th style="padding:14px;text-align:left">Capability</th>
+                    <th style="padding:14px">Standard Community</th>
+                    <th style="padding:14px;background:#4c1d95">With This Module</th>
+                </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td style="padding: 14px; font-weight: 600;">Standalone Internal Approvals App (Travel, Expense, CapEx)</td>
-                        <td class="text-center text-danger" style="padding: 14px;">Not Available in Community</td>
-                        <td class="text-center text-success fw-bold" style="padding: 14px;">Included Out of the Box</td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 14px; font-weight: 600;">Sales Order Multi-Tier Approval by Amount or Line Discount %</td>
-                        <td class="text-center text-danger" style="padding: 14px;">Not Available</td>
-                        <td class="text-center text-success fw-bold" style="padding: 14px;">Included (Sequential &amp; Parallel Tiers)</td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 14px; font-weight: 600;">Purchase Order Multi-Tier Budget Approval Matrix</td>
-                        <td class="text-center text-muted" style="padding: 14px;">Single Static Limit Only</td>
-                        <td class="text-center text-success fw-bold" style="padding: 14px;">Unlimited Multi-Tier Matrix Rules</td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 14px; font-weight: 600;">Customer Invoice &amp; Vendor Bill Posting Approval Gate</td>
-                        <td class="text-center text-danger" style="padding: 14px;">Not Available</td>
-                        <td class="text-center text-success fw-bold" style="padding: 14px;">Included Before Accounting Post</td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 14px; font-weight: 600;">Mandatory Rejection Reason Popup + PDF Certificate</td>
-                        <td class="text-center text-danger" style="padding: 14px;">Not Available</td>
-                        <td class="text-center text-success fw-bold" style="padding: 14px;">Included with Full Chatter Audit</td>
-                    </tr>
+                <tr>
+                    <td style="padding:14px;font-weight:600">Internal Approvals App (Travel, Expense, CapEx)</td>
+                    <td class="center" style="color:#dc2626">❌ Not available</td>
+                    <td class="center" style="color:#15803d;font-weight:700">✅ Included</td>
+                </tr>
+                <tr style="background:#f8fafc">
+                    <td style="padding:14px;font-weight:600">Sales Order approval by amount or discount %</td>
+                    <td class="center" style="color:#dc2626">❌ Not available</td>
+                    <td class="center" style="color:#15803d;font-weight:700">✅ Sequential &amp; parallel tiers</td>
+                </tr>
+                <tr>
+                    <td style="padding:14px;font-weight:600">Purchase Order multi-tier budget approval</td>
+                    <td class="center" style="color:#64748b">Single static limit</td>
+                    <td class="center" style="color:#15803d;font-weight:700">✅ Unlimited rules</td>
+                </tr>
+                <tr style="background:#f8fafc">
+                    <td style="padding:14px;font-weight:600">Invoice &amp; Vendor Bill posting gate</td>
+                    <td class="center" style="color:#dc2626">❌ Not available</td>
+                    <td class="center" style="color:#15803d;font-weight:700">✅ Before accounting post</td>
+                </tr>
+                <tr>
+                    <td style="padding:14px;font-weight:600">Rejection popup + PDF certificate</td>
+                    <td class="center" style="color:#dc2626">❌ Not available</td>
+                    <td class="center" style="color:#15803d;font-weight:700">✅ With chatter audit</td>
+                </tr>
                 </tbody>
             </table>
         </div>
     </div>
 
-    <!-- ================= 5. PRIVACY-SAFE INQUIRY & SUPPORT FORM SECTION ================= -->
-    <div class="mt48 mb32" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-radius: 20px; padding: 44px 36px; color: #ffffff;">
-        <div class="row align-items-center">
-            <div class="col-lg-7">
-                <span class="badge" style="background-color: #22c55e; color: #ffffff; font-size: 12px; padding: 6px 14px; border-radius: 20px; font-weight: 700;">
-                    SUPPORT, DEMO &amp; CUSTOMIZATION INQUIRY FORM
-                </span>
-                <h2 style="font-weight: 800; font-size: 30px; color: #ffffff; margin-top: 14px; margin-bottom: 12px;">
-                    Need Assistance, a Live Walkthrough, or a Custom Workflow?
-                </h2>
-                <p style="font-size: 16px; color: #cbd5e1; margin-bottom: 20px;">
-                    We handle all customer inquiries, support requests, and custom development proposals through our structured online ticket form so your request is tracked from day one:
-                </p>
-                <div class="row mb24">
-                    <div class="col-sm-6 mb12">
-                        <div style="background: rgba(255,255,255,0.08); border-radius: 10px; padding: 14px;">
-                            <strong style="color: #ffffff; display: block;">1. Click "Ask a Question" Above</strong>
-                            <span style="font-size: 13px; color: #cbd5e1;">Use the built-in Odoo Apps Store Support / Question form right on this module page.</span>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 mb12">
-                        <div style="background: rgba(255,255,255,0.08); border-radius: 10px; padding: 14px;">
-                            <strong style="color: #ffffff; display: block;">2. Or Submit Our GitHub Inquiry Form</strong>
-                            <span style="font-size: 13px; color: #cbd5e1;">Open our structured ticket form on GitHub Issues and select your inquiry type.</span>
-                        </div>
-                    </div>
-                </div>
+    <!-- CONTACT -->
+    <div style="margin-top:44px;background:linear-gradient(135deg,#0f172a,#1e293b);border-radius:22px;padding:42px 32px;color:#fff">
+        <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr));align-items:center;gap:28px">
+            <div>
+                <span class="chip" style="background:#22c55e">SUPPORT • DEMO • CUSTOMIZATION</span>
+                <h2 style="color:#fff;font-size:30px;margin:14px 0 10px">Need Help, a Live Demo or a Custom
+                    Workflow?</h2>
+                <p style="color:#cbd5e1;margin:0">Tell us about your approval process and we’ll tailor the module to
+                    fit. Every request is tracked from day one, and we usually reply quickly.</p>
             </div>
-            <div class="col-lg-5">
-                <div style="background: #ffffff; color: #0f172a; border-radius: 16px; padding: 26px;">
-                    <h5 style="font-weight: 800; margin-bottom: 14px; color: #0f172a;">
-                        <i class="fa fa-wpforms me-2" style="color: #714B67;"></i> Inquiry Form Fields to Include
-                    </h5>
-                    <div style="margin-bottom: 10px; padding: 10px 14px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; color: #475569;">
-                        <strong>1. Your Name &amp; Company Name</strong>
-                    </div>
-                    <div style="margin-bottom: 10px; padding: 10px 14px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; color: #475569;">
-                        <strong>2. Inquiry Type:</strong> Support / Live Demo / Custom Workflow
-                    </div>
-                    <div style="margin-bottom: 10px; padding: 10px 14px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; color: #475569;">
-                        <strong>3. Odoo Version:</strong> Odoo 19.0 Community / Enterprise
-                    </div>
-                    <div style="margin-bottom: 16px; padding: 10px 14px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; color: #475569;">
-                        <strong>4. Workflow Description &amp; Requirements</strong>
-                    </div>
-                    <div class="text-center">
-                        <a href="https://github.com/pashambhargavi/odooapps/issues/new/choose" target="_blank" class="btn btn-lg w-100" style="background-color: #714B67; color: #ffffff; font-weight: 700; border-radius: 10px; padding: 12px 20px; text-decoration: none; display: inline-block;">
-                            <i class="fa fa-external-link me-2"></i> Open Online Inquiry Form
-                        </a>
-                    </div>
+            <div style="background:#fff;color:#0f172a;border-radius:18px;padding:26px">
+                <h3 style="margin:0 0 6px;font-weight:800">Get in touch</h3>
+                <p style="font-size:14px;color:#475569;margin:0 0 16px">Pick whichever is easiest for you:</p>
+                <a class="btn" style="display:block;text-align:center;background:#714B67;color:#fff;margin-bottom:10px"
+                   target="_blank"
+                   href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=bhargavipasham2000@gmail.com&amp;su=Odoo%20Approval%20Matrix%20Inquiry&amp;body=Name%3A%0ACompany%3A%0AOdoo%20Version%3A%0AInquiry%20Type%20(Support%20%2F%20Demo%20%2F%20Customization)%3A%0AWorkflow%20details%3A%0A">✉️
+                    Email Us on Gmail</a>
+                <a class="btn"
+                   style="display:block;text-align:center;background:#f1f5f9;color:#0f172a;border:1px solid #cbd5e1;margin-bottom:10px"
+                   target="_blank" href="https://github.com/pashambhargavi/odooapps/issues/new/choose">🎫 Open Support
+                    Ticket (GitHub)</a>
+                <div style="text-align:center;font-size:13px;color:#64748b;margin-top:12px">
+                    Direct: <a href="mailto:bhargavipasham2000@gmail.com" style="color:#714B67;font-weight:700">bhargavipasham2000@gmail.com</a>
                 </div>
             </div>
         </div>
     </div>
 
 </section>
+</body>
+</html>

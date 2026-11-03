@@ -20,8 +20,8 @@ Key Features
   - **Invoices & Vendor Bills (`account.move`):** Gate Customer Invoices and Vendor Bills before posting based on financial thresholds.
 * **Mandatory Rejection Reason Wizard & Full Audit Trail:** Capture structured rejection reasons in chatter, schedule automated To-Do activities for approvers, and print official **PDF Approval Certificates**.
     """,
-    'author': 'Bhargavi Odoo Labs',
-    'maintainer': 'Bhargavi Odoo Labs',
+    'author': 'Bhargavi Pasham',
+    'maintainer': 'Bhargavi Pasham',
     'website': 'https://github.com/pashambhargavi/odooapps/issues/new/choose',
     'license': 'LGPL-3',
     'price': 49.00,
