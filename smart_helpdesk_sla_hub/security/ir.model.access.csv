@@ -1,0 +1,14 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_helpdesk_stage_user,helpdesk.stage.user,model_helpdesk_stage,base.group_user,1,0,0,0
+access_helpdesk_stage_manager,helpdesk.stage.manager,model_helpdesk_stage,smart_helpdesk_sla_hub.group_helpdesk_manager,1,1,1,1
+access_helpdesk_ticket_type_user,helpdesk.ticket.type.user,model_helpdesk_ticket_type,base.group_user,1,0,0,0
+access_helpdesk_ticket_type_manager,helpdesk.ticket.type.manager,model_helpdesk_ticket_type,smart_helpdesk_sla_hub.group_helpdesk_manager,1,1,1,1
+access_helpdesk_tag_user,helpdesk.tag.user,model_helpdesk_tag,base.group_user,1,1,1,0
+access_helpdesk_tag_manager,helpdesk.tag.manager,model_helpdesk_tag,smart_helpdesk_sla_hub.group_helpdesk_manager,1,1,1,1
+access_helpdesk_team_user,helpdesk.team.user,model_helpdesk_team,base.group_user,1,0,0,0
+access_helpdesk_team_manager,helpdesk.team.manager,model_helpdesk_team,smart_helpdesk_sla_hub.group_helpdesk_manager,1,1,1,1
+access_helpdesk_sla_policy_user,helpdesk.sla.policy.user,model_helpdesk_sla_policy,base.group_user,1,0,0,0
+access_helpdesk_sla_policy_manager,helpdesk.sla.policy.manager,model_helpdesk_sla_policy,smart_helpdesk_sla_hub.group_helpdesk_manager,1,1,1,1
+access_helpdesk_ticket_user,helpdesk.ticket.user,model_helpdesk_ticket,base.group_user,1,1,1,0
+access_helpdesk_ticket_manager,helpdesk.ticket.manager,model_helpdesk_ticket,smart_helpdesk_sla_hub.group_helpdesk_manager,1,1,1,1
+access_helpdesk_ticket_resolve_wizard_user,helpdesk.ticket.resolve.wizard.user,model_helpdesk_ticket_resolve_wizard,base.group_user,1,1,1,1

@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="helpdesk_ticket_view_search" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.search</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="arch" type="xml">
+            <search string="Search Support Tickets">
+                <field name="name" filter_domain="['|', ('name', 'ilike', self), ('ticket_ref', 'ilike', self)]"/>
+                <field name="ticket_ref"/>
+                <field name="partner_id"/>
+                <field name="user_id"/>
+                <field name="team_id"/>
+                <field name="ticket_type_id"/>
+                <field name="sale_order_id"/>
+                <field name="product_id"/>
+                <filter string="My Tickets" name="my_tickets" domain="[('user_id', '=', uid)]"/>
+                <filter string="Unassigned" name="unassigned" domain="[('user_id', '=', False)]"/>
+                <separator/>
+                <filter string="Open Tickets" name="open_tickets" domain="[('is_close', '=', False), ('is_cancel', '=', False)]"/>
+                <filter string="Solved Tickets" name="solved_tickets" domain="[('is_close', '=', True)]"/>
+                <separator/>
+                <filter string="High &amp; Urgent" name="urgent_tickets" domain="[('priority', 'in', ('2', '3'))]"/>
+                <filter string="SLA Breached" name="sla_failed" domain="[('sla_status', '=', 'failed')]"/>
+                <filter string="SLA Achieved" name="sla_achieved" domain="[('sla_status', '=', 'achieved')]"/>
+                <group>
+                    <filter string="Support Team" name="group_team" context="{'group_by': 'team_id'}"/>
+                    <filter string="Assigned Agent" name="group_user" context="{'group_by': 'user_id'}"/>
+                    <filter string="Stage" name="group_stage" context="{'group_by': 'stage_id'}"/>
+                    <filter string="Customer" name="group_partner" context="{'group_by': 'partner_id'}"/>
+                    <filter string="SLA Status" name="group_sla_status" context="{'group_by': 'sla_status'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="helpdesk_ticket_view_list" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.list</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="arch" type="xml">
+            <list string="Support Tickets" sample="1"
+                  decoration-danger="sla_status == 'failed' and not is_close"
+                  decoration-success="is_close"
+                  decoration-muted="is_cancel">
+                <field name="priority" widget="priority" nolabel="1"/>
+                <field name="ticket_ref" decoration-bf="1"/>
+                <field name="name"/>
+                <field name="partner_id" optional="show"/>
+                <field name="team_id" optional="show"/>
+                <field name="user_id" widget="many2one_avatar_user"/>
+                <field name="ticket_type_id" optional="show"/>
+                <field name="sla_deadline" optional="show"/>
+                <field name="sla_status" widget="badge"
+                       decoration-info="sla_status == 'ongoing'"
+                       decoration-success="sla_status == 'achieved'"
+                       decoration-danger="sla_status == 'failed'"/>
+                <field name="activity_ids" widget="list_activity" optional="show"/>
+                <field name="stage_id" widget="badge"/>
+                <field name="is_close" column_invisible="True"/>
+                <field name="is_cancel" column_invisible="True"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="helpdesk_ticket_view_kanban" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.kanban</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="stage_id" class="o_kanban_small_column" sample="1">
+                <field name="ticket_ref"/>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="user_id"/>
+                <field name="priority"/>
+                <field name="sla_status"/>
+                <field name="sla_deadline"/>
+                <field name="color"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="fw-bold text-primary"><field name="ticket_ref"/></span>
+                            <field name="sla_status" widget="badge"
+                                   decoration-info="sla_status == 'ongoing'"
+                                   decoration-success="sla_status == 'achieved'"
+                                   decoration-danger="sla_status == 'failed'"/>
+                        </div>
+                        <div class="fw-bolder mb-1">
+                            <field name="name"/>
+                        </div>
+                        <div class="text-muted small mb-1" t-if="record.partner_id.raw_value">
+                            <i class="fa fa-user me-1" title="Customer"/><field name="partner_id"/>
+                        </div>
+                        <div class="mb-2">
+                            <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                        </div>
+                        <footer class="d-flex justify-content-between align-items-center mt-auto pt-1">
+                            <div class="d-flex align-items-center gap-2">
+                                <field name="priority" widget="priority"/>
+                                <field name="activity_ids" widget="kanban_activity"/>
+                            </div>
+                            <field name="user_id" widget="many2one_avatar_user"/>
+                        </footer>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="helpdesk_ticket_view_pivot" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.pivot</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="arch" type="xml">
+            <pivot string="Helpdesk Tickets Analysis" sample="1">
+                <field name="team_id" type="row"/>
+                <field name="stage_id" type="col"/>
+                <field name="resolution_hours" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="helpdesk_ticket_view_graph" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.graph</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="arch" type="xml">
+            <graph string="Helpdesk Tickets Analysis" sample="1">
+                <field name="team_id"/>
+                <field name="sla_status"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="helpdesk_ticket_view_form" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.form</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="arch" type="xml">
+            <form string="Support Ticket">
+                <header>
+                    <field name="is_close" invisible="1"/>
+                    <field name="is_cancel" invisible="1"/>
+                    <button name="action_assign_to_me" string="Assign to Me" type="object"
+                            class="btn-secondary" invisible="user_id == uid or is_close or is_cancel"/>
+                    <button name="action_start_progress" string="Start Progress" type="object"
+                            class="btn-primary" invisible="first_response_date or is_close or is_cancel" data-hotkey="q"/>
+                    <button name="action_open_resolve_wizard" string="Resolve Ticket" type="object"
+                            class="btn-success" invisible="is_close or is_cancel" data-hotkey="v"/>
+                    <button name="action_reopen_ticket" string="Reopen Ticket" type="object"
+                            class="btn-warning" invisible="not is_close and not is_cancel"/>
+                    <field name="stage_id" widget="statusbar" options="{'clickable': '1'}"/>
+                </header>
+                <div class="alert alert-danger" role="alert" invisible="sla_status != 'failed' or is_close">
+                    <i class="fa fa-exclamation-triangle me-2" title="SLA Breached"/>
+                    <strong>SLA Breached:</strong> This ticket has exceeded its target resolution deadline (<field name="sla_deadline" class="d-inline"/>).
+                </div>
+                <sheet>
+                    <div class="oe_title">
+                        <span class="o_form_label"><field name="ticket_ref" readonly="1"/></span>
+                        <h1 class="d-flex align-items-center">
+                            <field name="priority" widget="priority" class="me-3"/>
+                            <field name="name" placeholder="e.g. Defective power supply on Order S00012"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Customer &amp; Channel">
+                            <field name="partner_id"/>
+                            <field name="partner_email" widget="email"/>
+                            <field name="partner_phone" widget="phone"/>
+                            <field name="channel"/>
+                        </group>
+                        <group string="Assignment &amp; Classification">
+                            <field name="team_id"/>
+                            <field name="user_id" widget="many2one_avatar_user"/>
+                            <field name="ticket_type_id"/>
+                            <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="SLA Tracking">
+                            <field name="sla_policy_id"/>
+                            <field name="sla_status" widget="badge"
+                                   decoration-info="sla_status == 'ongoing'"
+                                   decoration-success="sla_status == 'achieved'"
+                                   decoration-danger="sla_status == 'failed'"/>
+                            <field name="sla_response_deadline"/>
+                            <field name="sla_deadline"/>
+                        </group>
+                        <group string="Linked Business Documents">
+                            <field name="sale_order_id"/>
+                            <field name="invoice_id"/>
+                            <field name="product_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Issue Description" name="description">
+                            <field name="description" placeholder="Describe the customer issue, steps to reproduce, or support request details..."/>
+                        </page>
+                        <page string="Resolution &amp; Metrics" name="resolution">
+                            <group>
+                                <group string="Performance Metrics">
+                                    <field name="first_response_date"/>
+                                    <field name="response_hours" widget="float_time"/>
+                                    <field name="closed_date"/>
+                                    <field name="resolution_hours" widget="float_time"/>
+                                </group>
+                                <group string="Customer Satisfaction">
+                                    <field name="customer_rating"/>
+                                    <field name="customer_feedback" placeholder="Optional customer feedback comments..."/>
+                                </group>
+                            </group>
+                            <group string="Resolution Summary">
+                                <field name="resolution_summary" nolabel="1" placeholder="Document how the issue was resolved..."/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="helpdesk_ticket_action_my" model="ir.actions.act_window">
+        <field name="name">My Support Tickets</field>
+        <field name="res_model">helpdesk.ticket</field>
+        <field name="view_mode">kanban,list,form,pivot,graph,activity</field>
+        <field name="context">{'search_default_my_tickets': 1, 'search_default_open_tickets': 1}</field>
+    </record>
+
+    <record id="helpdesk_ticket_action_all" model="ir.actions.act_window">
+        <field name="name">All Support Tickets</field>
+        <field name="res_model">helpdesk.ticket</field>
+        <field name="view_mode">kanban,list,form,pivot,graph,activity</field>
+    </record>
+
+    <record id="helpdesk_ticket_action_sla_failed" model="ir.actions.act_window">
+        <field name="name">SLA Breached Tickets</field>
+        <field name="res_model">helpdesk.ticket</field>
+        <field name="view_mode">list,kanban,form,pivot,graph</field>
+        <field name="context">{'search_default_sla_failed': 1, 'search_default_open_tickets': 1}</field>
+    </record>
+</odoo>
