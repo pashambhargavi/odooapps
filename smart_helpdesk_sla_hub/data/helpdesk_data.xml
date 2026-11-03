@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Default Helpdesk Stages -->
+    <record id="helpdesk_stage_new" model="helpdesk.stage">
+        <field name="name">New</field>
+        <field name="sequence">10</field>
+        <field name="is_in_progress" eval="False"/>
+        <field name="is_close" eval="False"/>
+    </record>
+
+    <record id="helpdesk_stage_in_progress" model="helpdesk.stage">
+        <field name="name">In Progress</field>
+        <field name="sequence">20</field>
+        <field name="is_in_progress" eval="True"/>
+        <field name="is_close" eval="False"/>
+    </record>
+
+    <record id="helpdesk_stage_waiting" model="helpdesk.stage">
+        <field name="name">Waiting on Customer</field>
+        <field name="sequence">30</field>
+        <field name="is_in_progress" eval="True"/>
+        <field name="is_close" eval="False"/>
+    </record>
+
+    <record id="helpdesk_stage_solved" model="helpdesk.stage">
+        <field name="name">Solved</field>
+        <field name="sequence">40</field>
+        <field name="is_close" eval="True"/>
+        <field name="fold" eval="False"/>
+    </record>
+
+    <record id="helpdesk_stage_canceled" model="helpdesk.stage">
+        <field name="name">Canceled</field>
+        <field name="sequence">50</field>
+        <field name="is_cancel" eval="True"/>
+        <field name="fold" eval="True"/>
+    </record>
+
+    <!-- Default Ticket Types -->
+    <record id="helpdesk_type_issue" model="helpdesk.ticket.type">
+        <field name="name">Technical Issue / Bug</field>
+        <field name="sequence">10</field>
+        <field name="code">TECH</field>
+    </record>
+
+    <record id="helpdesk_type_question" model="helpdesk.ticket.type">
+        <field name="name">Product Question / How-To</field>
+        <field name="sequence">20</field>
+        <field name="code">QUESTION</field>
+    </record>
+
+    <record id="helpdesk_type_billing" model="helpdesk.ticket.type">
+        <field name="name">Billing &amp; Invoice Dispute</field>
+        <field name="sequence">30</field>
+        <field name="code">BILLING</field>
+    </record>
+
+    <record id="helpdesk_type_warranty" model="helpdesk.ticket.type">
+        <field name="name">Warranty / Return Claim</field>
+        <field name="sequence">40</field>
+        <field name="code">WARRANTY</field>
+    </record>
+
+    <!-- Default Tags -->
+    <record id="helpdesk_tag_vip" model="helpdesk.tag">
+        <field name="name">VIP Customer</field>
+        <field name="color">2</field>
+    </record>
+    <record id="helpdesk_tag_sla_priority" model="helpdesk.tag">
+        <field name="name">Fast-Track SLA</field>
+        <field name="color">10</field>
+    </record>
+    <record id="helpdesk_tag_warranty" model="helpdesk.tag">
+        <field name="name">Under Warranty</field>
+        <field name="color">4</field>
+    </record>
+
+    <!-- Default Support Teams -->
+    <record id="helpdesk_team_customer_care" model="helpdesk.team">
+        <field name="name">Customer Care &amp; General Support</field>
+        <field name="sequence">10</field>
+        <field name="color">4</field>
+        <field name="assignment_method">balanced</field>
+        <field name="use_sla" eval="True"/>
+        <field name="leader_id" ref="base.user_admin"/>
+        <field name="member_ids" eval="[(4, ref('base.user_admin'))]"/>
+        <field name="description">First-line customer inquiries, order status updates, and general product assistance.</field>
+    </record>
+
+    <record id="helpdesk_team_technical" model="helpdesk.team">
+        <field name="name">Technical &amp; Warranty Escalations</field>
+        <field name="sequence">20</field>
+        <field name="color">10</field>
+        <field name="assignment_method">balanced</field>
+        <field name="use_sla" eval="True"/>
+        <field name="leader_id" ref="base.user_admin"/>
+        <field name="member_ids" eval="[(4, ref('base.user_admin'))]"/>
+        <field name="description">Hardware/software troubleshooting, warranty replacements, and engineering escalations.</field>
+    </record>
+
+    <record id="helpdesk_team_billing" model="helpdesk.team">
+        <field name="name">Billing &amp; Accounts Support</field>
+        <field name="sequence">30</field>
+        <field name="color">3</field>
+        <field name="assignment_method">balanced</field>
+        <field name="use_sla" eval="True"/>
+        <field name="leader_id" ref="base.user_admin"/>
+        <field name="member_ids" eval="[(4, ref('base.user_admin'))]"/>
+        <field name="description">Invoice clarifications, credit note requests, and payment reconciliation support.</field>
+    </record>
+
+    <!-- Default SLA Policies -->
+    <record id="helpdesk_sla_urgent_care" model="helpdesk.sla.policy">
+        <field name="name">Urgent Priority 4-Hour Resolution SLA</field>
+        <field name="sequence">10</field>
+        <field name="team_id" ref="helpdesk_team_customer_care"/>
+        <field name="priority">2</field>
+        <field name="response_time_hours">1.0</field>
+        <field name="resolution_time_hours">4.0</field>
+        <field name="description">High and Urgent tickets must receive a response within 1 hour and resolution within 4 hours.</field>
+    </record>
+
+    <record id="helpdesk_sla_standard_care" model="helpdesk.sla.policy">
+        <field name="name">Standard 24-Hour Customer Support SLA</field>
+        <field name="sequence">20</field>
+        <field name="team_id" ref="helpdesk_team_customer_care"/>
+        <field name="priority">0</field>
+        <field name="response_time_hours">4.0</field>
+        <field name="resolution_time_hours">24.0</field>
+        <field name="description">All standard customer support tickets must be answered within 4 hours and resolved within 24 hours.</field>
+    </record>
+
+    <record id="helpdesk_sla_technical" model="helpdesk.sla.policy">
+        <field name="name">Technical Escalation 12-Hour SLA</field>
+        <field name="sequence">10</field>
+        <field name="team_id" ref="helpdesk_team_technical"/>
+        <field name="priority">0</field>
+        <field name="response_time_hours">2.0</field>
+        <field name="resolution_time_hours">12.0</field>
+        <field name="description">Technical and warranty tickets require a 2-hour response and 12-hour resolution.</field>
+    </record>
+
+    <record id="helpdesk_sla_billing" model="helpdesk.sla.policy">
+        <field name="name">Billing Support 16-Hour SLA</field>
+        <field name="sequence">10</field>
+        <field name="team_id" ref="helpdesk_team_billing"/>
+        <field name="priority">0</field>
+        <field name="response_time_hours">4.0</field>
+        <field name="resolution_time_hours">16.0</field>
+        <field name="description">Billing inquiries require resolution within 16 hours.</field>
+    </record>
+</odoo>

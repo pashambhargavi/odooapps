@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_helpdesk_ticket_resolve_wizard_form" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.resolve.wizard.form</field>
+        <field name="model">helpdesk.ticket.resolve.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Resolve Support Ticket">
+                <group>
+                    <field name="ticket_id" invisible="1"/>
+                    <field name="customer_rating"/>
+                    <field name="resolution_summary" placeholder="Describe the solution provided or root cause of the issue..."/>
+                </group>
+                <footer>
+                    <button name="action_confirm_resolve" string="Mark as Solved" type="object" class="btn-success" data-hotkey="q"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="x"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

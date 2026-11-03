@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_helpdesk_ticket_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="oe_structure"/>
+                        <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
+                            <div>
+                                <h2 class="mb-1">Helpdesk Service Report</h2>
+                                <h5 class="text-muted mb-0">
+                                    Ticket #: <span t-field="doc.ticket_ref"/>
+                                </h5>
+                            </div>
+                            <div>
+                                <span t-if="doc.sla_status == 'achieved'" class="badge text-bg-success fs-6 p-2">SLA ACHIEVED</span>
+                                <span t-elif="doc.sla_status == 'failed'" class="badge text-bg-danger fs-6 p-2">SLA BREACHED</span>
+                                <span t-elif="doc.sla_status == 'ongoing'" class="badge text-bg-info fs-6 p-2">SLA ON TRACK</span>
+                                <span class="badge text-bg-secondary fs-6 p-2 ms-1" t-field="doc.stage_id.name"/>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-6">
+                                <strong>Subject:</strong> <span t-field="doc.name"/><br/>
+                                <strong>Customer:</strong> <span t-field="doc.partner_id.name"/><br/>
+                                <t t-if="doc.partner_email">
+                                    <strong>Email:</strong> <span t-field="doc.partner_email"/><br/>
+                                </t>
+                                <t t-if="doc.partner_phone">
+                                    <strong>Phone:</strong> <span t-field="doc.partner_phone"/><br/>
+                                </t>
+                                <strong>Channel:</strong> <span t-field="doc.channel"/><br/>
+                            </div>
+                            <div class="col-6">
+                                <strong>Support Team:</strong> <span t-field="doc.team_id.name"/><br/>
+                                <strong>Assigned Agent:</strong> <span t-field="doc.user_id.name"/><br/>
+                                <strong>Priority:</strong> <span t-field="doc.priority"/><br/>
+                                <t t-if="doc.sale_order_id">
+                                    <strong>Sales Order:</strong> <span t-field="doc.sale_order_id.name"/><br/>
+                                </t>
+                                <t t-if="doc.invoice_id">
+                                    <strong>Invoice / Bill:</strong> <span t-field="doc.invoice_id.name"/><br/>
+                                </t>
+                                <t t-if="doc.product_id">
+                                    <strong>Product:</strong> <span t-field="doc.product_id.display_name"/><br/>
+                                </t>
+                            </div>
+                        </div>
+
+                        <h5 class="mb-2">SLA &amp; Timeline Metrics</h5>
+                        <table class="table table-sm table-bordered mb-4">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>SLA Policy</th>
+                                    <th>Response Deadline</th>
+                                    <th>First Response On</th>
+                                    <th>Resolution Deadline</th>
+                                    <th>Resolved On</th>
+                                    <th>Resolution Hours</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span t-field="doc.sla_policy_id.name"/></td>
+                                    <td><span t-field="doc.sla_response_deadline"/></td>
+                                    <td><span t-field="doc.first_response_date"/></td>
+                                    <td><span t-field="doc.sla_deadline"/></td>
+                                    <td><span t-field="doc.closed_date"/></td>
+                                    <td><span t-field="doc.resolution_hours"/> hrs</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <t t-if="doc.description">
+                            <div class="mb-4">
+                                <h5>Reported Issue Description</h5>
+                                <div class="p-3 bg-light border rounded" t-field="doc.description"/>
+                            </div>
+                        </t>
+
+                        <t t-if="doc.resolution_summary">
+                            <div class="mb-4">
+                                <h5>Resolution Summary &amp; Root Cause</h5>
+                                <div class="p-3 bg-light border rounded">
+                                    <span t-field="doc.resolution_summary"/>
+                                </div>
+                            </div>
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
