@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_credit_risk_policy_list" model="ir.ui.view">
+        <field name="name">credit.risk.policy.list</field>
+        <field name="model">credit.risk.policy</field>
+        <field name="arch" type="xml">
+            <list string="Credit &amp; Margin Risk Policies">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="enforcement_mode" widget="badge"
+                       decoration-danger="enforcement_mode == 'block'"
+                       decoration-warning="enforcement_mode == 'warning'"
+                       decoration-info="enforcement_mode == 'allow'"/>
+                <field name="default_credit_limit" widget="monetary"/>
+                <field name="check_overdue_aging"/>
+                <field name="max_overdue_days"/>
+                <field name="max_overdue_invoices" optional="show"/>
+                <field name="check_minimum_margin"/>
+                <field name="min_margin_percent"/>
+                <field name="partner_count"/>
+                <field name="pending_override_count"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+                <field name="currency_id" column_invisible="True"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_credit_risk_policy_kanban" model="ir.ui.view">
+        <field name="name">credit.risk.policy.kanban</field>
+        <field name="model">credit.risk.policy</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_dashboard" highlight_color="color">
+                <field name="color"/>
+                <field name="name"/>
+                <field name="enforcement_mode"/>
+                <field name="default_credit_limit"/>
+                <field name="max_overdue_days"/>
+                <field name="min_margin_percent"/>
+                <field name="partner_count"/>
+                <field name="pending_override_count"/>
+                <field name="currency_id"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <field name="name" class="fw-bold fs-5"/>
+                            <field name="enforcement_mode" widget="badge"
+                                   decoration-danger="enforcement_mode == 'block'"
+                                   decoration-warning="enforcement_mode == 'warning'"
+                                   decoration-info="enforcement_mode == 'allow'"/>
+                        </div>
+                        <div class="row g-2 my-2">
+                            <div class="col-4 text-center border-end">
+                                <div class="text-muted small">Default Limit</div>
+                                <div class="fw-bold">
+                                    <field name="default_credit_limit" widget="monetary"/>
+                                </div>
+                            </div>
+                            <div class="col-4 text-center border-end">
+                                <div class="text-muted small">Max Overdue</div>
+                                <div class="fw-bold">
+                                    <field name="max_overdue_days"/> Days
+                                </div>
+                            </div>
+                            <div class="col-4 text-center">
+                                <div class="text-muted small">Min Margin</div>
+                                <div class="fw-bold">
+                                    <field name="min_margin_percent"/>%
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top">
+                            <button name="action_view_assigned_partners" type="object" class="btn btn-sm btn-secondary">
+                                <field name="partner_count"/> Customers
+                            </button>
+                            <button name="action_view_pending_overrides" type="object" class="btn btn-sm btn-primary">
+                                <field name="pending_override_count"/> Pending Overrides
+                            </button>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_credit_risk_policy_form" model="ir.ui.view">
+        <field name="name">credit.risk.policy.form</field>
+        <field name="model">credit.risk.policy</field>
+        <field name="arch" type="xml">
+            <form string="Credit &amp; Margin Risk Policy">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_assigned_partners" type="object"
+                                class="oe_stat_button" icon="fa-users">
+                            <field name="partner_count" widget="statinfo" string="Customers"/>
+                        </button>
+                        <button name="action_view_pending_overrides" type="object"
+                                class="oe_stat_button" icon="fa-gavel">
+                            <field name="pending_override_count" widget="statinfo" string="Pending Overrides"/>
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="e.g., Standard B2B Credit &amp; Margin Policy"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="General Policy Governance">
+                            <field name="active" invisible="1"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="sequence"/>
+                            <field name="enforcement_mode" widget="radio"/>
+                            <field name="auto_confirm_on_override"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group string="Authorized Credit &amp; Margin Controllers">
+                            <field name="approver_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="1. Credit Limit &amp; Overdue Aging Thresholds">
+                            <field name="default_credit_limit" widget="monetary"/>
+                            <field name="check_overdue_aging"/>
+                            <field name="max_overdue_days" invisible="not check_overdue_aging"/>
+                            <field name="max_overdue_invoices" invisible="not check_overdue_aging"/>
+                        </group>
+                        <group string="2. Minimum Profit Margin Guard">
+                            <field name="check_minimum_margin"/>
+                            <field name="min_margin_percent" invisible="not check_minimum_margin"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Policy Notes &amp; Guidelines" name="notes">
+                            <field name="description" placeholder="Document credit check procedures, advance payment requirements, or margin escalation guidelines..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_credit_risk_policy" model="ir.actions.act_window">
+        <field name="name">Credit &amp; Margin Risk Policies</field>
+        <field name="res_model">credit.risk.policy</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a Credit, Overdue Aging &amp; Margin Risk Policy
+            </p>
+            <p>
+                Define credit exposure limits, maximum overdue invoice aging days, and minimum profit margin % rules for your customer segments.
+            </p>
+        </field>
+    </record>
+</odoo>

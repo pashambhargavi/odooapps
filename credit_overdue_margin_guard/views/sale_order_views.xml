@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_order_form_inherit_credit_margin_guard" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.credit.margin.guard</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <field name="risk_hold_state" invisible="1"/>
+                <field name="can_approve_credit_override" invisible="1"/>
+                <button name="action_approve_credit_override"
+                        string="Approve Credit / Margin Override"
+                        type="object"
+                        class="btn-success"
+                        invisible="not can_approve_credit_override"/>
+                <button name="action_open_credit_reject_wizard"
+                        string="Reject Credit Override"
+                        type="object"
+                        class="btn-danger"
+                        invisible="not can_approve_credit_override"/>
+            </xpath>
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_credit_overrides" type="object"
+                        class="oe_stat_button" icon="fa-gavel"
+                        invisible="credit_override_count == 0">
+                    <field name="credit_override_count" widget="statinfo" string="Risk Overrides"/>
+                </button>
+            </xpath>
+            <xpath expr="//sheet" position="before">
+                <div class="alert alert-warning" role="alert" invisible="risk_hold_state != 'on_hold'">
+                    <i class="fa fa-exclamation-triangle me-2" title="Order On Credit / Margin Hold"/>
+                    <strong>Order Placed on Credit / Overdue / Margin Hold:</strong>
+                    <field name="risk_violation_summary" readonly="1" class="d-block mt-1 mb-0"/>
+                </div>
+                <div class="alert alert-danger" role="alert" invisible="risk_hold_state != 'rejected'">
+                    <i class="fa fa-ban me-2" title="Credit Override Rejected"/>
+                    <strong>Credit / Margin Override Rejected:</strong>
+                    <field name="risk_violation_summary" readonly="1" class="d-inline ms-1"/>
+                </div>
+                <div class="alert alert-success" role="alert" invisible="risk_hold_state != 'overridden'">
+                    <i class="fa fa-check-circle me-2" title="Credit Override Approved"/>
+                    <strong>Credit / Margin Override Approved:</strong>
+                    <field name="risk_violation_summary" readonly="1" class="d-inline ms-1"/>
+                </div>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/list/field[@name='price_unit']" position="after">
+                <field name="purchase_price" optional="show"/>
+                <field name="margin_amount" optional="show"/>
+                <field name="margin_percent" optional="show"
+                       decoration-danger="margin_percent &lt; 0"
+                       decoration-warning="margin_percent &gt;= 0 and margin_percent &lt; 15"
+                       decoration-success="margin_percent &gt;= 15"/>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="Credit &amp; Margin Guard" name="credit_margin_guard_tab">
+                    <group>
+                        <group string="Order Profitability &amp; Margin Summary">
+                            <field name="total_cost_amount" widget="monetary"/>
+                            <field name="order_margin_amount" widget="monetary" class="fw-bold"/>
+                            <field name="order_margin_percent" class="fw-bold"/>
+                        </group>
+                        <group string="Customer Credit &amp; Overdue Aging Snapshot">
+                            <field name="risk_hold_state" widget="badge"
+                                   decoration-success="risk_hold_state in ('clear', 'overridden')"
+                                   decoration-warning="risk_hold_state in ('warning', 'on_hold')"
+                                   decoration-danger="risk_hold_state == 'rejected'"/>
+                            <field name="partner_credit_limit" widget="monetary"/>
+                            <field name="partner_total_exposure" widget="monetary"/>
+                            <field name="partner_available_credit" widget="monetary"/>
+                            <field name="partner_oldest_overdue_days"/>
+                            <field name="pending_override_id" invisible="not pending_override_id"/>
+                        </group>
+                    </group>
+                    <group string="Risk Evaluation Breakdown" invisible="not risk_violation_summary">
+                        <field name="risk_violation_summary" nolabel="1" colspan="2"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

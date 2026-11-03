@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_form_inherit_credit_margin_guard" model="ir.ui.view">
+        <field name="name">res.partner.form.inherit.credit.margin.guard</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_credit_overrides" type="object"
+                        class="oe_stat_button" icon="fa-shield">
+                    <field name="credit_override_count" widget="statinfo" string="Credit Overrides"/>
+                </button>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="Credit &amp; Aging Risk" name="credit_aging_risk_guard">
+                    <group>
+                        <group string="Credit &amp; Margin Policy Configuration">
+                            <field name="credit_policy_id"/>
+                            <field name="credit_enforcement_mode"/>
+                            <field name="custom_credit_limit" widget="monetary"/>
+                            <field name="effective_credit_limit" widget="monetary" class="fw-bold"/>
+                            <field name="effective_max_overdue_days"/>
+                            <field name="effective_min_margin_percent"/>
+                        </group>
+                        <group string="Manual Credit Hold &amp; Live Risk Status">
+                            <field name="credit_risk_status" widget="badge"
+                                   decoration-success="credit_risk_status == 'healthy'"
+                                   decoration-warning="credit_risk_status == 'near_limit'"
+                                   decoration-danger="credit_risk_status in ('over_limit', 'on_hold')"/>
+                            <field name="is_credit_hold" widget="boolean_toggle"/>
+                            <field name="credit_hold_reason" invisible="not is_credit_hold"
+                                   placeholder="Reason for placing customer on credit hold..."/>
+                        </group>
+                    </group>
+                    <group string="Live Receivable Exposure &amp; Overdue Aging Metrics">
+                        <group>
+                            <field name="unpaid_invoice_amount" widget="monetary"/>
+                            <field name="uninvoiced_sale_amount" widget="monetary"/>
+                            <field name="total_receivable_exposure" widget="monetary" class="fw-bold"/>
+                            <field name="available_credit_balance" widget="monetary" class="fw-bold"/>
+                        </group>
+                        <group>
+                            <field name="overdue_invoice_count"/>
+                            <field name="overdue_invoice_amount" widget="monetary"/>
+                            <field name="oldest_overdue_days"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>
