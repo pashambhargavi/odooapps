@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_commission_worksheet_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-4">
+                            <div>
+                                <h2 class="mb-1" style="color: #0f172a; font-weight: 800;">Sales Commission Settlement Statement</h2>
+                                <p class="text-muted mb-0">
+                                    Worksheet: <strong t-field="o.name"/> |
+                                    Period: <strong t-field="o.date_start"/> to <strong t-field="o.date_end"/>
+                                </p>
+                            </div>
+                            <div class="text-end">
+                                <span t-if="o.state == 'approved'" class="badge text-bg-success fs-6 px-3 py-2">APPROVED</span>
+                                <span t-elif="o.state == 'settled'" class="badge text-bg-primary fs-6 px-3 py-2">SETTLED / PAID</span>
+                                <span t-elif="o.state == 'calculated'" class="badge text-bg-warning fs-6 px-3 py-2">CALCULATED</span>
+                                <span t-else="" class="badge text-bg-secondary fs-6 px-3 py-2">DRAFT</span>
+                            </div>
+                        </div>
+
+                        <!-- Beneficiary & Audit Header -->
+                        <div class="row mb-4">
+                            <div class="col-6">
+                                <h5 style="color: #0f172a; font-weight: 700;">Beneficiary Information</h5>
+                                <table class="table table-sm table-borderless">
+                                    <tr>
+                                        <td class="text-muted" style="width: 40%;">Beneficiary Type:</td>
+                                        <td><strong t-field="o.beneficiary_type"/></td>
+                                    </tr>
+                                    <tr t-if="o.salesperson_id">
+                                        <td class="text-muted">Sales Representative:</td>
+                                        <td><strong t-field="o.salesperson_id.name"/></td>
+                                    </tr>
+                                    <tr t-if="o.agent_partner_id">
+                                        <td class="text-muted">Agent Partner:</td>
+                                        <td><strong t-field="o.agent_partner_id.name"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-muted">Settlement Currency:</td>
+                                        <td><span t-field="o.currency_id.name"/></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-6">
+                                <h5 style="color: #0f172a; font-weight: 700;">Approval &amp; Audit Trail</h5>
+                                <table class="table table-sm table-borderless">
+                                    <tr>
+                                        <td class="text-muted" style="width: 40%;">Approved By:</td>
+                                        <td><span t-field="o.approved_by_id.name"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-muted">Approval Date:</td>
+                                        <td><span t-field="o.date_approved"/></td>
+                                    </tr>
+                                    <tr t-if="o.vendor_bill_id">
+                                        <td class="text-muted">Linked Vendor Bill:</td>
+                                        <td><strong t-field="o.vendor_bill_id.name"/></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Financial Totals Cards -->
+                        <div class="row mb-4">
+                            <div class="col-4">
+                                <div class="p-3 border rounded text-center bg-light">
+                                    <div class="text-muted small">Total Sales Volume</div>
+                                    <div class="fs-5 fw-bold text-dark">
+                                        <span t-field="o.total_base_amount" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="p-3 border rounded text-center bg-light">
+                                    <div class="text-muted small">Commission Entries</div>
+                                    <div class="fs-5 fw-bold text-dark">
+                                        <span t-field="o.lines_count"/> lines
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="p-3 border rounded text-center" style="background-color: #f0fdf4; border-color: #86efac !important;">
+                                    <div class="text-muted small">Net Payable Commission</div>
+                                    <div class="fs-4 fw-bold text-success">
+                                        <span t-field="o.total_commission_amount" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Itemized Lines Table -->
+                        <h5 style="color: #0f172a; font-weight: 700;" class="mb-3">Itemized Commission Breakdown</h5>
+                        <table class="table table-sm table-striped table-bordered mb-4">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Description / Transaction</th>
+                                    <th>Customer</th>
+                                    <th>Sales Volume</th>
+                                    <th class="text-center">Rate (%)</th>
+                                    <th class="text-end">Commission</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="o.line_ids" t-as="l">
+                                    <tr>
+                                        <td><span t-field="l.date"/></td>
+                                        <td>
+                                            <span t-field="l.name"/><br/>
+                                            <small class="text-muted" t-if="l.sale_order_id">Order: <span t-field="l.sale_order_id.name"/></small>
+                                            <small class="text-muted" t-if="l.invoice_id"> | Inv: <span t-field="l.invoice_id.name"/></small>
+                                        </td>
+                                        <td><span t-field="l.partner_id.name"/></td>
+                                        <td><span t-field="l.base_amount" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                                        <td class="text-center"><span t-field="l.rate"/>%</td>
+                                        <td class="text-end fw-bold"><span t-field="l.commission_amount" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+
+                        <!-- Signature Blocks -->
+                        <div class="row mt-5 pt-4">
+                            <div class="col-6 text-center">
+                                <div style="border-top: 1px solid #94a3b8; width: 80%; margin: 0 auto; padding-top: 8px;">
+                                    <strong>Beneficiary Signature</strong><br/>
+                                    <span class="text-muted small">I confirm receipt and agreement with the calculated amount.</span>
+                                </div>
+                            </div>
+                            <div class="col-6 text-center">
+                                <div style="border-top: 1px solid #94a3b8; width: 80%; margin: 0 auto; padding-top: 8px;">
+                                    <strong>Manager / Finance Authorization</strong><br/>
+                                    <span class="text-muted small">Authorized for payment and settlement.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

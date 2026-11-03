@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_commission_plan_list" model="ir.ui.view">
+        <field name="name">commission.plan.list</field>
+        <field name="model">commission.plan</field>
+        <field name="arch" type="xml">
+            <list string="Commission Plans">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="plan_type" widget="badge"
+                       decoration-info="plan_type == 'flat'"
+                       decoration-success="plan_type == 'margin'"
+                       decoration-warning="plan_type == 'tiered'"
+                       decoration-primary="plan_type == 'product_rule'"/>
+                <field name="calculation_basis" widget="badge"/>
+                <field name="flat_rate" string="Direct Rate (%)"/>
+                <field name="enable_manager_override"/>
+                <field name="manager_override_rate" string="Manager Rate (%)"/>
+                <field name="user_count" string="Assigned Reps"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_commission_plan_kanban" model="ir.ui.view">
+        <field name="name">commission.plan.kanban</field>
+        <field name="model">commission.plan</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_dashboard">
+                <field name="name"/>
+                <field name="plan_type"/>
+                <field name="calculation_basis"/>
+                <field name="flat_rate"/>
+                <field name="margin_rate"/>
+                <field name="manager_override_rate"/>
+                <field name="user_count"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="fw-bold fs-5 text-primary"><field name="name"/></span>
+                            <field name="plan_type" widget="badge"/>
+                        </div>
+                        <div class="text-muted small mb-2">
+                            Trigger: <field name="calculation_basis"/>
+                        </div>
+                        <div class="row g-2 text-center my-2 border-top border-bottom py-2">
+                            <div class="col-6 border-end">
+                                <div class="text-muted small">Direct Rate</div>
+                                <div class="fw-bold fs-5 text-success">
+                                    <t t-if="record.plan_type.raw_value == 'margin'">
+                                        <field name="margin_rate"/>% (Margin)
+                                    </t>
+                                    <t t-else="">
+                                        <field name="flat_rate"/>%
+                                    </t>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="text-muted small">Manager Override</div>
+                                <div class="fw-bold fs-5 text-info">
+                                    <field name="manager_override_rate"/>%
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mt-2">
+                            <button name="action_view_commission_lines" type="object" class="btn btn-sm btn-outline-primary">
+                                <field name="commission_line_count"/> Ledger Lines
+                            </button>
+                            <span class="text-muted small"><field name="user_count"/> Reps Active</span>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_commission_plan_form" model="ir.ui.view">
+        <field name="name">commission.plan.form</field>
+        <field name="model">commission.plan</field>
+        <field name="arch" type="xml">
+            <form string="Commission Plan">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_commission_lines" type="object"
+                                class="oe_stat_button" icon="fa-line-chart">
+                            <field name="commission_line_count" widget="statinfo" string="Commission Lines"/>
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="e.g. Standard Revenue &amp; Cash Collection Plan"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Commission Method &amp; Triggers">
+                            <field name="active" invisible="1"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="sequence"/>
+                            <field name="plan_type" widget="radio"/>
+                            <field name="calculation_basis" widget="radio"/>
+                        </group>
+                        <group string="Standard Incentive Rates">
+                            <field name="flat_rate" invisible="plan_type in ('tiered', 'margin')"/>
+                            <field name="margin_rate" invisible="plan_type != 'margin'"/>
+                            <field name="enable_manager_override"/>
+                            <field name="manager_override_rate" invisible="not enable_manager_override"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Volume Tiers" name="tiers" invisible="plan_type != 'tiered'">
+                            <field name="tier_ids">
+                                <list editable="bottom">
+                                    <field name="amount_from"/>
+                                    <field name="amount_to"/>
+                                    <field name="rate" string="Commission Rate (%)"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Product / Category Rules" name="rules" invisible="plan_type != 'product_rule'">
+                            <field name="rule_ids">
+                                <list editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="category_id"/>
+                                    <field name="rate" string="Commission Rate (%)"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Assigned Sales Reps &amp; Partners" name="assigned_users">
+                            <group>
+                                <field name="user_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                                <field name="partner_ids" widget="many2many_tags"/>
+                            </group>
+                        </page>
+                        <page string="Terms &amp; Guidelines" name="description">
+                            <field name="description" placeholder="Document specific qualification criteria, quarterly bonus benchmarks, or payout guidelines..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_commission_plan" model="ir.actions.act_window">
+        <field name="name">Commission Plans</field>
+        <field name="res_model">commission.plan</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first Sales Commission Plan
+            </p>
+            <p>
+                Define revenue %, gross profit margin %, volume accelerators, or product rules to automatically reward your sales team and referral agents.
+            </p>
+        </field>
+    </record>
+</odoo>

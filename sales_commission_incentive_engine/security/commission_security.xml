@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="module_category_sales_commission" model="ir.module.category">
+        <field name="name">Sales Commission &amp; Incentives</field>
+        <field name="description">Manage sales commissions, multi-tier plans, worksheets, and settlements.</field>
+        <field name="sequence">25</field>
+    </record>
+
+    <record id="privilege_sales_commission" model="res.groups.privilege">
+        <field name="name">Sales Commission</field>
+        <field name="category_id" ref="module_category_sales_commission"/>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="group_commission_user" model="res.groups">
+        <field name="name">Sales Rep: View Own Commissions</field>
+        <field name="privilege_id" ref="privilege_sales_commission"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <record id="group_commission_manager" model="res.groups">
+        <field name="name">Manager: Configure Plans &amp; Approve Worksheets</field>
+        <field name="privilege_id" ref="privilege_sales_commission"/>
+        <field name="implied_ids" eval="[(4, ref('group_commission_user'))]"/>
+        <field name="user_ids" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+
+    <record id="base.group_user" model="res.groups">
+        <field name="implied_ids" eval="[(4, ref('sales_commission_incentive_engine.group_commission_user'))]"/>
+    </record>
+
+    <data noupdate="1">
+        <record id="rule_commission_plan_company" model="ir.rule">
+            <field name="name">Commission Plan: Multi-Company</field>
+            <field name="model_id" ref="model_commission_plan"/>
+            <field name="domain_force">[('company_id', 'in', company_ids + [False])]</field>
+        </record>
+
+        <record id="rule_commission_worksheet_company" model="ir.rule">
+            <field name="name">Commission Worksheet: Multi-Company</field>
+            <field name="model_id" ref="model_commission_worksheet"/>
+            <field name="domain_force">[('company_id', 'in', company_ids + [False])]</field>
+        </record>
+
+        <record id="rule_commission_line_company" model="ir.rule">
+            <field name="name">Commission Line: Multi-Company</field>
+            <field name="model_id" ref="model_commission_line"/>
+            <field name="domain_force">[('company_id', 'in', company_ids + [False])]</field>
+        </record>
+    </data>
+</odoo>

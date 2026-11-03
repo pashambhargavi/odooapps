@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_commission_worksheet" model="ir.actions.report">
+        <field name="name">Commission Settlement Statement</field>
+        <field name="model">commission.worksheet</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">sales_commission_incentive_engine.report_commission_worksheet_document</field>
+        <field name="report_file">sales_commission_incentive_engine.report_commission_worksheet_document</field>
+        <field name="print_report_name">'Commission_Statement_%s' % (object.name.replace('/', '_'))</field>
+        <field name="binding_model_id" ref="model_commission_worksheet"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

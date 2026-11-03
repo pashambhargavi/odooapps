@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Plan 1: Standard Revenue & Cash Collection Plan -->
+    <record id="commission_plan_standard_revenue" model="commission.plan">
+        <field name="name">Standard Revenue &amp; Cash Collection Plan (5% Direct + 1.5% Manager Override)</field>
+        <field name="sequence">10</field>
+        <field name="plan_type">flat</field>
+        <field name="calculation_basis">inv_paid</field>
+        <field name="flat_rate">5.0</field>
+        <field name="enable_manager_override" eval="True"/>
+        <field name="manager_override_rate">1.5</field>
+        <field name="description">Standard commercial incentive plan. Sales representatives receive 5% upon customer payment collection. Sales managers receive a 1.5% override bonus.</field>
+    </record>
+
+    <!-- Plan 2: Gross Margin Incentive Plan -->
+    <record id="commission_plan_margin_based" model="commission.plan">
+        <field name="name">Gross Profit Margin Protection Plan (15% of Margin)</field>
+        <field name="sequence">20</field>
+        <field name="plan_type">margin</field>
+        <field name="calculation_basis">inv_paid</field>
+        <field name="margin_rate">15.0</field>
+        <field name="enable_manager_override" eval="True"/>
+        <field name="manager_override_rate">2.0</field>
+        <field name="description">Margin protection plan. Incentivizes sales reps to maintain high pricing by granting 15% of total gross profit margin earned on closed deals.</field>
+    </record>
+
+    <!-- Plan 3: Progressive Volume Tiers -->
+    <record id="commission_plan_tiered_volume" model="commission.plan">
+        <field name="name">High-Volume Tiered Sales Plan (3% / 5% / 8%)</field>
+        <field name="sequence">30</field>
+        <field name="plan_type">tiered</field>
+        <field name="calculation_basis">so_confirm</field>
+        <field name="flat_rate">3.0</field>
+        <field name="enable_manager_override" eval="True"/>
+        <field name="manager_override_rate">1.0</field>
+        <field name="description">Progressive volume accelerator rewarding large deals upon Sales Order confirmation.</field>
+    </record>
+
+    <record id="commission_plan_tier_1" model="commission.plan.tier">
+        <field name="plan_id" ref="commission_plan_tiered_volume"/>
+        <field name="amount_from">0.0</field>
+        <field name="amount_to">10000.0</field>
+        <field name="rate">3.0</field>
+    </record>
+
+    <record id="commission_plan_tier_2" model="commission.plan.tier">
+        <field name="plan_id" ref="commission_plan_tiered_volume"/>
+        <field name="amount_from">10000.01</field>
+        <field name="amount_to">50000.0</field>
+        <field name="rate">5.0</field>
+    </record>
+
+    <record id="commission_plan_tier_3" model="commission.plan.tier">
+        <field name="plan_id" ref="commission_plan_tiered_volume"/>
+        <field name="amount_from">50000.01</field>
+        <field name="amount_to">0.0</field>
+        <field name="rate">8.0</field>
+    </record>
+</odoo>

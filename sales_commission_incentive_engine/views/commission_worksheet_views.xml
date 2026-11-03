@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ================= COMMISSION WORKSHEET ================= -->
+    <record id="view_commission_worksheet_search" model="ir.ui.view">
+        <field name="name">commission.worksheet.search</field>
+        <field name="model">commission.worksheet</field>
+        <field name="arch" type="xml">
+            <search string="Search Worksheets">
+                <field name="name"/>
+                <field name="salesperson_id"/>
+                <field name="agent_partner_id"/>
+                <filter string="Draft" name="filter_draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Calculated" name="filter_calculated" domain="[('state', '=', 'calculated')]"/>
+                <filter string="Approved" name="filter_approved" domain="[('state', '=', 'approved')]"/>
+                <filter string="Settled / Paid" name="filter_settled" domain="[('state', '=', 'settled')]"/>
+                <group>
+                    <filter string="Sales Rep" name="group_rep" context="{'group_by': 'salesperson_id'}"/>
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Beneficiary Type" name="group_type" context="{'group_by': 'beneficiary_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_commission_worksheet_list" model="ir.ui.view">
+        <field name="name">commission.worksheet.list</field>
+        <field name="model">commission.worksheet</field>
+        <field name="arch" type="xml">
+            <list string="Commission Worksheets"
+                  decoration-info="state == 'draft'"
+                  decoration-warning="state == 'calculated'"
+                  decoration-success="state == 'approved'"
+                  decoration-muted="state == 'settled'">
+                <field name="name" decoration-bf="1"/>
+                <field name="beneficiary_type" widget="badge"/>
+                <field name="salesperson_id"/>
+                <field name="agent_partner_id"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="lines_count"/>
+                <field name="total_base_amount" widget="monetary" sum="Total Volume"/>
+                <field name="total_commission_amount" widget="monetary" sum="Total Commission" decoration-bf="1"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'draft'"
+                       decoration-warning="state == 'calculated'"
+                       decoration-success="state == 'approved'"
+                       decoration-muted="state == 'settled'"/>
+                <field name="currency_id" column_invisible="True"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_commission_worksheet_form" model="ir.ui.view">
+        <field name="name">commission.worksheet.form</field>
+        <field name="model">commission.worksheet</field>
+        <field name="arch" type="xml">
+            <form string="Commission Worksheet">
+                <header>
+                    <button name="action_calculate_commissions" string="Calculate Commissions" type="object"
+                            class="btn-primary" invisible="state not in ('draft', 'calculated')"/>
+                    <button name="action_approve" string="Approve Worksheet" type="object"
+                            class="btn-success" invisible="state != 'calculated'"/>
+                    <button name="%(action_commission_make_invoice_wizard)d" string="Create Settlement Bill" type="action"
+                            class="btn-primary" invisible="state != 'approved' or vendor_bill_id"/>
+                    <button name="action_mark_settled" string="Mark as Settled / Paid" type="object"
+                            class="btn-secondary" invisible="state != 'approved'"/>
+                    <button name="action_reset_to_draft" string="Reset to Draft" type="object"
+                            invisible="state not in ('calculated', 'approved')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,calculated,approved,settled"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_vendor_bill" type="object"
+                                class="oe_stat_button" icon="fa-pencil-square-o"
+                                invisible="not vendor_bill_id">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">Vendor Bill</span>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Beneficiary &amp; Period">
+                            <field name="currency_id" invisible="1"/>
+                            <field name="beneficiary_type" widget="radio" readonly="state != 'draft'"/>
+                            <field name="salesperson_id" invisible="beneficiary_type == 'partner'" readonly="state != 'draft'"/>
+                            <field name="agent_partner_id" invisible="beneficiary_type != 'partner'" readonly="state != 'draft'"/>
+                            <label for="date_start" string="Settlement Period"/>
+                            <div class="o_row">
+                                <field name="date_start" widget="daterange" options="{'related_end_date': 'date_end'}" readonly="state != 'draft'"/>
+                                <i class="fa fa-arrow-right mx-2" title="To"/>
+                                <field name="date_end" widget="daterange" options="{'related_start_date': 'date_start'}" readonly="state != 'draft'"/>
+                            </div>
+                        </group>
+                        <group string="Audit &amp; Financial Totals">
+                            <field name="company_id" groups="base.group_multi_company" readonly="1"/>
+                            <field name="total_base_amount" widget="monetary"/>
+                            <field name="total_commission_amount" widget="monetary" class="fw-bold fs-4 text-success"/>
+                            <field name="lines_count"/>
+                            <field name="approved_by_id" invisible="not approved_by_id"/>
+                            <field name="date_approved" invisible="not date_approved"/>
+                            <field name="vendor_bill_id" invisible="not vendor_bill_id"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Itemized Commission Lines" name="lines">
+                            <field name="line_ids" readonly="state in ('approved', 'settled')">
+                                <list>
+                                    <field name="date"/>
+                                    <field name="name"/>
+                                    <field name="partner_id" string="Customer"/>
+                                    <field name="sale_order_id" optional="show"/>
+                                    <field name="invoice_id" optional="show"/>
+                                    <field name="base_amount" widget="monetary" sum="Base Volume"/>
+                                    <field name="margin_amount" widget="monetary" optional="hide"/>
+                                    <field name="rate" string="Rate (%)"/>
+                                    <field name="commission_amount" widget="monetary" sum="Total Commission" decoration-bf="1"/>
+                                    <field name="state" widget="badge"
+                                           decoration-info="state == 'draft'"
+                                           decoration-success="state == 'approved'"
+                                           decoration-muted="state == 'paid'"/>
+                                    <field name="currency_id" column_invisible="True"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Internal Settlement Notes" name="notes">
+                            <field name="notes" placeholder="Add payroll notes, bonus rationale, or bank wire details..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_commission_worksheet" model="ir.actions.act_window">
+        <field name="name">Commission Worksheets</field>
+        <field name="res_model">commission.worksheet</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_filter_draft': 1, 'search_default_filter_calculated': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a Commission Settlement Worksheet
+            </p>
+            <p>
+                Consolidate accrued commission lines for a salesperson or external partner over any month or quarter, approve them, and generate a settlement vendor bill in 1 click.
+            </p>
+        </field>
+    </record>
+
+    <!-- ================= COMMISSION LEDGER LINES ================= -->
+    <record id="view_commission_line_search" model="ir.ui.view">
+        <field name="name">commission.line.search</field>
+        <field name="model">commission.line</field>
+        <field name="arch" type="xml">
+            <search string="Search Commission Ledger">
+                <field name="name"/>
+                <field name="salesperson_id"/>
+                <field name="agent_partner_id"/>
+                <field name="partner_id" string="Customer"/>
+                <field name="sale_order_id"/>
+                <field name="invoice_id"/>
+                <filter string="Accrued (Draft)" name="filter_draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Approved" name="filter_approved" domain="[('state', '=', 'approved')]"/>
+                <filter string="Paid / Settled" name="filter_paid" domain="[('state', '=', 'paid')]"/>
+                <group>
+                    <filter string="Salesperson / Agent" name="group_salesperson" context="{'group_by': 'salesperson_id'}"/>
+                    <filter string="Applied Plan" name="group_plan" context="{'group_by': 'plan_id'}"/>
+                    <filter string="Role" name="group_role" context="{'group_by': 'beneficiary_type'}"/>
+                    <filter string="Month" name="group_date" context="{'group_by': 'date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_commission_line_list" model="ir.ui.view">
+        <field name="name">commission.line.list</field>
+        <field name="model">commission.line</field>
+        <field name="arch" type="xml">
+            <list string="Commission Ledger" create="0">
+                <field name="date"/>
+                <field name="name"/>
+                <field name="beneficiary_type" widget="badge"/>
+                <field name="salesperson_id"/>
+                <field name="agent_partner_id" optional="show"/>
+                <field name="partner_id" string="Customer"/>
+                <field name="sale_order_id" optional="show"/>
+                <field name="invoice_id" optional="show"/>
+                <field name="base_amount" widget="monetary" sum="Total Volume"/>
+                <field name="rate" string="Rate (%)"/>
+                <field name="commission_amount" widget="monetary" sum="Total Commission" decoration-bf="1"/>
+                <field name="worksheet_id" optional="show"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'draft'"
+                       decoration-success="state == 'approved'"
+                       decoration-muted="state == 'paid'"/>
+                <field name="currency_id" column_invisible="True"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_commission_line_pivot" model="ir.ui.view">
+        <field name="name">commission.line.pivot</field>
+        <field name="model">commission.line</field>
+        <field name="arch" type="xml">
+            <pivot string="Commission Analysis">
+                <field name="salesperson_id" type="row"/>
+                <field name="date" interval="month" type="col"/>
+                <field name="commission_amount" type="measure"/>
+                <field name="base_amount" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_commission_line_graph" model="ir.ui.view">
+        <field name="name">commission.line.graph</field>
+        <field name="model">commission.line</field>
+        <field name="arch" type="xml">
+            <graph string="Commission Performance" sample="1">
+                <field name="salesperson_id"/>
+                <field name="commission_amount" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="action_commission_line" model="ir.actions.act_window">
+        <field name="name">Commission Ledger Lines</field>
+        <field name="res_model">commission.line</field>
+        <field name="view_mode">list,pivot,graph,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No commission entries yet
+            </p>
+            <p>
+                Commission lines accrue automatically whenever Sales Orders or Customer Invoices are confirmed or paid according to your active Commission Plans.
+            </p>
+        </field>
+    </record>
+</odoo>
