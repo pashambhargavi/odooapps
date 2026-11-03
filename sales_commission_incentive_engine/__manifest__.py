@@ -33,8 +33,8 @@ Key Features
     'maintainer': 'Bhargavi Pasham',
     'website': 'https://github.com/pashambhargavi/odooapps/issues/new/choose',
     'license': 'LGPL-3',
-    'price': 69.00,
-    'currency': 'USD',
+    # 'price': 69.00,
+    # 'currency': 'USD',
     'depends': [
         'base',
         'mail',
