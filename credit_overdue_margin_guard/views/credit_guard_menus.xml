@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_credit_margin_guard_root"
+              name="Credit &amp; Margin Guard"
+              web_icon="credit_overdue_margin_guard,static/description/icon.png"
+              sequence="32"
+              groups="credit_overdue_margin_guard.group_credit_guard_user"/>
+
+    <menuitem id="menu_credit_override_requests"
+              name="Override Requests"
+              parent="menu_credit_margin_guard_root"
+              action="action_credit_override_request"
+              sequence="10"/>
+
+    <menuitem id="menu_credit_guard_config"
+              name="Configuration"
+              parent="menu_credit_margin_guard_root"
+              sequence="90"
+              groups="credit_overdue_margin_guard.group_credit_guard_manager"/>
+
+    <menuitem id="menu_credit_risk_policies"
+              name="Credit &amp; Margin Risk Policies"
+              parent="menu_credit_guard_config"
+              action="action_credit_risk_policy"
+              sequence="10"/>
+</odoo>

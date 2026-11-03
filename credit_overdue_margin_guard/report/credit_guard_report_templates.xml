@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_credit_override_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-4">
+                            <div>
+                                <h2 class="mb-1">Commercial Credit &amp; Margin Risk Statement</h2>
+                                <p class="text-muted mb-0">
+                                    Override Reference: <strong t-field="o.name"/> |
+                                    Sales Order: <strong t-field="o.sale_order_id.name"/>
+                                </p>
+                            </div>
+                            <div class="text-end">
+                                <span t-if="o.state == 'approved'" class="badge text-bg-success fs-6 px-3 py-2">APPROVED</span>
+                                <span t-elif="o.state == 'pending'" class="badge text-bg-warning fs-6 px-3 py-2">PENDING REVIEW</span>
+                                <span t-elif="o.state == 'rejected'" class="badge text-bg-danger fs-6 px-3 py-2">REJECTED</span>
+                                <span t-else="" class="badge text-bg-secondary fs-6 px-3 py-2">CANCELLED</span>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-6">
+                                <h5>Customer &amp; Policy Details</h5>
+                                <table class="table table-sm table-borderless">
+                                    <tr>
+                                        <td class="text-muted">Customer:</td>
+                                        <td><strong t-field="o.partner_id.name"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-muted">Applied Risk Policy:</td>
+                                        <td><span t-field="o.policy_id.name"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-muted">Primary Violation:</td>
+                                        <td><strong t-field="o.violation_type"/></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-6">
+                                <h5>Governance Audit Trail</h5>
+                                <table class="table table-sm table-borderless">
+                                    <tr>
+                                        <td class="text-muted">Requested By:</td>
+                                        <td><span t-field="o.requested_by_id.name"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-muted">Reviewed By:</td>
+                                        <td><span t-field="o.reviewed_by_id.name"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-muted">Reviewed Date:</td>
+                                        <td><span t-field="o.reviewed_date"/></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <h5>Financial Exposure &amp; Margin Snapshot</h5>
+                        <table class="table table-bordered mb-4">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Order Total</th>
+                                    <th>Existing Exposure</th>
+                                    <th>Projected Exposure</th>
+                                    <th>Credit Limit</th>
+                                    <th>Overdue Days</th>
+                                    <th>Order Margin %</th>
+                                    <th>Min Required Margin %</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span t-field="o.order_amount" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                                    <td><span t-field="o.current_exposure_amount" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                                    <td><strong t-field="o.projected_exposure_amount" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                                    <td><span t-field="o.credit_limit_amount" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                                    <td><span t-field="o.oldest_overdue_days"/> days</td>
+                                    <td><strong t-field="o.order_margin_percent"/>%</td>
+                                    <td><span t-field="o.min_margin_percent"/>%</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="mb-3" t-if="o.violation_details">
+                            <h5>Detailed Risk Evaluation Breakdown</h5>
+                            <div class="p-3 bg-light border rounded" style="white-space: pre-line;" t-field="o.violation_details"/>
+                        </div>
+
+                        <div class="mb-3" t-if="o.justification">
+                            <h5>Salesperson Justification</h5>
+                            <div class="p-3 border rounded" t-field="o.justification"/>
+                        </div>
+
+                        <div class="mb-3" t-if="o.rejection_reason">
+                            <h5>Finance Rejection Reason</h5>
+                            <div class="p-3 border border-danger rounded text-danger" t-field="o.rejection_reason"/>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

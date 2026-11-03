@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_credit_override_request_search" model="ir.ui.view">
+        <field name="name">credit.override.request.search</field>
+        <field name="model">credit.override.request</field>
+        <field name="arch" type="xml">
+            <search string="Search Credit &amp; Margin Overrides">
+                <field name="name"/>
+                <field name="sale_order_id"/>
+                <field name="partner_id"/>
+                <field name="policy_id"/>
+                <field name="requested_by_id"/>
+                <field name="reviewed_by_id"/>
+                <filter string="Pending Finance Review" name="filter_pending" domain="[('state', '=', 'pending')]"/>
+                <filter string="Approved" name="filter_approved" domain="[('state', '=', 'approved')]"/>
+                <filter string="Rejected" name="filter_rejected" domain="[('state', '=', 'rejected')]"/>
+                <separator/>
+                <filter string="Credit Limit Exceeded" name="filter_credit_limit" domain="[('violation_type', 'in', ('credit_limit', 'multiple'))]"/>
+                <filter string="Overdue Invoice Aging" name="filter_overdue" domain="[('violation_type', 'in', ('overdue_aging', 'multiple'))]"/>
+                <filter string="Low Profit Margin" name="filter_low_margin" domain="[('violation_type', 'in', ('low_margin', 'multiple'))]"/>
+                <filter string="Manual Credit Hold" name="filter_credit_hold" domain="[('violation_type', '=', 'credit_hold')]"/>
+                <group>
+                    <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
+                    <filter string="Violation Type" name="group_by_violation" context="{'group_by': 'violation_type'}"/>
+                    <filter string="Customer" name="group_by_partner" context="{'group_by': 'partner_id'}"/>
+                    <filter string="Risk Policy" name="group_by_policy" context="{'group_by': 'policy_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_credit_override_request_list" model="ir.ui.view">
+        <field name="name">credit.override.request.list</field>
+        <field name="model">credit.override.request</field>
+        <field name="arch" type="xml">
+            <list string="Credit &amp; Margin Override Requests"
+                  decoration-warning="state == 'pending'"
+                  decoration-success="state == 'approved'"
+                  decoration-danger="state == 'rejected'"
+                  decoration-muted="state == 'cancel'">
+                <field name="name" decoration-bf="1"/>
+                <field name="create_date" string="Requested On"/>
+                <field name="sale_order_id"/>
+                <field name="partner_id"/>
+                <field name="violation_type" widget="badge"
+                       decoration-danger="violation_type in ('credit_hold', 'multiple')"
+                       decoration-warning="violation_type in ('credit_limit', 'overdue_aging', 'low_margin')"/>
+                <field name="violation_summary"/>
+                <field name="order_amount" widget="monetary"/>
+                <field name="projected_exposure_amount" widget="monetary" optional="show"/>
+                <field name="credit_limit_amount" widget="monetary" optional="show"/>
+                <field name="oldest_overdue_days" optional="show"/>
+                <field name="order_margin_percent" optional="show"/>
+                <field name="requested_by_id" widget="many2one_avatar_user"/>
+                <field name="reviewed_by_id" widget="many2one_avatar_user" optional="show"/>
+                <field name="state" widget="badge"
+                       decoration-warning="state == 'pending'"
+                       decoration-success="state == 'approved'"
+                       decoration-danger="state == 'rejected'"
+                       decoration-muted="state == 'cancel'"/>
+                <field name="currency_id" column_invisible="True"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_credit_override_request_kanban" model="ir.ui.view">
+        <field name="name">credit.override.request.kanban</field>
+        <field name="model">credit.override.request</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_small_column">
+                <field name="name"/>
+                <field name="sale_order_id"/>
+                <field name="partner_id"/>
+                <field name="violation_type"/>
+                <field name="violation_summary"/>
+                <field name="order_amount"/>
+                <field name="order_margin_percent"/>
+                <field name="state"/>
+                <field name="requested_by_id"/>
+                <field name="currency_id"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <field name="name" class="fw-bold"/>
+                            <field name="violation_type" widget="badge"
+                                   decoration-danger="violation_type in ('credit_hold', 'multiple')"
+                                   decoration-warning="violation_type in ('credit_limit', 'overdue_aging', 'low_margin')"/>
+                        </div>
+                        <div class="fw-semibold mb-1">
+                            <field name="partner_id"/> — <field name="sale_order_id"/>
+                        </div>
+                        <div class="text-muted small mb-2">
+                            <field name="violation_summary"/>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mt-auto pt-1 border-top">
+                            <div>
+                                <span class="fw-bold"><field name="order_amount" widget="monetary"/></span>
+                                <span class="text-muted small ms-2">(<field name="order_margin_percent"/>% Margin)</span>
+                            </div>
+                            <field name="requested_by_id" widget="many2one_avatar_user"/>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_credit_override_request_form" model="ir.ui.view">
+        <field name="name">credit.override.request.form</field>
+        <field name="model">credit.override.request</field>
+        <field name="arch" type="xml">
+            <form string="Credit &amp; Margin Override Request">
+                <header>
+                    <field name="can_current_user_review" invisible="1"/>
+                    <button name="action_approve" string="Approve &amp; Release Order" type="object"
+                            class="btn-success" invisible="not can_current_user_review"/>
+                    <button name="action_open_reject_wizard" string="Reject Override" type="object"
+                            class="btn-danger" invisible="not can_current_user_review"/>
+                    <button name="action_reset_to_pending" string="Reset to Pending" type="object"
+                            invisible="state not in ('rejected', 'cancel')"/>
+                    <button name="action_cancel" string="Cancel" type="object"
+                            invisible="state not in ('pending', 'rejected')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="pending,approved,rejected"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_sale_order" type="object"
+                                class="oe_stat_button" icon="fa-shopping-cart">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">Sales Order</span>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Order &amp; Customer Information">
+                            <field name="currency_id" invisible="1"/>
+                            <field name="sale_order_id" readonly="state != 'pending'"/>
+                            <field name="partner_id" readonly="state != 'pending'"/>
+                            <field name="policy_id" readonly="state != 'pending'"/>
+                            <field name="violation_type" widget="badge"
+                                   decoration-danger="violation_type in ('credit_hold', 'multiple')"
+                                   decoration-warning="violation_type in ('credit_limit', 'overdue_aging', 'low_margin')"/>
+                            <field name="violation_summary"/>
+                        </group>
+                        <group string="Governance Audit Trail">
+                            <field name="requested_by_id" widget="many2one_avatar_user" readonly="1"/>
+                            <field name="reviewed_by_id" widget="many2one_avatar_user" invisible="not reviewed_by_id"/>
+                            <field name="reviewed_date" invisible="not reviewed_date"/>
+                            <field name="company_id" groups="base.group_multi_company" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group string="Credit Exposure &amp; Aging Snapshot">
+                            <field name="order_amount" widget="monetary"/>
+                            <field name="current_exposure_amount" widget="monetary"/>
+                            <field name="projected_exposure_amount" widget="monetary" class="fw-bold"/>
+                            <field name="credit_limit_amount" widget="monetary"/>
+                            <field name="overdue_invoice_count"/>
+                            <field name="oldest_overdue_days"/>
+                        </group>
+                        <group string="Profit Margin Snapshot">
+                            <field name="order_margin_percent"/>
+                            <field name="min_margin_percent"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Risk Violation Breakdown &amp; Justification" name="details">
+                            <group>
+                                <field name="violation_details" readonly="1"/>
+                                <field name="justification" readonly="state != 'pending'"
+                                       placeholder="Provide commercial context for Finance (e.g., customer promised wire transfer by Friday, strategic bundle deal)..."/>
+                                <field name="rejection_reason" invisible="not rejection_reason"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_credit_override_request" model="ir.actions.act_window">
+        <field name="name">Credit &amp; Margin Override Requests</field>
+        <field name="res_model">credit.override.request</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="context">{'search_default_filter_pending': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No pending Credit or Margin Override Requests
+            </p>
+            <p>
+                When a Sales Order exceeds a customer's credit limit, overdue aging threshold, or minimum profit margin %, an override request appears here for Finance review.
+            </p>
+        </field>
+    </record>
+</odoo>

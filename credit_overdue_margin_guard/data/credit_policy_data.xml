@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="credit_policy_standard_b2b" model="credit.risk.policy">
+        <field name="name">Standard B2B Tier ($15,000 Limit / 30d Aging / 15% Margin)</field>
+        <field name="sequence">10</field>
+        <field name="color">4</field>
+        <field name="enforcement_mode">block</field>
+        <field name="default_credit_limit">15000.0</field>
+        <field name="check_overdue_aging" eval="True"/>
+        <field name="max_overdue_days">30</field>
+        <field name="max_overdue_invoices">2</field>
+        <field name="check_minimum_margin" eval="True"/>
+        <field name="min_margin_percent">15.0</field>
+        <field name="auto_confirm_on_override" eval="True"/>
+        <field name="approver_ids" eval="[(4, ref('base.user_admin'))]"/>
+        <field name="description">Default commercial policy for regular B2B accounts. Enforces a $15,000 receivable limit, blocks accounts with invoices over 30 days past due, and requires at least 15% gross order margin.</field>
+    </record>
+
+    <record id="credit_policy_vip_enterprise" model="credit.risk.policy">
+        <field name="name">VIP Enterprise Tier ($75,000 Limit / 60d Aging / 10% Margin)</field>
+        <field name="sequence">20</field>
+        <field name="color">10</field>
+        <field name="enforcement_mode">block</field>
+        <field name="default_credit_limit">75000.0</field>
+        <field name="check_overdue_aging" eval="True"/>
+        <field name="max_overdue_days">60</field>
+        <field name="max_overdue_invoices">5</field>
+        <field name="check_minimum_margin" eval="True"/>
+        <field name="min_margin_percent">10.0</field>
+        <field name="auto_confirm_on_override" eval="True"/>
+        <field name="approver_ids" eval="[(4, ref('base.user_admin'))]"/>
+        <field name="description">Strategic enterprise accounts with extended $75,000 credit exposure, 60-day overdue tolerance, and 10% volume margin floor.</field>
+    </record>
+
+    <record id="credit_policy_strict_zero_overdue" model="credit.risk.policy">
+        <field name="name">Strict Prepay / Watchlist Tier ($2,500 Limit / 0d Overdue / 20% Margin)</field>
+        <field name="sequence">30</field>
+        <field name="color">1</field>
+        <field name="enforcement_mode">block</field>
+        <field name="default_credit_limit">2500.0</field>
+        <field name="check_overdue_aging" eval="True"/>
+        <field name="max_overdue_days">0</field>
+        <field name="max_overdue_invoices">0</field>
+        <field name="check_minimum_margin" eval="True"/>
+        <field name="min_margin_percent">20.0</field>
+        <field name="auto_confirm_on_override" eval="True"/>
+        <field name="approver_ids" eval="[(4, ref('base.user_admin'))]"/>
+        <field name="description">High-risk or new accounts requiring immediate payment on due dates, low credit exposure, and a 20% minimum margin buffer.</field>
+    </record>
+</odoo>

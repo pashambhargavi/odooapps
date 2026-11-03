@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_credit_override_reject_wizard_form" model="ir.ui.view">
+        <field name="name">credit.override.reject.wizard.form</field>
+        <field name="model">credit.override.reject.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Reject Credit / Margin Override">
+                <group>
+                    <field name="override_request_id" readonly="1"/>
+                    <field name="rejection_reason" placeholder="Explain why this credit or margin override cannot be approved (e.g., require 50% advance payment or increase unit price)..."/>
+                </group>
+                <footer>
+                    <button name="action_confirm_reject" string="Confirm Rejection" type="object" class="btn-danger"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

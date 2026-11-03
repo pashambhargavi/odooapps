@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_credit_override_certificate" model="ir.actions.report">
+        <field name="name">Credit &amp; Margin Risk Statement</field>
+        <field name="model">credit.override.request</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">credit_overdue_margin_guard.report_credit_override_document</field>
+        <field name="report_file">credit_overdue_margin_guard.report_credit_override_document</field>
+        <field name="print_report_name">'Credit_Margin_Override_%s' % (object.name.replace('/', '_'))</field>
+        <field name="binding_model_id" ref="model_credit_override_request"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>
