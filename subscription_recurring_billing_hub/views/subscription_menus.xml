@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_subscription_contract_active" model="ir.actions.act_window">
+        <field name="name">Active Subscriptions</field>
+        <field name="res_model">subscription.contract</field>
+        <field name="view_mode">kanban,list,form,pivot,graph</field>
+        <field name="domain">[('state', '=', 'active')]</field>
+        <field name="context">{'default_state': 'active'}</field>
+    </record>
+
+    <record id="action_subscription_contract_expiring" model="ir.actions.act_window">
+        <field name="name">Expiring Contracts</field>
+        <field name="res_model">subscription.contract</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="domain">[('state', '=', 'active'), ('date_end', '!=', False)]</field>
+    </record>
+
+    <record id="action_subscription_invoices" model="ir.actions.act_window">
+        <field name="name">Recurring Invoices</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="domain">[('subscription_id', '!=', False), ('move_type', '=', 'out_invoice')]</field>
+        <field name="context">{'default_move_type': 'out_invoice'}</field>
+    </record>
+
+    <!-- Top Root Menu -->
+    <menuitem id="menu_subscription_root"
+              name="Subscriptions"
+              web_icon="subscription_recurring_billing_hub,static/description/icon.png"
+              sequence="35"/>
+
+    <!-- Submenus -->
+    <menuitem id="menu_subscription_contracts"
+              name="Contracts"
+              parent="menu_subscription_root"
+              sequence="10"/>
+
+    <menuitem id="menu_subscription_contract_all"
+              name="All Subscriptions"
+              parent="menu_subscription_contracts"
+              action="action_subscription_contract_all"
+              sequence="10"/>
+
+    <menuitem id="menu_subscription_contract_active"
+              name="Active Subscriptions"
+              parent="menu_subscription_contracts"
+              action="action_subscription_contract_active"
+              sequence="20"/>
+
+    <menuitem id="menu_subscription_contract_expiring"
+              name="Expiring Soon"
+              parent="menu_subscription_contracts"
+              action="action_subscription_contract_expiring"
+              sequence="30"/>
+
+    <menuitem id="menu_subscription_billing"
+              name="Billing &amp; Invoices"
+              parent="menu_subscription_root"
+              sequence="20"/>
+
+    <menuitem id="menu_subscription_invoices"
+              name="Recurring Invoices"
+              parent="menu_subscription_billing"
+              action="action_subscription_invoices"
+              sequence="10"/>
+
+    <menuitem id="menu_subscription_config"
+              name="Configuration"
+              parent="menu_subscription_root"
+              groups="subscription_recurring_billing_hub.group_subscription_manager"
+              sequence="90"/>
+
+    <menuitem id="menu_subscription_plans"
+              name="Billing Plans"
+              parent="menu_subscription_config"
+              action="action_subscription_plan"
+              sequence="10"/>
+</odoo>

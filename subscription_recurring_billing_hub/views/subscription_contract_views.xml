@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Kanban View -->
+    <record id="view_subscription_contract_kanban" model="ir.ui.view">
+        <field name="name">subscription.contract.kanban</field>
+        <field name="model">subscription.contract</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" quick_create="false" class="o_kanban_dashboard">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="plan_id"/>
+                <field name="state"/>
+                <field name="mrr"/>
+                <field name="arr"/>
+                <field name="amount_total"/>
+                <field name="currency_id"/>
+                <field name="next_invoice_date"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_global_click">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <strong class="o_kanban_record_title fs-6"><field name="name"/></strong>
+                                <span t-if="record.state.raw_value == 'active'" class="badge text-bg-success">Active</span>
+                                <span t-elif="record.state.raw_value == 'draft'" class="badge text-bg-secondary">Draft</span>
+                                <span t-elif="record.state.raw_value == 'paused'" class="badge text-bg-warning">Paused</span>
+                                <span t-elif="record.state.raw_value == 'expired'" class="badge text-bg-danger">Expired</span>
+                                <span t-else="" class="badge text-bg-dark">Closed</span>
+                            </div>
+                            <div class="text-muted small mb-2">
+                                <i class="fa fa-user me-1" title="Customer"/> <field name="partner_id"/>
+                            </div>
+                            <div class="text-muted small mb-2">
+                                <i class="fa fa-calendar me-1" title="Next Invoice Date"/> Next Invoice: <field name="next_invoice_date"/>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+                                <div>
+                                    <span class="text-muted small">MRR: </span>
+                                    <strong class="text-primary"><field name="mrr" widget="monetary"/></strong>
+                                </div>
+                                <div>
+                                    <span class="text-muted small">ARR: </span>
+                                    <strong class="text-success"><field name="arr" widget="monetary"/></strong>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- List View -->
+    <record id="view_subscription_contract_tree" model="ir.ui.view">
+        <field name="name">subscription.contract.list</field>
+        <field name="model">subscription.contract</field>
+        <field name="arch" type="xml">
+            <list string="Subscription Contracts" decoration-success="state == 'active'" decoration-warning="state == 'paused'" decoration-danger="state == 'expired'" decoration-muted="state in ('closed', 'draft')">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="plan_id"/>
+                <field name="date_start"/>
+                <field name="next_invoice_date"/>
+                <field name="date_end" optional="show"/>
+                <field name="user_id" widget="many2one_avatar_user" optional="show"/>
+                <field name="amount_total" sum="Total Recurring"/>
+                <field name="mrr" sum="Total MRR"/>
+                <field name="arr" sum="Total ARR" optional="show"/>
+                <field name="currency_id" column_invisible="True"/>
+                <field name="state" widget="badge" decoration-success="state == 'active'" decoration-warning="state == 'paused'" decoration-danger="state == 'expired'" decoration-info="state == 'draft'" decoration-muted="state == 'closed'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_subscription_contract_form" model="ir.ui.view">
+        <field name="name">subscription.contract.form</field>
+        <field name="model">subscription.contract</field>
+        <field name="arch" type="xml">
+            <form string="Subscription Contract">
+                <header>
+                    <button name="action_activate" string="Activate Subscription" type="object" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_generate_invoice" string="Generate Recurring Invoice" type="object" class="btn-primary" invisible="state != 'active'"/>
+                    <button name="action_open_renew_wizard" string="Renew / Extend" type="object" class="btn-secondary" invisible="state not in ('active', 'expired')"/>
+                    <button name="action_pause" string="Pause Billing" type="object" class="btn-secondary" invisible="state != 'active'"/>
+                    <button name="action_resume" string="Resume Subscription" type="object" class="btn-secondary" invisible="state != 'paused'"/>
+                    <button name="action_close" string="Cancel Contract" type="object" class="btn-secondary" invisible="state in ('draft', 'closed')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,active,paused,expired,closed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_invoices" type="object" class="oe_stat_button" icon="fa-pencil-square-o">
+                            <field name="invoice_count" widget="statinfo" string="Invoices"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <span class="o_form_label">Subscription Reference</span>
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Subscription Profile">
+                            <field name="partner_id" readonly="state != 'draft'"/>
+                            <field name="plan_id" readonly="state != 'draft'"/>
+                            <field name="user_id" widget="many2one_avatar_user"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                        <group string="Schedule &amp; Recurring Dates">
+                            <field name="date_start" readonly="state != 'draft'"/>
+                            <field name="next_invoice_date" readonly="state not in ('draft', 'active')"/>
+                            <field name="date_end"/>
+                            <field name="last_invoice_date"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Subscription Items &amp; Services" name="lines">
+                            <field name="line_ids" readonly="state in ('closed')">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="product_id"/>
+                                    <field name="name"/>
+                                    <field name="quantity"/>
+                                    <field name="product_uom_id" groups="uom.group_uom"/>
+                                    <field name="price_unit"/>
+                                    <field name="discount"/>
+                                    <field name="tax_ids" widget="many2many_tags" optional="show"/>
+                                    <field name="currency_id" column_invisible="True"/>
+                                    <field name="price_subtotal" widget="monetary"/>
+                                </list>
+                            </field>
+                            <group col="6" class="mt-2 mt-md-0">
+                                <group colspan="4">
+                                    <div class="alert alert-info mb-0" role="alert">
+                                        <i class="fa fa-info-circle me-1" title="Info"/> 
+                                        <strong>Normalized Recurring Revenue:</strong>
+                                        Monthly MRR is automatically calculated based on the selected plan's billing interval.
+                                    </div>
+                                </group>
+                                <group class="oe_subtotal_footer oe_right" colspan="2">
+                                    <field name="amount_untaxed" widget="monetary"/>
+                                    <field name="amount_tax" widget="monetary"/>
+                                    <field name="amount_total" widget="monetary" class="oe_subtotal_footer_separator"/>
+                                    <div class="oe_clear"/>
+                                    <field name="mrr" widget="monetary" style="font-size: 16px; font-weight: bold; color: #2563eb;"/>
+                                    <field name="arr" widget="monetary" style="font-weight: bold; color: #16a34a;"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Cancellation &amp; Reason" name="cancellation" invisible="not close_reason and state != 'closed'">
+                            <group>
+                                <field name="close_reason" placeholder="State reason for pause or cancellation..."/>
+                            </group>
+                        </page>
+                        <page string="Internal Notes" name="notes">
+                            <field name="notes" placeholder="Service notes, SLA commitments, or customer details..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Pivot & Graph Views for Financial Analytics -->
+    <record id="view_subscription_contract_pivot" model="ir.ui.view">
+        <field name="name">subscription.contract.pivot</field>
+        <field name="model">subscription.contract</field>
+        <field name="arch" type="xml">
+            <pivot string="Subscription MRR &amp; ARR Analysis" sample="1">
+                <field name="partner_id" type="row"/>
+                <field name="plan_id" type="col"/>
+                <field name="mrr" type="measure"/>
+                <field name="arr" type="measure"/>
+                <field name="amount_total" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_subscription_contract_graph" model="ir.ui.view">
+        <field name="name">subscription.contract.graph</field>
+        <field name="model">subscription.contract</field>
+        <field name="arch" type="xml">
+            <graph string="Monthly Recurring Revenue (MRR) by Plan" type="bar" sample="1">
+                <field name="plan_id"/>
+                <field name="mrr" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_subscription_contract_search" model="ir.ui.view">
+        <field name="name">subscription.contract.search</field>
+        <field name="model">subscription.contract</field>
+        <field name="arch" type="xml">
+            <search string="Search Subscriptions">
+                <field name="name" string="Contract / Customer" filter_domain="['|', ('name', 'ilike', self), ('partner_id', 'ilike', self)]"/>
+                <field name="partner_id"/>
+                <field name="plan_id"/>
+                <field name="user_id"/>
+                <separator/>
+                <filter string="Active Contracts" name="filter_active" domain="[('state', '=', 'active')]"/>
+                <filter string="Paused" name="filter_paused" domain="[('state', '=', 'paused')]"/>
+                <filter string="Expired" name="filter_expired" domain="[('state', '=', 'expired')]"/>
+                <filter string="Draft" name="filter_draft" domain="[('state', '=', 'draft')]"/>
+                <separator/>
+                <group>
+                    <filter string="Customer" name="group_by_partner" context="{'group_by': 'partner_id'}"/>
+                    <filter string="Billing Plan" name="group_by_plan" context="{'group_by': 'plan_id'}"/>
+                    <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
+                    <filter string="Account Executive" name="group_by_user" context="{'group_by': 'user_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Window Actions -->
+    <record id="action_subscription_contract_all" model="ir.actions.act_window">
+        <field name="name">All Subscriptions</field>
+        <field name="res_model">subscription.contract</field>
+        <field name="view_mode">kanban,list,form,pivot,graph</field>
+        <field name="context">{'search_default_filter_active': 1}</field>
+        <field name="search_view_id" ref="view_subscription_contract_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first recurring subscription contract or convert one from a confirmed sales order!
+            </p>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_subscription_plan_tree" model="ir.ui.view">
+        <field name="name">subscription.plan.list</field>
+        <field name="model">subscription.plan</field>
+        <field name="arch" type="xml">
+            <list string="Subscription Plans">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="billing_interval_count"/>
+                <field name="billing_interval"/>
+                <field name="auto_invoice" widget="boolean_toggle"/>
+                <field name="auto_post_invoice" widget="boolean_toggle"/>
+                <field name="reminder_days_before"/>
+                <field name="contract_count"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_subscription_plan_form" model="ir.ui.view">
+        <field name="name">subscription.plan.form</field>
+        <field name="model">subscription.plan</field>
+        <field name="arch" type="xml">
+            <form string="Subscription Billing Plan">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_contracts" type="object" class="oe_stat_button" icon="fa-book">
+                            <field name="contract_count" widget="statinfo" string="Contracts"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only" string="Plan Title"/>
+                        <h1><field name="name" placeholder="e.g. Monthly Standard SaaS Retainer"/></h1>
+                    </div>
+                    <group>
+                        <group string="Billing Cycle &amp; Interval">
+                            <field name="code"/>
+                            <label for="billing_interval_count" string="Repeat Every"/>
+                            <div class="o_row">
+                                <field name="billing_interval_count" class="oe_inline"/>
+                                <field name="billing_interval" class="oe_inline"/>
+                            </div>
+                            <field name="sequence"/>
+                        </group>
+                        <group string="Automation &amp; Alerts">
+                            <field name="auto_invoice"/>
+                            <field name="auto_post_invoice"/>
+                            <field name="reminder_days_before"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Plan Description" name="description">
+                            <field name="description" placeholder="Internal notes and plan specifications..."/>
+                        </page>
+                        <page string="Standard Contract Terms" name="terms">
+                            <field name="terms_conditions" placeholder="Default legal terms and service level commitments for this plan..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_subscription_plan" model="ir.actions.act_window">
+        <field name="name">Subscription Plans</field>
+        <field name="res_model">subscription.plan</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Define your recurring billing frequencies, auto-invoicing rules, and renewal alert windows.
+            </p>
+        </field>
+    </record>
+</odoo>
