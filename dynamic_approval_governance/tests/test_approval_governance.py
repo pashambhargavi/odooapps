@@ -14,13 +14,13 @@ class TestApprovalGovernance(TransactionCase):
             'name': 'Tier 1 Approver',
             'login': 'tier1_approver@example.com',
             'email': 'tier1_approver@example.com',
-            'group_ids': [Command.link(cls.env.ref('base.group_user').id)],
+            'groups_id': [Command.link(cls.env.ref('base.group_user').id)],
         })
         cls.user_tier2 = cls.env['res.users'].create({
             'name': 'Tier 2 Approver',
             'login': 'tier2_approver@example.com',
             'email': 'tier2_approver@example.com',
-            'group_ids': [Command.link(cls.env.ref('base.group_user').id)],
+            'groups_id': [Command.link(cls.env.ref('base.group_user').id)],
         })
         cls.partner = cls.env['res.partner'].create({
             'name': 'Enterprise Client Corp',

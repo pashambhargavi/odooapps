@@ -2,13 +2,13 @@
 
 {
     'name': 'Multi-Tier Approval Matrix & Workflow Governance',
-    'version': '19.0.1.0.0',
+    'version': '18.0.1.0.0',
     'category': 'Productivity',
     'summary': 'Dynamic Multi-Tier Approval Matrix for Sales, Purchases, Invoices & Internal Requests',
     'description': """
-Multi-Tier Approval Matrix & Workflow Governance for Odoo 19 Community
+Multi-Tier Approval Matrix & Workflow Governance for Odoo 18 Community
 ======================================================================
-Bring enterprise-grade approval workflows and transaction governance to Odoo 19 Community Edition:
+Bring enterprise-grade approval workflows and transaction governance to Odoo 18 Community Edition:
 
 Key Features
 ------------
