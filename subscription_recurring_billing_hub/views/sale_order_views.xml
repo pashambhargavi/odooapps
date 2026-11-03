@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_order_form_inherit_subscription" model="ir.ui.view">
+        <field name="name">sale.order.form.subscription</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_create_subscription" string="Create Subscription" type="object" class="btn-success" invisible="state != 'sale' or subscription_id"/>
+            </xpath>
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_subscription" type="object" class="oe_stat_button" icon="fa-repeat" invisible="not subscription_id">
+                    <div class="o_stat_info">
+                        <span class="o_stat_text">Subscription</span>
+                    </div>
+                </button>
+            </xpath>
+            <xpath expr="//field[@name='payment_term_id']" position="after">
+                <field name="subscription_plan_id" placeholder="Select Recurring Billing Plan..."/>
+                <field name="subscription_id" readonly="1" invisible="not subscription_id"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

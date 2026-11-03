@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_subscription_renew_wizard_form" model="ir.ui.view">
+        <field name="name">subscription.renew.wizard.form</field>
+        <field name="model">subscription.renew.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Renew / Extend Subscription Contract">
+                <sheet>
+                    <div class="oe_title">
+                        <h2>Extend Contract Terms &amp; Pricing</h2>
+                    </div>
+                    <group>
+                        <group string="Contract Reference">
+                            <field name="contract_id" readonly="1"/>
+                            <field name="plan_id" readonly="1"/>
+                            <field name="current_end_date"/>
+                        </group>
+                        <group string="Renewal Terms">
+                            <field name="renewal_type" widget="radio"/>
+                            <field name="cycles_to_extend" invisible="renewal_type != 'extend_cycle'"/>
+                            <field name="new_end_date" invisible="renewal_type == 'indefinite'"/>
+                        </group>
+                    </group>
+                    <group string="Price Adjustment / Indexation">
+                        <field name="apply_price_adjustment"/>
+                        <field name="price_adjustment_percent" invisible="not apply_price_adjustment"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_apply_renewal" string="Apply Renewal" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_subscription_plan_user,subscription.plan.user,model_subscription_plan,group_subscription_user,1,0,0,0
+access_subscription_plan_manager,subscription.plan.manager,model_subscription_plan,group_subscription_manager,1,1,1,1
+access_subscription_contract_user,subscription.contract.user,model_subscription_contract,group_subscription_user,1,1,1,0
+access_subscription_contract_manager,subscription.contract.manager,model_subscription_contract,group_subscription_manager,1,1,1,1
+access_subscription_contract_line_user,subscription.contract.line.user,model_subscription_contract_line,group_subscription_user,1,1,1,1
+access_subscription_contract_line_manager,subscription.contract.line.manager,model_subscription_contract_line,group_subscription_manager,1,1,1,1
+access_subscription_renew_wizard_user,subscription.renew.wizard.user,model_subscription_renew_wizard,group_subscription_user,1,1,1,1
