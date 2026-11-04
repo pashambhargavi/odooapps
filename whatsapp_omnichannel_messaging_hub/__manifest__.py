@@ -4,7 +4,7 @@
     'name': 'WhatsApp 1-Click Omnichannel Messaging & Customer Chat Hub',
     'version': '19.0.1.0.0',
     'category': 'Sales/WhatsApp',
-    'summary': '1-Click Direct WhatsApp Chat & PDF Sharing for Orders, Invoices, Delivery Slips, Dynamic Templates & Audit Logs (No Meta API Fees Required)',
+    'summary': '1-Click Direct WhatsApp Chat for Orders, Invoices, Delivery Slips, Dynamic Templates & Audit Logs (No Meta API Fees Required)',
     'description': """
 WhatsApp 1-Click Omnichannel Messaging & Customer Chat Hub for Odoo 19 Community
 ================================================================================
@@ -13,7 +13,7 @@ Standard Odoo Community has zero WhatsApp capability, while Odoo Enterprise lock
 expensive Meta Cloud API fees and monthly per-message IAP credits.
 
 This all-in-one hub provides direct 1-click WhatsApp Web, Desktop, and Mobile app messaging
-with dynamic templates, automated placeholder replacements, document attachments, and full audit logs
+with dynamic templates, automated placeholder replacements, and full audit logs
 with ZERO mandatory API fees or monthly subscriptions!
 
 Key Features & Business Benefits
@@ -26,9 +26,8 @@ Key Features & Business Benefits
 * **Dynamic Template Engine (`whatsapp.template`):**
   - Preconfigured templates for Orders, Invoices, Overdue Alerts, and Delivery updates.
   - Automatic placeholder replacement: `${partner_name}`, `${document_number}`, `${amount_total}`, `${due_date}`, `${company_name}`.
-* **Dual Operation Modes:**
-  - Direct WhatsApp Web / Mobile Click-to-Chat (Zero cost, works out-of-the-box on browser and phone).
-  - Optional Gateway API mode (supports Meta Cloud API, UltraMsg, Twilio, or GreenAPI).
+* **Click-to-Chat Mode:**
+  - Opens WhatsApp Web / Desktop / Mobile with the message pre-filled (zero cost, no API account needed).
 * **Interactive Message Composer Wizard (`whatsapp.composer.wizard`):**
   - Preview formatted message text in real time.
   - Switch templates on the fly, edit custom notes, and verify phone numbers.
