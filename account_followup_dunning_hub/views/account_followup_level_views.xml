@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_account_followup_level_list" model="ir.ui.view">
+        <field name="name">account.followup.level.list</field>
+        <field name="model">account.followup.level</field>
+        <field name="arch" type="xml">
+            <list string="Follow-up Levels">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="delay"/>
+                <field name="send_email" widget="boolean_toggle"/>
+                <field name="auto_credit_hold" widget="boolean_toggle"/>
+                <field name="email_template_id"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_account_followup_level_form" model="ir.ui.view">
+        <field name="name">account.followup.level.form</field>
+        <field name="model">account.followup.level</field>
+        <field name="arch" type="xml">
+            <form string="Follow-up Level">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="Level Title"/>
+                        <h1><field name="name" placeholder="e.g. Level 1: Friendly Reminder"/></h1>
+                    </div>
+                    <group>
+                        <group string="Escalation Rules">
+                            <field name="delay"/>
+                            <field name="sequence"/>
+                            <field name="auto_credit_hold"/>
+                        </group>
+                        <group string="Automated Communication">
+                            <field name="send_email"/>
+                            <field name="email_template_id" invisible="not send_email"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="active" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Default Notice Body" name="description">
+                            <field name="description" placeholder="Enter standard reminder text for this dunning level..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_account_followup_level" model="ir.actions.act_window">
+        <field name="name">Follow-up Levels</field>
+        <field name="res_model">account.followup.level</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Configure your multi-stage payment reminder and dunning levels!
+            </p>
+        </field>
+    </record>
+</odoo>

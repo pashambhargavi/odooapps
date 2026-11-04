@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_account_followup_manual_wizard_form" model="ir.ui.view">
+        <field name="name">account.followup.manual.wizard.form</field>
+        <field name="model">account.followup.manual.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Customer Payment Follow-Up Workbench">
+                <sheet>
+                    <div class="oe_title">
+                        <h2>Follow-up Action: <field name="partner_id" readonly="1" options="{'no_open': True}"/></h2>
+                    </div>
+                    <group>
+                        <group string="Action Selection">
+                            <field name="action_type" widget="radio"/>
+                            <field name="followup_level_id" options="{'no_create': True}"/>
+                        </group>
+                        <group string="Overdue Context &amp; Scheduling">
+                            <field name="total_overdue_amount" widget="monetary" options="{'currency_field': 'currency_id'}" readonly="1"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="company_id" invisible="1"/>
+                            <field name="next_followup_date"/>
+                            <field name="promised_payment_date" invisible="action_type != 'promise'"/>
+                        </group>
+                    </group>
+                    <group string="Email Delivery" invisible="action_type != 'manual_email'">
+                        <field name="send_email"/>
+                        <field name="email_template_id" invisible="not send_email" options="{'no_create': True}"/>
+                    </group>
+                    <notebook>
+                        <page string="Follow-up Discussion Notes" name="notes">
+                            <field name="notes" placeholder="Summarize the conversation, payment promise details, or customer justification..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <footer>
+                    <button name="action_confirm" string="Execute &amp; Log Action" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Top-Level Follow-Up Menu under Accounting/Invoicing -->
+    <menuitem id="menu_account_followup_root"
+              name="Payment Follow-Up"
+              parent="account.menu_finance"
+              sequence="35"/>
+
+    <!-- Customer Follow-Up Control Center -->
+    <menuitem id="menu_action_partner_followup_hub"
+              name="Customer Dunning Hub"
+              parent="menu_account_followup_root"
+              action="action_partner_followup_hub"
+              sequence="10"/>
+
+    <!-- Follow-Up Action Audit Log -->
+    <menuitem id="menu_action_account_followup_history"
+              name="Follow-Up History Log"
+              parent="menu_account_followup_root"
+              action="action_account_followup_history"
+              sequence="20"/>
+
+    <!-- Follow-Up Levels Configuration -->
+    <menuitem id="menu_action_account_followup_level"
+              name="Follow-up Levels"
+              parent="menu_account_followup_root"
+              action="action_account_followup_level"
+              groups="account_followup_dunning_hub.group_followup_manager"
+              sequence="30"/>
+
+    <!-- Also expose under Accounting Configuration -->
+    <menuitem id="menu_action_account_followup_level_config"
+              name="Payment Follow-Up Levels"
+              parent="account.menu_finance_configuration"
+              action="action_account_followup_level"
+              sequence="45"/>
+</odoo>

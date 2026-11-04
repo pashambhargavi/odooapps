@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Level 1: Friendly Reminder (7 Days) -->
+        <record id="followup_level_1" model="account.followup.level">
+            <field name="name">Level 1: Friendly Reminder</field>
+            <field name="sequence">10</field>
+            <field name="delay">7</field>
+            <field name="send_email" eval="True"/>
+            <field name="email_template_id" ref="email_template_followup_level_1"/>
+            <field name="auto_credit_hold" eval="False"/>
+            <field name="description">Gentle reminder notification sent when invoices exceed 7 days overdue.</field>
+            <field name="company_id" ref="base.main_company"/>
+        </record>
+
+        <!-- Level 2: Urgent Warning (15 Days) -->
+        <record id="followup_level_2" model="account.followup.level">
+            <field name="name">Level 2: Urgent Notice</field>
+            <field name="sequence">20</field>
+            <field name="delay">15</field>
+            <field name="send_email" eval="True"/>
+            <field name="email_template_id" ref="email_template_followup_level_2"/>
+            <field name="auto_credit_hold" eval="False"/>
+            <field name="description">Escalated urgent notification for invoices past 15 days overdue.</field>
+            <field name="company_id" ref="base.main_company"/>
+        </record>
+
+        <!-- Level 3: Formal Demand (30 Days) -->
+        <record id="followup_level_3" model="account.followup.level">
+            <field name="name">Level 3: Formal Demand Notice</field>
+            <field name="sequence">30</field>
+            <field name="delay">30</field>
+            <field name="send_email" eval="True"/>
+            <field name="email_template_id" ref="email_template_followup_level_3"/>
+            <field name="auto_credit_hold" eval="False"/>
+            <field name="description">Formal demand letter sent when invoices cross 30 days overdue.</field>
+            <field name="company_id" ref="base.main_company"/>
+        </record>
+
+        <!-- Level 4: Final Notice & Credit Hold (60 Days) -->
+        <record id="followup_level_4" model="account.followup.level">
+            <field name="name">Level 4: Final Notice &amp; Credit Hold</field>
+            <field name="sequence">40</field>
+            <field name="delay">60</field>
+            <field name="send_email" eval="False"/>
+            <field name="auto_credit_hold" eval="True"/>
+            <field name="description">Critical dunning level: flags customer with a credit hold for debt recovery.</field>
+            <field name="company_id" ref="base.main_company"/>
+        </record>
+    </data>
+</odoo>
