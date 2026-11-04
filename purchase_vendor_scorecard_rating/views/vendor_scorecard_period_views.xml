@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Period List View -->
+    <record id="view_vendor_scorecard_period_list" model="ir.ui.view">
+        <field name="name">vendor.scorecard.period.list</field>
+        <field name="model">vendor.scorecard.period</field>
+        <field name="arch" type="xml">
+            <list string="Evaluation Periods">
+                <field name="name"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="template_id"/>
+                <field name="evaluation_count" string="Vendors Evaluated"/>
+                <field name="grade_a_count" string="Grade A" decoration-success="grade_a_count &gt; 0"/>
+                <field name="grade_b_count" string="Grade B" decoration-info="grade_b_count &gt; 0"/>
+                <field name="grade_c_count" string="Grade C" decoration-warning="grade_c_count &gt; 0"/>
+                <field name="grade_d_count" string="Grade D" decoration-danger="grade_d_count &gt; 0"/>
+                <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-primary="state == 'in_progress'" decoration-warning="state == 'evaluated'" decoration-success="state == 'closed'"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Period Form View -->
+    <record id="view_vendor_scorecard_period_form" model="ir.ui.view">
+        <field name="name">vendor.scorecard.period.form</field>
+        <field name="model">vendor.scorecard.period</field>
+        <field name="arch" type="xml">
+            <form string="Evaluation Period">
+                <header>
+                    <button name="action_start" string="Start Campaign" type="object" class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_generate_evaluations" string="Compute All Vendor Scores" type="object" class="oe_highlight" invisible="state not in ['in_progress', 'evaluated']"/>
+                    <button name="action_close" string="Publish &amp; Close Campaign" type="object" class="btn-success" invisible="state != 'evaluated'"/>
+                    <button name="action_reset_draft" string="Reset to Draft" type="object" invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,in_progress,evaluated,closed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_evaluations" type="object" class="oe_stat_button" icon="fa-bar-chart">
+                            <div class="o_stat_info">
+                                <field name="evaluation_count" class="o_stat_value"/>
+                                <span class="o_stat_text">Scorecards</span>
+                            </div>
+                        </button>
+                    </div>
+
+                    <div class="oe_title">
+                        <label for="name" string="Campaign Title"/>
+                        <h1>
+                            <field name="name" placeholder="e.g. Q1 2026 Supplier Quality Audit"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group string="Date Horizon">
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                        </group>
+                        <group string="Audit Framework">
+                            <field name="template_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+
+                    <div class="row mt16 mb16">
+                        <div class="col-3">
+                            <div class="p-3 bg-light rounded text-center border-start border-success border-4">
+                                <h4 class="mb-0 text-success"><field name="grade_a_count"/></h4>
+                                <small class="text-muted">Grade A (Preferred)</small>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="p-3 bg-light rounded text-center border-start border-info border-4">
+                                <h4 class="mb-0 text-info"><field name="grade_b_count"/></h4>
+                                <small class="text-muted">Grade B (Approved)</small>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="p-3 bg-light rounded text-center border-start border-warning border-4">
+                                <h4 class="mb-0 text-warning"><field name="grade_c_count"/></h4>
+                                <small class="text-muted">Grade C (Warning)</small>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="p-3 bg-light rounded text-center border-start border-danger border-4">
+                                <h4 class="mb-0 text-danger"><field name="grade_d_count"/></h4>
+                                <small class="text-muted">Grade D (Restricted)</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <notebook>
+                        <page string="Vendor Scorecards" name="evaluations">
+                            <field name="evaluation_ids">
+                                <list string="Evaluations" decoration-success="grade == 'grade_a'" decoration-info="grade == 'grade_b'" decoration-warning="grade == 'grade_c'" decoration-danger="grade == 'grade_d'">
+                                    <field name="name"/>
+                                    <field name="partner_id"/>
+                                    <field name="total_orders_count"/>
+                                    <field name="total_amount_purchased" widget="monetary"/>
+                                    <field name="otd_rate" string="OTD %"/>
+                                    <field name="fulfillment_rate" string="Fill %"/>
+                                    <field name="quality_rate" string="Quality %"/>
+                                    <field name="final_score" string="Overall Score %" widget="progressbar"/>
+                                    <field name="grade" widget="badge"/>
+                                    <field name="state" widget="badge"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Period Action -->
+    <record id="action_vendor_scorecard_period" model="ir.actions.act_window">
+        <field name="name">Evaluation Periods</field>
+        <field name="res_model">vendor.scorecard.period</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Launch your first Vendor Evaluation Campaign!
+            </p>
+            <p>
+                Set a time window (e.g. Q1, Annual) and automatically scan all supplier shipments and purchase orders to compute ISO 9001 performance ratings.
+            </p>
+        </field>
+    </record>
+</odoo>

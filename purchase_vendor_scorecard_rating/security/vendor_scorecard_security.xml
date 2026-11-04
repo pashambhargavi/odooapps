@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="module_category_vendor_scorecard" model="ir.module.category">
+        <field name="name">Vendor Scorecards &amp; Evaluation</field>
+        <field name="description">Manage ISO 9001 vendor evaluation templates, scoring criteria, audit periods, and supplier ratings.</field>
+        <field name="sequence">26</field>
+    </record>
+
+    <record id="privilege_vendor_scorecard" model="res.groups.privilege">
+        <field name="name">Vendor Scorecard Access</field>
+        <field name="category_id" ref="module_category_vendor_scorecard"/>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="group_scorecard_user" model="res.groups">
+        <field name="name">Procurement Officer / Auditor</field>
+        <field name="privilege_id" ref="privilege_vendor_scorecard"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user')), (4, ref('purchase.group_purchase_user'))]"/>
+    </record>
+
+    <record id="group_scorecard_manager" model="res.groups">
+        <field name="name">Procurement Manager / ISO Director</field>
+        <field name="privilege_id" ref="privilege_vendor_scorecard"/>
+        <field name="implied_ids" eval="[(4, ref('group_scorecard_user')), (4, ref('purchase.group_purchase_manager'))]"/>
+        <field name="user_ids" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+
+    <record id="base.group_user" model="res.groups">
+        <field name="implied_ids" eval="[(4, ref('purchase_vendor_scorecard_rating.group_scorecard_user'))]"/>
+    </record>
+
+    <data noupdate="1">
+        <!-- Multi-Company Rules -->
+        <record id="rule_vendor_scorecard_template_company" model="ir.rule">
+            <field name="name">Vendor Scorecard Template: Multi-Company</field>
+            <field name="model_id" ref="model_vendor_scorecard_template"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="rule_vendor_scorecard_period_company" model="ir.rule">
+            <field name="name">Vendor Scorecard Period: Multi-Company</field>
+            <field name="model_id" ref="model_vendor_scorecard_period"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="rule_vendor_scorecard_evaluation_company" model="ir.rule">
+            <field name="name">Vendor Scorecard Evaluation: Multi-Company</field>
+            <field name="model_id" ref="model_vendor_scorecard_evaluation"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+    </data>
+</odoo>

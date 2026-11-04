@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_vendor_scorecard" model="ir.actions.report">
+        <field name="name">Supplier Performance Scorecard</field>
+        <field name="model">vendor.scorecard.evaluation</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">purchase_vendor_scorecard_rating.report_vendor_scorecard_document</field>
+        <field name="report_file">purchase_vendor_scorecard_rating.report_vendor_scorecard_document</field>
+        <field name="print_report_name">'Vendor_Scorecard_%s' % (object.name or 'Evaluation')</field>
+        <field name="binding_model_id" ref="model_vendor_scorecard_evaluation"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_vendor_scorecard_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page" style="font-family: Arial, sans-serif; color: #1e293b; font-size: 13px;">
+                        <!-- Report Header Banner -->
+                        <div style="border-bottom: 3px solid #2563eb; padding-bottom: 12px; margin-bottom: 20px;">
+                            <div class="row align-items-center">
+                                <div class="col-8">
+                                    <h2 style="font-weight: 800; color: #0f172a; margin: 0; text-transform: uppercase; letter-spacing: 0.5px;">
+                                        Supplier Performance Evaluation Report
+                                    </h2>
+                                    <div style="font-size: 13px; color: #64748b; margin-top: 4px;">
+                                        ISO 9001:2015 Clause 8.4 Quality Conformance &amp; Audit Scorecard
+                                    </div>
+                                </div>
+                                <div class="col-4 text-end">
+                                    <div style="background-color: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 8px 12px; display: inline-block;">
+                                        <div style="font-size: 11px; text-transform: uppercase; color: #64748b; font-weight: bold;">Evaluation Ref</div>
+                                        <div style="font-size: 15px; font-weight: bold; color: #0f172a;"><t t-out="o.name"/></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Supplier Profile & Campaign Metadata -->
+                        <div class="row mb-4" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 10px;">
+                            <div class="col-6">
+                                <strong style="color: #475569; font-size: 11px; text-transform: uppercase;">Evaluated Supplier:</strong>
+                                <h4 style="font-weight: 700; color: #0f172a; margin: 2px 0 6px 0;"><t t-out="o.partner_id.name"/></h4>
+                                <div t-if="o.partner_id.street"><t t-out="o.partner_id.street"/></div>
+                                <div t-if="o.partner_id.city"><t t-out="o.partner_id.city"/>, <t t-out="o.partner_id.country_id.name"/></div>
+                                <div t-if="o.partner_id.email"><i class="fa fa-envelope"/> <t t-out="o.partner_id.email"/></div>
+                            </div>
+                            <div class="col-6">
+                                <table class="table table-sm table-borderless mb-0">
+                                    <tr>
+                                        <td class="text-muted" style="width: 45%;"><strong>Audit Period:</strong></td>
+                                        <td><strong><t t-out="o.period_id.name"/></strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-muted"><strong>Date Horizon:</strong></td>
+                                        <td><t t-out="o.period_id.date_from"/> to <t t-out="o.period_id.date_to"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-muted"><strong>Scoring Framework:</strong></td>
+                                        <td><t t-out="o.template_id.name"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-muted"><strong>Lead Evaluator:</strong></td>
+                                        <td><t t-out="o.evaluator_id.name"/></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Rating Badge & Overall Performance Stat Boxes -->
+                        <div class="row mb-4">
+                            <div class="col-4 text-center">
+                                <div style="background-color: #f8fafc; border: 2px solid #cbd5e1; border-radius: 8px; padding: 16px;">
+                                    <div style="font-size: 12px; font-weight: bold; color: #64748b; text-transform: uppercase;">Overall Rating Tier</div>
+                                    <h1 style="font-weight: 900; margin: 8px 0; color: #2563eb;">
+                                        <t t-if="o.grade == 'grade_a'"><span style="color: #10b981;">GRADE A</span></t>
+                                        <t t-elif="o.grade == 'grade_b'"><span style="color: #0284c7;">GRADE B</span></t>
+                                        <t t-elif="o.grade == 'grade_c'"><span style="color: #f59e0b;">GRADE C</span></t>
+                                        <t t-else=""><span style="color: #ef4444;">GRADE D</span></t>
+                                    </h1>
+                                    <div style="font-size: 16px; font-weight: bold; color: #0f172a;"><t t-out="o.final_score"/>% Total Score</div>
+                                </div>
+                            </div>
+                            <div class="col-8">
+                                <div class="row g-2">
+                                    <div class="col-6">
+                                        <div style="background-color: #eff6ff; border-left: 4px solid #2563eb; padding: 10px; border-radius: 4px;">
+                                            <div style="font-size: 11px; color: #1e40af; font-weight: bold; text-transform: uppercase;">On-Time Delivery (OTD)</div>
+                                            <div style="font-size: 18px; font-weight: bold; color: #1e3a8a;"><t t-out="o.otd_rate"/>%</div>
+                                            <small style="color: #3b82f6;"><t t-out="o.ontime_pickings_count"/> on-time / <t t-out="o.total_pickings_count"/> shipments</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div style="background-color: #f0fdf4; border-left: 4px solid #16a34a; padding: 10px; border-radius: 4px;">
+                                            <div style="font-size: 11px; color: #166534; font-weight: bold; text-transform: uppercase;">Quality Conformance</div>
+                                            <div style="font-size: 18px; font-weight: bold; color: #14532d;"><t t-out="o.quality_rate"/>%</div>
+                                            <small style="color: #22c55e;"><t t-out="o.total_qty_returned"/> defects reported</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 mt-2">
+                                        <div style="background-color: #faf5ff; border-left: 4px solid #9333ea; padding: 10px; border-radius: 4px;">
+                                            <div style="font-size: 11px; color: #6b21a8; font-weight: bold; text-transform: uppercase;">Quantity Fill Rate</div>
+                                            <div style="font-size: 18px; font-weight: bold; color: #581c87;"><t t-out="o.fulfillment_rate"/>%</div>
+                                            <small style="color: #a855f7;"><t t-out="o.total_qty_delivered"/> / <t t-out="o.total_qty_ordered"/> units</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 mt-2">
+                                        <div style="background-color: #f8fafc; border-left: 4px solid #475569; padding: 10px; border-radius: 4px;">
+                                            <div style="font-size: 11px; color: #334155; font-weight: bold; text-transform: uppercase;">Spend Volume</div>
+                                            <div style="font-size: 18px; font-weight: bold; color: #0f172a;"><t t-out="o.total_amount_purchased" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></div>
+                                            <small style="color: #64748b;"><t t-out="o.total_orders_count"/> purchase orders</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Criterion Breakdown Table -->
+                        <div class="mb-4">
+                            <h5 style="font-weight: 700; color: #0f172a; margin-bottom: 8px;">Evaluation Rubric Criteria &amp; Normalized Points</h5>
+                            <table class="table table-bordered table-sm" style="font-size: 12px;">
+                                <thead style="background-color: #f1f5f9; color: #334155;">
+                                    <tr>
+                                        <th>Evaluation Criterion</th>
+                                        <th class="text-center">Benchmark Target</th>
+                                        <th class="text-center">Actual Performance</th>
+                                        <th class="text-center">Normalized Score (0-100)</th>
+                                        <th class="text-center">Weight</th>
+                                        <th class="text-end">Weighted Points</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="o.line_ids" t-as="line">
+                                        <tr>
+                                            <td><strong><t t-out="line.name"/></strong></td>
+                                            <td class="text-center"><t t-out="line.benchmark_target"/>%</td>
+                                            <td class="text-center"><strong><t t-out="line.actual_value"/>%</strong></td>
+                                            <td class="text-center"><t t-out="line.score"/></td>
+                                            <td class="text-center"><t t-out="line.weight"/>%</td>
+                                            <td class="text-end"><strong><t t-out="line.weighted_score"/></strong></td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                                <tfoot>
+                                    <tr style="background-color: #f8fafc; font-weight: bold;">
+                                        <td colspan="4" class="text-end">Total Weighted Score:</td>
+                                        <td class="text-center"><t t-out="sum(o.line_ids.mapped('weight'))"/>%</td>
+                                        <td class="text-end"><t t-out="o.final_score"/> pts</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+
+                        <!-- Qualitative Notes & CAPA -->
+                        <div class="row mb-4">
+                            <div class="col-12" t-if="o.notes">
+                                <div style="border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px; margin-bottom: 10px; background-color: #f8fafc;">
+                                    <strong style="color: #475569; font-size: 11px; text-transform: uppercase;">Lead Auditor Notes &amp; Observations:</strong>
+                                    <p style="margin: 4px 0 0 0;"><t t-out="o.notes"/></p>
+                                </div>
+                            </div>
+                            <div class="col-12" t-if="o.corrective_action_plan">
+                                <div style="border: 1px solid #fecaca; border-radius: 6px; padding: 10px; background-color: #fef2f2;">
+                                    <strong style="color: #991b1b; font-size: 11px; text-transform: uppercase;">Corrective Action Plan (CAPA) Requirements:</strong>
+                                    <p style="margin: 4px 0 0 0; color: #7f1d1d;"><t t-out="o.corrective_action_plan"/></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Formal Sign-Off Signatures -->
+                        <div class="row mt-5" style="page-break-inside: avoid;">
+                            <div class="col-4 text-center">
+                                <div style="border-top: 1px solid #94a3b8; padding-top: 8px; margin: 0 15px;">
+                                    <strong><t t-out="o.evaluator_id.name"/></strong>
+                                    <div style="font-size: 11px; color: #64748b;">Lead Procurement Auditor</div>
+                                </div>
+                            </div>
+                            <div class="col-4 text-center">
+                                <div style="border-top: 1px solid #94a3b8; padding-top: 8px; margin: 0 15px;">
+                                    <strong>Quality Assurance Director</strong>
+                                    <div style="font-size: 11px; color: #64748b;">ISO 9001 Compliance Lead</div>
+                                </div>
+                            </div>
+                            <div class="col-4 text-center">
+                                <div style="border-top: 1px solid #94a3b8; padding-top: 8px; margin: 0 15px;">
+                                    <strong>Purchasing Director / Comptroller</strong>
+                                    <div style="font-size: 11px; color: #64748b;">Executive Authorization</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

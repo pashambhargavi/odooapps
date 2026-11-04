@@ -1,0 +1,37 @@
+# -*- coding: utf-8 -*-
+{
+    'name': 'Vendor Scorecard, Supplier Performance & ISO 9001 Rating Hub',
+    'version': '19.0.1.0.0',
+    'category': 'Purchases',
+    'summary': 'Automated On-Time Delivery (OTD), Quality Acceptance Rate, ISO 9001 Clause 8.4 Rating Rubric, Supplier Tiers & Audit Scorecards for Odoo Community',
+    'sequence': 15,
+    'author': 'Bhargavi Pasham',
+    'website': 'https://github.com/pashambhargavi/odooapps',
+    'license': 'LGPL-3',
+    # 'price': 169.00,
+    # 'currency': 'EUR',
+    'depends': [
+        'base',
+        'purchase',
+        'stock',
+        'mail',
+    ],
+    'data': [
+        'security/vendor_scorecard_security.xml',
+        'security/ir.model.access.csv',
+        'data/vendor_scorecard_data.xml',
+        'report/vendor_scorecard_report.xml',
+        'views/vendor_scorecard_template_views.xml',
+        'views/vendor_scorecard_period_views.xml',
+        'views/vendor_scorecard_evaluation_views.xml',
+        'views/res_partner_views.xml',
+        'views/purchase_order_views.xml',
+        'views/vendor_scorecard_menus.xml',
+    ],
+    'images': [
+        'static/description/banner.png',
+    ],
+    'installable': True,
+    'application': True,
+    'auto_install': False,
+}
