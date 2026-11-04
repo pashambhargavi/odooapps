@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Settlement List View -->
+    <record id="view_consignment_settlement_list" model="ir.ui.view">
+        <field name="name">consignment.settlement.list</field>
+        <field name="model">consignment.settlement</field>
+        <field name="arch" type="xml">
+            <tree string="Consumption Settlements">
+                <field name="name"/>
+                <field name="agreement_id"/>
+                <field name="partner_id"/>
+                <field name="consignment_type" widget="badge"/>
+                <field name="date"/>
+                <field name="total_consumed_qty" string="Consumed Units"/>
+                <field name="total_settlement_amount" widget="monetary" string="Gross Amount"/>
+                <field name="net_settlement_amount" widget="monetary" string="Net Amount"/>
+                <field name="invoice_id" widget="many2one"/>
+                <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-primary="state == 'confirmed'" decoration-success="state == 'invoiced'" decoration-danger="state == 'cancelled'"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Settlement Form View -->
+    <record id="view_consignment_settlement_form" model="ir.ui.view">
+        <field name="name">consignment.settlement.form</field>
+        <field name="model">consignment.settlement</field>
+        <field name="arch" type="xml">
+            <form string="Consumption Settlement">
+                <header>
+                    <button name="action_detect_consumption" string="Scan Unbilled Consumption" type="object" class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_confirm" string="Confirm Consumption" type="object" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_generate_invoice" string="Generate Bill / Invoice" type="object" class="btn-success" invisible="state != 'confirmed'"/>
+                    <button name="action_reset_draft" string="Reset to Draft" type="object" invisible="state not in ['confirmed', 'cancelled']"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,invoiced"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_invoice" type="object" class="oe_stat_button" icon="fa-file-text-o" invisible="not invoice_id">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">Linked</span>
+                                <span class="o_stat_value">Bill / Invoice</span>
+                            </div>
+                        </button>
+                    </div>
+
+                    <div class="oe_title">
+                        <label for="name" string="Settlement Batch"/>
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group string="Agreement &amp; Partner">
+                            <field name="agreement_id" readonly="state != 'draft'"/>
+                            <field name="partner_id"/>
+                            <field name="consignment_type" widget="badge"/>
+                        </group>
+                        <group string="Settlement Horizon &amp; Billing">
+                            <field name="date" readonly="state != 'draft'"/>
+                            <field name="period_start" readonly="state != 'draft'"/>
+                            <field name="period_end" readonly="state != 'draft'"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+
+                    <div class="row mt16 mb24">
+                        <div class="col-md-3">
+                            <div class="p-3 bg-light rounded text-center border-start border-primary border-4">
+                                <small class="text-muted text-uppercase fw-bold">Consumed Units</small>
+                                <h3 class="mb-0 text-primary mt-1"><field name="total_consumed_qty"/></h3>
+                                <small class="text-muted">Total units consumed in period</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="p-3 bg-light rounded text-center border-start border-info border-4">
+                                <small class="text-muted text-uppercase fw-bold">Gross Settlement</small>
+                                <h3 class="mb-0 text-info mt-1"><field name="total_settlement_amount" widget="monetary"/></h3>
+                                <small class="text-muted">Agreed unit price &#215; qty</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="p-3 bg-light rounded text-center border-start border-warning border-4">
+                                <small class="text-muted text-uppercase fw-bold">Commission</small>
+                                <h3 class="mb-0 text-warning mt-1"><field name="total_commission_amount" widget="monetary"/></h3>
+                                <small class="text-muted">Contract commission deduction</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="p-3 bg-light rounded text-center border-start border-success border-4">
+                                <small class="text-muted text-uppercase fw-bold">Net Settlement</small>
+                                <h3 class="mb-0 text-success mt-1"><field name="net_settlement_amount" widget="monetary"/></h3>
+                                <small class="text-muted">Final payable / receivable</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <notebook>
+                        <page string="Consumed Line Items" name="lines">
+                            <field name="line_ids" readonly="state != 'draft'">
+                                <tree editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="consumed_qty"/>
+                                    <field name="unit_price" widget="monetary"/>
+                                    <field name="commission_rate" string="Commission (%)"/>
+                                    <field name="commission_amount" widget="monetary"/>
+                                    <field name="subtotal" widget="monetary"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Auditor Notes &amp; Logs" name="notes">
+                            <field name="notes" placeholder="Enter settlement notes, consumption batch numbers, or customer store register references..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Settlement Search View -->
+    <record id="view_consignment_settlement_search" model="ir.ui.view">
+        <field name="name">consignment.settlement.search</field>
+        <field name="model">consignment.settlement</field>
+        <field name="arch" type="xml">
+            <search string="Search Settlements">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="agreement_id"/>
+                <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Confirmed" name="confirmed" domain="[('state', '=', 'confirmed')]"/>
+                <filter string="Invoiced / Billed" name="invoiced" domain="[('state', '=', 'invoiced')]"/>
+                <group>
+                    <filter string="Partner" name="group_partner" context="{'group_by': 'partner_id'}"/>
+                    <filter string="Agreement" name="group_agreement" context="{'group_by': 'agreement_id'}"/>
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Settlement Action -->
+    <record id="action_consignment_settlement" model="ir.actions.act_window">
+        <field name="name">Consumption Settlements</field>
+        <field name="res_model">consignment.settlement</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_consignment_settlement_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new Consignment Settlement!
+            </p>
+            <p>
+                Periodically scan consumed items leaving the consignment location and automatically generate Vendor Bills (for Inward Consignment) or Customer Invoices (for Outward Consignment).
+            </p>
+        </field>
+    </record>
+</odoo>

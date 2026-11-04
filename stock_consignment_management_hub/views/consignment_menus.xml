@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_consignment_root"
+              name="Consignment Stock"
+              parent="stock.menu_stock_root"
+              sequence="35"/>
+
+    <menuitem id="menu_consignment_agreements"
+              name="Consignment Agreements"
+              parent="menu_consignment_root"
+              action="action_consignment_agreement"
+              sequence="10"/>
+
+    <menuitem id="menu_consignment_settlements"
+              name="Consumption Settlements"
+              parent="menu_consignment_root"
+              action="action_consignment_settlement"
+              sequence="20"/>
+
+    <menuitem id="menu_consignment_audits"
+              name="Physical Stock Audits"
+              parent="menu_consignment_root"
+              action="action_consignment_audit"
+              sequence="30"/>
+</odoo>

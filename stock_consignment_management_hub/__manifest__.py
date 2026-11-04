@@ -1,0 +1,36 @@
+# -*- coding: utf-8 -*-
+{
+    'name': 'Consignment Stock, Vendor Consignment & Customer Consignment Hub',
+    'version': '18.0.1.0.0',
+    'category': 'Inventory/Inventory',
+    'summary': 'Vendor Consignment (Inward) & Customer Consignment (Outward) Agreements, Periodic Consumption Self-Billing, Consignment Inventory Statements & Physical Audit Reconciliation for Odoo Community',
+    'sequence': 18,
+    'author': 'Bhargavi Pasham',
+    'website': 'https://github.com/pashambhargavi/odooapps',
+    'license': 'LGPL-3',
+    # 'price': 189.00,
+    # 'currency': 'EUR',
+    'depends': [
+        'base',
+        'stock',
+        'account',
+        'mail',
+    ],
+    'data': [
+        'security/consignment_security.xml',
+        'security/ir.model.access.csv',
+        'data/consignment_sequence_data.xml',
+        'report/consignment_statement_report.xml',
+        'views/consignment_agreement_views.xml',
+        'views/consignment_settlement_views.xml',
+        'views/consignment_audit_views.xml',
+        'views/res_partner_views.xml',
+        'views/consignment_menus.xml',
+    ],
+    'images': [
+        'static/description/banner.png',
+    ],
+    'installable': True,
+    'application': True,
+    'auto_install': False,
+}

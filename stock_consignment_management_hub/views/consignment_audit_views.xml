@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Audit List View -->
+    <record id="view_consignment_audit_list" model="ir.ui.view">
+        <field name="name">consignment.audit.list</field>
+        <field name="model">consignment.audit</field>
+        <field name="arch" type="xml">
+            <tree string="Consignment Stock Audits">
+                <field name="name"/>
+                <field name="agreement_id"/>
+                <field name="partner_id"/>
+                <field name="audit_date"/>
+                <field name="auditor_id" widget="many2one_avatar_user"/>
+                <field name="total_theoretical_qty" string="Theoretical Qty"/>
+                <field name="total_physical_qty" string="Physical Qty"/>
+                <field name="total_variance_qty" string="Variance Qty" decoration-danger="total_variance_qty != 0"/>
+                <field name="total_variance_value" widget="monetary" string="Variance Value" decoration-danger="total_variance_value != 0"/>
+                <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-warning="state == 'in_progress'" decoration-success="state == 'reconciled'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Audit Form View -->
+    <record id="view_consignment_audit_form" model="ir.ui.view">
+        <field name="name">consignment.audit.form</field>
+        <field name="model">consignment.audit</field>
+        <field name="arch" type="xml">
+            <form string="Consignment Stock Audit">
+                <header>
+                    <button name="action_start_count" string="Load Current On-Hand Stock" type="object" class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_reconcile" string="Reconcile &amp; Close Audit" type="object" class="btn-success" invisible="state != 'in_progress'"/>
+                    <button name="action_reset_draft" string="Reset to Draft" type="object" invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,in_progress,reconciled"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="Audit Session"/>
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group string="Agreement &amp; Location">
+                            <field name="agreement_id" readonly="state != 'draft'"/>
+                            <field name="partner_id"/>
+                        </group>
+                        <group string="Audit Schedule &amp; Auditor">
+                            <field name="audit_date" readonly="state != 'draft'"/>
+                            <field name="auditor_id"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+
+                    <div class="row mt16 mb24">
+                        <div class="col-md-3">
+                            <div class="p-3 bg-light rounded text-center border-start border-primary border-4">
+                                <small class="text-muted text-uppercase fw-bold">Theoretical Book Units</small>
+                                <h3 class="mb-0 text-primary mt-1"><field name="total_theoretical_qty"/></h3>
+                                <small class="text-muted">Expected system balance</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="p-3 bg-light rounded text-center border-start border-info border-4">
+                                <small class="text-muted text-uppercase fw-bold">Physical Counted Units</small>
+                                <h3 class="mb-0 text-info mt-1"><field name="total_physical_qty"/></h3>
+                                <small class="text-muted">Physically verified on shelf</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="p-3 bg-light rounded text-center border-start border-warning border-4">
+                                <small class="text-muted text-uppercase fw-bold">Discrepancy (Units)</small>
+                                <h3 class="mb-0 text-warning mt-1"><field name="total_variance_qty"/></h3>
+                                <small class="text-muted">Difference (Physical - Book)</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="p-3 bg-light rounded text-center border-start border-danger border-4">
+                                <small class="text-muted text-uppercase fw-bold">Valuation Impact</small>
+                                <h3 class="mb-0 text-danger mt-1"><field name="total_variance_value" widget="monetary"/></h3>
+                                <small class="text-muted">Net shrinkage / excess value</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <notebook>
+                        <page string="Physical Count Lines" name="items">
+                            <field name="line_ids" readonly="state == 'reconciled'">
+                                <tree editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="theoretical_qty" string="Theoretical Qty" readonly="1"/>
+                                    <field name="physical_qty" string="Counted Physical Qty"/>
+                                    <field name="variance_qty" string="Discrepancy Units" readonly="1" decoration-danger="variance_qty &lt; 0" decoration-success="variance_qty &gt; 0"/>
+                                    <field name="unit_price" widget="monetary"/>
+                                    <field name="variance_value" widget="monetary" readonly="1" decoration-danger="variance_value &lt; 0" decoration-success="variance_value &gt; 0"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Auditor Observations" name="comments">
+                            <field name="notes" placeholder="Enter findings on packaging damage, shrinkage explanations, or reconciliation actions..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Audit Action -->
+    <record id="action_consignment_audit" model="ir.actions.act_window">
+        <field name="name">Consignment Stock Audits</field>
+        <field name="res_model">consignment.audit</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Start a Consignment Stock Physical Audit!
+            </p>
+            <p>
+                Periodically verify physical counts against theoretical consignment balances, calculating shrinkage, loss, or damaged goods.
+            </p>
+        </field>
+    </record>
+</odoo>

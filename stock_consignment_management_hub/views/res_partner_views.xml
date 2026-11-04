@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_form_consignment_inherit" model="ir.ui.view">
+        <field name="name">res.partner.form.consignment.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_consignment_agreements" type="object" class="oe_stat_button" icon="fa-cubes" invisible="consignment_agreement_count == 0">
+                    <div class="o_stat_info">
+                        <span class="o_stat_value">
+                            <field name="consignment_active_stock_value" widget="monetary"/>
+                        </span>
+                        <span class="o_stat_text">
+                            <field name="consignment_agreement_count"/> Agreements
+                        </span>
+                    </div>
+                </button>
+            </xpath>
+
+            <xpath expr="//page[@name='internal_notes']" position="after">
+                <page string="Consignment Inventory" name="consignment_stock" invisible="not consignment_agreement_ids">
+                    <group>
+                        <group string="Active Consigned Inventory Valuation">
+                            <field name="consignment_active_stock_value" widget="monetary"/>
+                            <field name="consignment_agreement_count"/>
+                        </group>
+                    </group>
+                    <field name="consignment_agreement_ids" readonly="1">
+                        <tree string="Consignment Contracts">
+                            <field name="name"/>
+                            <field name="consignment_type" widget="badge"/>
+                            <field name="location_id"/>
+                            <field name="date_start"/>
+                            <field name="total_active_stock_qty" string="On-Hand Units"/>
+                            <field name="total_active_stock_value" widget="monetary"/>
+                            <field name="state" widget="badge"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

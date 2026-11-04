@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_consignment_agreement_user,consignment.agreement.user,model_consignment_agreement,group_consignment_user,1,1,1,0
+access_consignment_agreement_mgr,consignment.agreement.mgr,model_consignment_agreement,group_consignment_manager,1,1,1,1
+access_consignment_agreement_line_user,consignment.agreement.line.user,model_consignment_agreement_line,group_consignment_user,1,1,1,1
+access_consignment_agreement_line_mgr,consignment.agreement.line.mgr,model_consignment_agreement_line,group_consignment_manager,1,1,1,1
+access_consignment_settlement_user,consignment.settlement.user,model_consignment_settlement,group_consignment_user,1,1,1,0
+access_consignment_settlement_mgr,consignment.settlement.mgr,model_consignment_settlement,group_consignment_manager,1,1,1,1
+access_consignment_settlement_line_user,consignment.settlement.line.user,model_consignment_settlement_line,group_consignment_user,1,1,1,1
+access_consignment_settlement_line_mgr,consignment.settlement.line.mgr,model_consignment_settlement_line,group_consignment_manager,1,1,1,1
+access_consignment_audit_user,consignment.audit.user,model_consignment_audit,group_consignment_user,1,1,1,0
+access_consignment_audit_mgr,consignment.audit.mgr,model_consignment_audit,group_consignment_manager,1,1,1,1
+access_consignment_audit_line_user,consignment.audit.line.user,model_consignment_audit_line,group_consignment_user,1,1,1,1
+access_consignment_audit_line_mgr,consignment.audit.line.mgr,model_consignment_audit_line,group_consignment_manager,1,1,1,1
