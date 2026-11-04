@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="purchase_order_form_vendor_scorecard_inherit" model="ir.ui.view">
+        <field name="name">purchase.order.form.vendor.scorecard.inherit</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <!-- Alert notification on PO form if vendor is Grade C or D -->
+            <xpath expr="//sheet/div[hasclass('oe_title')]" position="before">
+                <field name="supplier_grade_warning" invisible="1"/>
+                <div class="alert alert-warning mb-3 d-flex align-items-center" role="alert" invisible="not supplier_grade_warning">
+                    <i class="fa fa-exclamation-triangle fa-2x me-3 text-warning" title="Warning"/>
+                    <div>
+                        <strong>Supplier Performance Notice:</strong>
+                        <p class="mb-0"><field name="supplier_grade_warning" readonly="1"/></p>
+                    </div>
+                </div>
+            </xpath>
+
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="supplier_grade" widget="badge" invisible="not supplier_grade"/>
+                <field name="supplier_score" widget="progressbar" invisible="not supplier_grade"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Show Supplier Grade in Purchase Order Tree -->
+    <record id="purchase_order_kpis_tree_vendor_scorecard_inherit" model="ir.ui.view">
+        <field name="name">purchase.order.kpis.tree.vendor.scorecard.inherit</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_kpis_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="supplier_grade" widget="badge" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

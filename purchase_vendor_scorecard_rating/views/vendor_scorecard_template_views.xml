@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Template List View -->
+    <record id="view_vendor_scorecard_template_list" model="ir.ui.view">
+        <field name="name">vendor.scorecard.template.list</field>
+        <field name="model">vendor.scorecard.template</field>
+        <field name="arch" type="xml">
+            <tree string="Scorecard Templates">
+                <field name="name"/>
+                <field name="total_weight" string="Total Weight (%)" decoration-success="total_weight == 100.0" decoration-danger="total_weight != 100.0"/>
+                <field name="min_grade_a" string="Grade A Min (%)"/>
+                <field name="min_grade_b" string="Grade B Min (%)"/>
+                <field name="min_grade_c" string="Grade C Min (%)"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="active" widget="boolean_toggle"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Template Form View -->
+    <record id="view_vendor_scorecard_template_form" model="ir.ui.view">
+        <field name="name">vendor.scorecard.template.form</field>
+        <field name="model">vendor.scorecard.template</field>
+        <field name="arch" type="xml">
+            <form string="Scorecard Template">
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+                    <div class="oe_title">
+                        <label for="name" string="Template Title"/>
+                        <h1>
+                            <field name="name" placeholder="e.g. ISO 9001 Annual Supplier Evaluation Rubric"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group string="Grading Tiers &amp; Benchmarks">
+                            <field name="min_grade_a"/>
+                            <field name="min_grade_b"/>
+                            <field name="min_grade_c"/>
+                        </group>
+                        <group string="Configuration">
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="active"/>
+                            <field name="total_weight" readonly="1" decoration-success="total_weight == 100.0" decoration-danger="total_weight != 100.0"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Evaluation Criteria &amp; Weights" name="criteria">
+                            <field name="criterion_ids">
+                                <tree editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="metric_type"/>
+                                    <field name="weight"/>
+                                    <field name="benchmark_target"/>
+                                    <field name="description"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Rubric Guidelines &amp; Scope" name="guidelines">
+                            <field name="description" placeholder="Document the purpose, ISO clauses, or internal audit requirements for this scoring rubric..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Template Action -->
+    <record id="action_vendor_scorecard_template" model="ir.actions.act_window">
+        <field name="name">Scorecard Templates</field>
+        <field name="res_model">vendor.scorecard.template</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first Vendor Evaluation Template!
+            </p>
+            <p>
+                Define weighted scoring criteria (On-Time Delivery, Fill Rate, Conformance, Service) and configure rating grade cutoffs.
+            </p>
+        </field>
+    </record>
+</odoo>

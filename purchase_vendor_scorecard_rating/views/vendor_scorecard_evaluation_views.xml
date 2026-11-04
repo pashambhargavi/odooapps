@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Evaluation Kanban View -->
+    <record id="view_vendor_scorecard_evaluation_kanban" model="ir.ui.view">
+        <field name="name">vendor.scorecard.evaluation.kanban</field>
+        <field name="model">vendor.scorecard.evaluation</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile" sample="1">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="period_id"/>
+                <field name="final_score"/>
+                <field name="grade"/>
+                <field name="state"/>
+                <field name="otd_rate"/>
+                <field name="quality_rate"/>
+                <field name="total_amount_purchased"/>
+                <field name="currency_id"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <strong class="fs-5 text-truncate"><field name="partner_id"/></strong>
+                            <span t-attf-class="badge #{record.grade.raw_value == 'grade_a' ? 'text-bg-success' : (record.grade.raw_value == 'grade_b' ? 'text-bg-info' : (record.grade.raw_value == 'grade_c' ? 'text-bg-warning' : 'text-bg-danger'))}">
+                                <field name="grade"/>
+                            </span>
+                        </div>
+                        <div class="text-muted small mb-2">
+                            <i class="fa fa-calendar me-1" title="Period"/> <field name="period_id"/> | <field name="name"/>
+                        </div>
+                        <div class="my-2 p-2 bg-light rounded">
+                            <div class="d-flex justify-content-between small text-muted mb-1">
+                                <span>Overall Performance</span>
+                                <strong><field name="final_score"/>%</strong>
+                            </div>
+                            <div class="progress" style="height: 8px;">
+                                <div t-attf-class="progress-bar #{record.final_score.raw_value >= 90 ? 'bg-success' : (record.final_score.raw_value >= 75 ? 'bg-info' : (record.final_score.raw_value >= 60 ? 'bg-warning' : 'bg-danger'))}"
+                                     role="progressbar"
+                                     t-attf-style="width: #{record.final_score.raw_value}%;"/>
+                            </div>
+                        </div>
+                        <div class="row g-2 small mt-2">
+                            <div class="col-6">
+                                <span class="text-muted">OTD: </span><strong><field name="otd_rate"/>%</strong>
+                            </div>
+                            <div class="col-6 text-end">
+                                <span class="text-muted">Quality: </span><strong><field name="quality_rate"/>%</strong>
+                            </div>
+                            <div class="col-12 mt-1">
+                                <span class="text-muted">Spend: </span><field name="total_amount_purchased" widget="monetary"/>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top">
+                            <span class="badge rounded-pill text-bg-light border"><field name="state"/></span>
+                            <field name="evaluator_id" widget="many2one_avatar_user"/>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Evaluation List View -->
+    <record id="view_vendor_scorecard_evaluation_list" model="ir.ui.view">
+        <field name="name">vendor.scorecard.evaluation.list</field>
+        <field name="model">vendor.scorecard.evaluation</field>
+        <field name="arch" type="xml">
+            <tree string="Vendor Evaluations" decoration-success="grade == 'grade_a'" decoration-info="grade == 'grade_b'" decoration-warning="grade == 'grade_c'" decoration-danger="grade == 'grade_d'">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="period_id"/>
+                <field name="total_orders_count" optional="show"/>
+                <field name="total_amount_purchased" widget="monetary" optional="show"/>
+                <field name="otd_rate" string="OTD %" optional="show"/>
+                <field name="fulfillment_rate" string="Fill %" optional="show"/>
+                <field name="quality_rate" string="Quality %" optional="show"/>
+                <field name="final_score" string="Overall Score %" widget="progressbar"/>
+                <field name="grade" widget="badge"/>
+                <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-primary="state == 'reviewed'" decoration-warning="state == 'approved'" decoration-success="state == 'published'"/>
+                <field name="evaluator_id" widget="many2one_avatar_user" optional="hide"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Evaluation Form View -->
+    <record id="view_vendor_scorecard_evaluation_form" model="ir.ui.view">
+        <field name="name">vendor.scorecard.evaluation.form</field>
+        <field name="model">vendor.scorecard.evaluation</field>
+        <field name="arch" type="xml">
+            <form string="Vendor Scorecard Evaluation">
+                <header>
+                    <button name="action_compute_metrics" string="Recalculate Metrics" type="object" class="oe_highlight" invisible="state in ['published', 'cancelled']"/>
+                    <button name="action_review" string="Mark Reviewed" type="object" class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_approve" string="Approve Scorecard" type="object" class="btn-primary" invisible="state != 'reviewed'"/>
+                    <button name="action_publish" string="Publish Rating" type="object" class="btn-success" invisible="state != 'approved'"/>
+                    <button name="action_print_scorecard_report" string="Print Evaluation PDF" type="object" class="btn-outline-primary" icon="fa-print"/>
+                    <button name="action_reset_draft" string="Reset to Draft" type="object" invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,reviewed,approved,published"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <span class="o_form_label">Supplier Performance Scorecard</span>
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group string="Supplier &amp; Campaign Profile">
+                            <field name="partner_id"/>
+                            <field name="period_id"/>
+                            <field name="template_id"/>
+                            <field name="evaluation_date"/>
+                        </group>
+                        <group string="Governance &amp; Rating Verdict">
+                            <field name="evaluator_id"/>
+                            <field name="final_score" widget="progressbar"/>
+                            <field name="grade" widget="badge"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+
+                    <div class="row mt16 mb24">
+                        <div class="col-md-3">
+                            <div class="p-3 bg-light rounded text-center border-start border-primary border-4">
+                                <small class="text-muted text-uppercase fw-bold">On-Time Delivery (OTD)</small>
+                                <h3 class="mb-0 text-primary mt-1"><field name="otd_rate"/>%</h3>
+                                <small class="text-muted"><field name="ontime_pickings_count"/> on-time / <field name="total_pickings_count"/> shipments</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="p-3 bg-light rounded text-center border-start border-info border-4">
+                                <small class="text-muted text-uppercase fw-bold">Quantity Fill Rate</small>
+                                <h3 class="mb-0 text-info mt-1"><field name="fulfillment_rate"/>%</h3>
+                                <small class="text-muted"><field name="total_qty_delivered"/> / <field name="total_qty_ordered"/> units</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="p-3 bg-light rounded text-center border-start border-success border-4">
+                                <small class="text-muted text-uppercase fw-bold">Quality Acceptance</small>
+                                <h3 class="mb-0 text-success mt-1"><field name="quality_rate"/>%</h3>
+                                <small class="text-muted"><field name="total_qty_returned"/> defects reported</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="p-3 bg-light rounded text-center border-start border-dark border-4">
+                                <small class="text-muted text-uppercase fw-bold">Total Procurement Spend</small>
+                                <h3 class="mb-0 text-dark mt-1"><field name="total_amount_purchased" widget="monetary"/></h3>
+                                <small class="text-muted"><field name="total_orders_count"/> purchase orders</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <notebook>
+                        <page string="Evaluation Rubric Breakdown" name="breakdown">
+                            <field name="line_ids">
+                                <tree editable="bottom" create="0" delete="0">
+                                    <field name="name"/>
+                                    <field name="metric_type"/>
+                                    <field name="benchmark_target" string="Target (%)"/>
+                                    <field name="actual_value" string="Actual Result (%)"/>
+                                    <field name="score" string="Normalized Score (0-100)"/>
+                                    <field name="weight" string="Weight (%)"/>
+                                    <field name="weighted_score" string="Weighted Points"/>
+                                </tree>
+                            </field>
+                        </page>
+
+                        <page string="Qualitative Audit &amp; Service" name="service">
+                            <group>
+                                <group string="Supplier Responsiveness Assessment">
+                                    <field name="service_score" string="Service &amp; Support Score (0-100)"/>
+                                </group>
+                            </group>
+                            <group string="Auditor Notes &amp; Observations">
+                                <field name="notes" placeholder="Detail any non-conformances, communications delays, or packaging findings during the audit period..."/>
+                            </group>
+                            <group string="Corrective Action Plan (CAPA)">
+                                <field name="corrective_action_plan" placeholder="Outline mandatory supplier corrective actions, milestone reviews, or escalation requests for Grade C/D vendors..."/>
+                            </group>
+                        </page>
+
+                        <page string="Procurement &amp; Logistics Details" name="logistics">
+                            <group>
+                                <group string="Purchase Order Metrics">
+                                    <field name="total_orders_count"/>
+                                    <field name="total_amount_purchased" widget="monetary"/>
+                                    <field name="price_variance_rate"/>
+                                </group>
+                                <group string="Warehouse Receipt Analysis">
+                                    <field name="total_pickings_count"/>
+                                    <field name="ontime_pickings_count"/>
+                                    <field name="late_pickings_count"/>
+                                    <field name="total_qty_ordered"/>
+                                    <field name="total_qty_delivered"/>
+                                    <field name="total_qty_returned"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Evaluation Search View -->
+    <record id="view_vendor_scorecard_evaluation_search" model="ir.ui.view">
+        <field name="name">vendor.scorecard.evaluation.search</field>
+        <field name="model">vendor.scorecard.evaluation</field>
+        <field name="arch" type="xml">
+            <search string="Search Evaluations">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="period_id"/>
+                <filter string="Grade A (Preferred)" name="grade_a" domain="[('grade', '=', 'grade_a')]"/>
+                <filter string="Grade B (Approved)" name="grade_b" domain="[('grade', '=', 'grade_b')]"/>
+                <filter string="Grade C (Warning)" name="grade_c" domain="[('grade', '=', 'grade_c')]"/>
+                <filter string="Grade D (Restricted)" name="grade_d" domain="[('grade', '=', 'grade_d')]"/>
+                <separator/>
+                <filter string="Published" name="published" domain="[('state', '=', 'published')]"/>
+                <filter string="In Progress" name="draft" domain="[('state', 'in', ['draft', 'reviewed'])]"/>
+                <group>
+                    <filter string="Supplier" name="group_by_partner" context="{'group_by': 'partner_id'}"/>
+                    <filter string="Period" name="group_by_period" context="{'group_by': 'period_id'}"/>
+                    <filter string="Grade" name="group_by_grade" context="{'group_by': 'grade'}"/>
+                    <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Evaluation Action -->
+    <record id="action_vendor_scorecard_evaluation" model="ir.actions.act_window">
+        <field name="name">Vendor Performance Scorecards</field>
+        <field name="res_model">vendor.scorecard.evaluation</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="search_view_id" ref="view_vendor_scorecard_evaluation_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No supplier evaluations generated yet.
+            </p>
+            <p>
+                Launch an Evaluation Period to automatically score your suppliers on punctuality, shipment quality, and order fill accuracy.
+            </p>
+        </field>
+    </record>
+</odoo>

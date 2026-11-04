@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Default ISO 9001:2015 Clause 8.4 Evaluation Template -->
+    <record id="template_iso9001_standard" model="vendor.scorecard.template">
+        <field name="name">ISO 9001:2015 Standard Supplier Evaluation Rubric</field>
+        <field name="description">Comprehensive Clause 8.4 supplier evaluation framework balancing logistics punctuality, shipment fill accuracy, incoming quality conformance, and vendor customer service responsiveness.</field>
+        <field name="min_grade_a">90.0</field>
+        <field name="min_grade_b">75.0</field>
+        <field name="min_grade_c">60.0</field>
+    </record>
+
+    <record id="criterion_otd" model="vendor.scorecard.criterion">
+        <field name="template_id" ref="template_iso9001_standard"/>
+        <field name="name">On-Time Delivery Rate (OTD %)</field>
+        <field name="metric_type">otd</field>
+        <field name="weight">30.0</field>
+        <field name="benchmark_target">95.0</field>
+        <field name="sequence">10</field>
+        <field name="description">Measures percentage of incoming stock receipts delivered on or before the committed scheduled date.</field>
+    </record>
+
+    <record id="criterion_fulfillment" model="vendor.scorecard.criterion">
+        <field name="template_id" ref="template_iso9001_standard"/>
+        <field name="name">Quantity Fill Rate (%)</field>
+        <field name="metric_type">fulfillment</field>
+        <field name="weight">20.0</field>
+        <field name="benchmark_target">98.0</field>
+        <field name="sequence">20</field>
+        <field name="description">Measures delivered quantities versus purchase order line quantities without missing items or under-shipments.</field>
+    </record>
+
+    <record id="criterion_quality" model="vendor.scorecard.criterion">
+        <field name="template_id" ref="template_iso9001_standard"/>
+        <field name="name">Quality Acceptance Conformance (%)</field>
+        <field name="metric_type">quality</field>
+        <field name="weight">30.0</field>
+        <field name="benchmark_target">99.0</field>
+        <field name="sequence">30</field>
+        <field name="description">Measures accepted material units versus returned, defective, or rejected items.</field>
+    </record>
+
+    <record id="criterion_service" model="vendor.scorecard.criterion">
+        <field name="template_id" ref="template_iso9001_standard"/>
+        <field name="name">Commercial Service &amp; Support Responsiveness (%)</field>
+        <field name="metric_type">service</field>
+        <field name="weight">20.0</field>
+        <field name="benchmark_target">90.0</field>
+        <field name="sequence">40</field>
+        <field name="description">Qualitative evaluation assessing RFQ turnaround speed, warranty support, billing accuracy, and communication.</field>
+    </record>
+</odoo>

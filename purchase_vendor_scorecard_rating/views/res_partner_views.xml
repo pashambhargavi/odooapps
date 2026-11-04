@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_form_vendor_scorecard_inherit" model="ir.ui.view">
+        <field name="name">res.partner.form.vendor.scorecard.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_vendor_scorecards" type="object" class="oe_stat_button" icon="fa-line-chart" invisible="supplier_evaluation_count == 0">
+                    <div class="o_stat_info">
+                        <span class="o_stat_value">
+                            <field name="supplier_score" widget="float"/>%
+                        </span>
+                        <span class="o_stat_text">
+                            <field name="supplier_grade" widget="badge"/>
+                        </span>
+                    </div>
+                </button>
+            </xpath>
+
+            <xpath expr="//page[@name='internal_notes']" position="after">
+                <page string="Vendor Rating &amp; Scorecard" name="vendor_scorecard" invisible="supplier_rank == 0 and not vendor_scorecard_ids">
+                    <group>
+                        <group string="Current ISO 9001 Performance Standing">
+                            <field name="supplier_grade" widget="badge"/>
+                            <field name="supplier_score" widget="progressbar"/>
+                            <field name="latest_scorecard_id"/>
+                        </group>
+                    </group>
+                    <field name="vendor_scorecard_ids" readonly="1">
+                        <tree string="Scorecard History" decoration-success="grade == 'grade_a'" decoration-info="grade == 'grade_b'" decoration-warning="grade == 'grade_c'" decoration-danger="grade == 'grade_d'">
+                            <field name="name"/>
+                            <field name="period_id"/>
+                            <field name="total_amount_purchased" widget="monetary"/>
+                            <field name="otd_rate" string="OTD %"/>
+                            <field name="fulfillment_rate" string="Fill %"/>
+                            <field name="quality_rate" string="Quality %"/>
+                            <field name="final_score" string="Score %"/>
+                            <field name="grade" widget="badge"/>
+                            <field name="state" widget="badge"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

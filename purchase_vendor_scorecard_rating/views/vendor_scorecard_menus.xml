@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_vendor_scorecard_root"
+              name="Vendor Scorecards"
+              parent="purchase.menu_purchase_root"
+              sequence="25"/>
+
+    <menuitem id="menu_vendor_scorecard_evaluations"
+              name="Supplier Scorecards"
+              parent="menu_vendor_scorecard_root"
+              action="action_vendor_scorecard_evaluation"
+              sequence="10"/>
+
+    <menuitem id="menu_vendor_scorecard_periods"
+              name="Evaluation Campaigns"
+              parent="menu_vendor_scorecard_root"
+              action="action_vendor_scorecard_period"
+              sequence="20"/>
+
+    <menuitem id="menu_vendor_scorecard_templates"
+              name="Scoring Templates"
+              parent="purchase.menu_purchase_config"
+              action="action_vendor_scorecard_template"
+              sequence="90"/>
+</odoo>
