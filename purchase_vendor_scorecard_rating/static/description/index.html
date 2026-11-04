@@ -259,6 +259,94 @@
             </div>
         </div>
 
+        <!-- STEP-BY-STEP TESTING & VERIFICATION GUIDE -->
+        <div style="background-color: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; padding: 30px; margin-bottom: 45px;">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <span style="background-color: #0f172a; color: #ffffff; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase;">VERIFICATION PLAYBOOK</span>
+                <h2 style="color: #0f172a; font-size: 24px; font-weight: 800; margin: 8px 0 6px 0;">How to Test &amp; Verify This Module (Step-by-Step Flow)</h2>
+                <p style="color: #64748b; font-size: 14px; margin: 0;">Follow these 7 simple steps in your Odoo database to verify the complete supplier evaluation lifecycle.</p>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 16px;">
+                <!-- Step 1 -->
+                <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 5px solid #2563eb; border-radius: 8px; padding: 18px 20px;">
+                    <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px;">
+                        <span style="background-color: #2563eb; color: #ffffff; font-weight: 800; font-size: 12px; padding: 2px 8px; border-radius: 4px;">STEP 1</span>
+                        <h4 style="color: #0f172a; font-size: 16px; font-weight: 700; margin: 0;">Inspect Default ISO 9001 Scoring Template</h4>
+                    </div>
+                    <p style="color: #475569; font-size: 13px; line-height: 1.6; margin: 0;">
+                        Navigate to <strong>Purchase &gt; Configuration &gt; Scoring Templates</strong>. Open the pre-loaded <em>ISO 9001:2015 Standard Supplier Evaluation Rubric</em>. Review the 4 pre-configured criteria: On-Time Delivery (30%), Fill Rate (20%), Quality Conformance (30%), and Service Support (20%) summing to 100%, alongside Grade cutoffs (Grade A &ge; 90%, Grade B &ge; 75%, Grade C &ge; 60%, Grade D &lt; 60%).
+                    </p>
+                </div>
+
+                <!-- Step 2 -->
+                <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 5px solid #0284c7; border-radius: 8px; padding: 18px 20px;">
+                    <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px;">
+                        <span style="background-color: #0284c7; color: #ffffff; font-weight: 800; font-size: 12px; padding: 2px 8px; border-radius: 4px;">STEP 2</span>
+                        <h4 style="color: #0f172a; font-size: 16px; font-weight: 700; margin: 0;">Create a Purchase Order &amp; Validate Warehouse Receipt</h4>
+                    </div>
+                    <p style="color: #475569; font-size: 13px; line-height: 1.6; margin: 0;">
+                        Go to <strong>Purchase &gt; Orders &gt; Purchase Orders &gt; New</strong>. Choose an active supplier (e.g. <em>Apex Industrial Supplies</em>), add products with quantities and prices, and click <strong>Confirm Order</strong>. Open the receipt in Inventory and click <strong>Validate</strong>. The system records the committed scheduled date and actual done date.
+                    </p>
+                </div>
+
+                <!-- Step 3 -->
+                <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 5px solid #10b981; border-radius: 8px; padding: 18px 20px;">
+                    <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px;">
+                        <span style="background-color: #10b981; color: #ffffff; font-weight: 800; font-size: 12px; padding: 2px 8px; border-radius: 4px;">STEP 3</span>
+                        <h4 style="color: #0f172a; font-size: 16px; font-weight: 700; margin: 0;">Launch an Audit Campaign &amp; Auto-Compute Scores</h4>
+                    </div>
+                    <p style="color: #475569; font-size: 13px; line-height: 1.6; margin: 0;">
+                        Navigate to <strong>Purchase &gt; Vendor Scorecards &gt; Evaluation Campaigns &gt; New</strong>. Name the campaign (e.g. <em>Q1 Supplier Review</em>), set the date range covering today's PO, and select the ISO 9001 template. Click <strong>Start Campaign</strong>, then click <strong>Compute All Vendor Scores</strong>. The engine automatically scans all completed receipts and POs to generate scorecards!
+                    </p>
+                </div>
+
+                <!-- Step 4 -->
+                <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 5px solid #8b5cf6; border-radius: 8px; padding: 18px 20px;">
+                    <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px;">
+                        <span style="background-color: #8b5cf6; color: #ffffff; font-weight: 800; font-size: 12px; padding: 2px 8px; border-radius: 4px;">STEP 4</span>
+                        <h4 style="color: #0f172a; font-size: 16px; font-weight: 700; margin: 0;">Review Automated KPIs &amp; Add Qualitative Survey</h4>
+                    </div>
+                    <p style="color: #475569; font-size: 13px; line-height: 1.6; margin: 0;">
+                        Open the generated scorecard. Notice how <strong>OTD Rate (%)</strong>, <strong>Quantity Fill Rate (%)</strong>, and <strong>Quality Conformance (%)</strong> are auto-computed directly from stock pickings. In the <em>Qualitative Audit &amp; Service</em> tab, rate vendor responsiveness (e.g. 95/100) and observe the weighted overall score update live.
+                    </p>
+                </div>
+
+                <!-- Step 5 -->
+                <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 5px solid #f59e0b; border-radius: 8px; padding: 18px 20px;">
+                    <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px;">
+                        <span style="background-color: #f59e0b; color: #ffffff; font-weight: 800; font-size: 12px; padding: 2px 8px; border-radius: 4px;">STEP 5</span>
+                        <h4 style="color: #0f172a; font-size: 16px; font-weight: 700; margin: 0;">Approve &amp; Publish Rating to Vendor Contact Card</h4>
+                    </div>
+                    <p style="color: #475569; font-size: 13px; line-height: 1.6; margin: 0;">
+                        On the Scorecard header, click <strong>Mark Reviewed</strong> &gt; <strong>Approve Scorecard</strong> &gt; <strong>Publish Rating</strong>. Now open the supplier form under <strong>Purchase &gt; Orders &gt; Vendors</strong>. You will see their new official <strong>Grade Badge</strong> and score in both the header smart button and the <em>Vendor Rating &amp; Scorecard</em> historical tab!
+                    </p>
+                </div>
+
+                <!-- Step 6 -->
+                <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 5px solid #ef4444; border-radius: 8px; padding: 18px 20px;">
+                    <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px;">
+                        <span style="background-color: #ef4444; color: #ffffff; font-weight: 800; font-size: 12px; padding: 2px 8px; border-radius: 4px;">STEP 6</span>
+                        <h4 style="color: #0f172a; font-size: 16px; font-weight: 700; margin: 0;">Verify Purchase Order Alert &amp; Restriction Shield</h4>
+                    </div>
+                    <p style="color: #475569; font-size: 13px; line-height: 1.6; margin: 0;">
+                        Test the risk controls: for any supplier with Grade C or Grade D (Restricted/Blacklisted), create a new PO. Notice the amber/red alert banner warning the procurement team. When confirming an order for a Grade D supplier, regular users are blocked unless approved by a Procurement Manager!
+                    </p>
+                </div>
+
+                <!-- Step 7 -->
+                <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 5px solid #0f172a; border-radius: 8px; padding: 18px 20px;">
+                    <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px;">
+                        <span style="background-color: #0f172a; color: #ffffff; font-weight: 800; font-size: 12px; padding: 2px 8px; border-radius: 4px;">STEP 7</span>
+                        <h4 style="color: #0f172a; font-size: 16px; font-weight: 700; margin: 0;">Print Executive ISO 9001 Supplier Performance Certificate PDF</h4>
+                    </div>
+                    <p style="color: #475569; font-size: 13px; line-height: 1.6; margin: 0;">
+                        On any published Scorecard, click <strong>Print Evaluation PDF</strong>. Odoo generates a formal executive audit report with company logo, supplier details, rating grade ribbon, KPI stat boxes, full rubric points table, CAPA plan, and 3 formal sign-off signature lines.
+                    </p>
+                </div>
+            </div>
+        </div>
+
         <!-- SUPPORT / FOOTER BANNER (CYBROSYS STYLE) -->
         <div style="background-color: #0f172a; border-radius: 12px; padding: 35px 30px; color: #ffffff; margin-top: 40px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;">
             <div style="flex: 1 1 500px; margin-bottom: 20px;">
