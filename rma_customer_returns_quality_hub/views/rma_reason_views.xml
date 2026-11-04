@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_rma_reason_list" model="ir.ui.view">
+        <field name="name">rma.reason.list</field>
+        <field name="model">rma.reason</field>
+        <field name="arch" type="xml">
+            <tree string="RMA Return Reasons">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="default_action"/>
+                <field name="active" widget="boolean_toggle"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_rma_reason_form" model="ir.ui.view">
+        <field name="name">rma.reason.form</field>
+        <field name="model">rma.reason</field>
+        <field name="arch" type="xml">
+            <form string="Return Reason">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="e.g. Defective on Arrival"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="default_action"/>
+                        </group>
+                        <group>
+                            <field name="sequence"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group string="Operational Policy &amp; Description">
+                        <field name="description" nolabel="1" placeholder="Describe when to apply this return reason..."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_rma_reason" model="ir.actions.act_window">
+        <field name="name">RMA Reasons</field>
+        <field name="res_model">rma.reason</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

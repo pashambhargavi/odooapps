@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_rma_root" name="RMA Returns" sequence="35"
+              web_icon="rma_customer_returns_quality_hub,static/description/icon.png"
+              groups="group_rma_user"/>
+    <menuitem id="menu_rma_orders" name="RMA Orders" parent="menu_rma_root"
+              action="action_rma_order" sequence="10"/>
+    <menuitem id="menu_rma_config" name="Configuration" parent="menu_rma_root" sequence="90"
+              groups="group_rma_manager"/>
+    <menuitem id="menu_rma_reasons" name="Return Reasons" parent="menu_rma_config"
+              action="action_rma_reason" sequence="10"/>
+</odoo>

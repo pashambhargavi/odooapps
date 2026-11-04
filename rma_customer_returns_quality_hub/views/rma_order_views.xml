@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_rma_order_list" model="ir.ui.view">
+        <field name="name">rma.order.list</field>
+        <field name="model">rma.order</field>
+        <field name="arch" type="xml">
+            <tree string="RMA Orders" decoration-info="state == 'draft'" decoration-warning="state == 'approved'"
+                  decoration-primary="state == 'received'" decoration-success="state == 'resolved'"
+                  decoration-muted="state == 'rejected'">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="date_rma"/>
+                <field name="sale_id" optional="show"/>
+                <field name="picking_id" optional="hide"/>
+                <field name="warehouse_id" optional="show"/>
+                <field name="resolution_type"/>
+                <field name="total_returned_qty" sum="Total Units"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="total_refund_amount" sum="Total Refund" widget="monetary"/>
+                <field name="user_id" widget="many2one_avatar_user" optional="show"/>
+                <field name="state" widget="badge" decoration-info="state == 'draft'"
+                       decoration-warning="state == 'approved'" decoration-primary="state == 'received'"
+                       decoration-success="state == 'resolved'" decoration-muted="state == 'rejected'"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_rma_order_kanban" model="ir.ui.view">
+        <field name="name">rma.order.kanban</field>
+        <field name="model">rma.order</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_small_column">
+                <field name="currency_id"/>
+                <templates>
+                    <t t-name="card">
+                        <field name="name" class="fw-bold fs-5"/>
+                        <field name="partner_id" class="text-muted"/>
+                        <div class="d-flex justify-content-between mt-2">
+                            <span>Units: <field name="total_returned_qty"/></span>
+                            <span class="fw-bold"><field name="total_refund_amount" widget="monetary"/></span>
+                        </div>
+                        <div class="d-flex justify-content-between text-muted fs-7">
+                            <span>Type: <field name="resolution_type"/></span>
+                        </div>
+                        <footer>
+                            <field name="date_rma" widget="date"/>
+                            <field name="state" widget="label_selection"
+                                   options="{'classes': {'draft': 'info', 'approved': 'warning', 'received': 'primary', 'inspected': 'secondary', 'resolved': 'success', 'rejected': 'danger'}}"/>
+                        </footer>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_rma_order_form" model="ir.ui.view">
+        <field name="name">rma.order.form</field>
+        <field name="model">rma.order</field>
+        <field name="arch" type="xml">
+            <form string="Return Merchandise Authorization">
+                <header>
+                    <button name="action_approve" type="object" string="Approve Return Request" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_receive_goods" type="object" string="Receive Returned Goods" class="btn-primary"
+                            invisible="state != 'approved'"/>
+                    <button name="action_open_inspection_wizard" type="object" string="Execute Quality Inspection" class="btn-primary"
+                            invisible="state not in ('received', 'inspected')"/>
+                    <button name="action_create_credit_note" type="object" string="Create Customer Refund" class="btn-secondary"
+                            invisible="state not in ('inspected', 'received') or credit_note_id"/>
+                    <button name="action_create_replacement_delivery" type="object" string="Create Replacement Delivery" class="btn-secondary"
+                            invisible="state not in ('inspected', 'received') or replacement_picking_id"/>
+                    <button name="action_resolve" type="object" string="Close / Resolved" class="btn-success"
+                            invisible="state in ('resolved', 'rejected', 'draft')"/>
+                    <button name="action_reject" type="object" string="Reject" class="btn-danger"
+                            invisible="state in ('resolved', 'rejected')"/>
+                    <button name="action_set_to_draft" type="object" string="Reset to Draft" class="btn-secondary"
+                            invisible="state not in ('approved', 'rejected')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,approved,received,inspected,resolved"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_return_picking" type="object" class="oe_stat_button" icon="fa-truck"
+                                invisible="return_picking_count == 0">
+                            <field name="return_picking_count" widget="statinfo" string="Return Receipt"/>
+                        </button>
+                        <button name="action_view_replacement_picking" type="object" class="oe_stat_button" icon="fa-cube"
+                                invisible="replacement_picking_count == 0">
+                            <field name="replacement_picking_count" widget="statinfo" string="Replacement"/>
+                        </button>
+                        <button name="action_view_credit_note" type="object" class="oe_stat_button" icon="fa-pencil-square-o"
+                                invisible="credit_note_count == 0">
+                            <field name="credit_note_count" widget="statinfo" string="Refund Credit Note"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Customer &amp; Origin">
+                            <field name="partner_id" readonly="state != 'draft'"/>
+                            <field name="date_rma" readonly="state != 'draft'"/>
+                            <field name="sale_id" readonly="state != 'draft'"/>
+                            <field name="picking_id" readonly="state != 'draft'"/>
+                            <field name="invoice_id" readonly="state != 'draft'"/>
+                        </group>
+                        <group string="Logistics &amp; Resolution">
+                            <field name="warehouse_id" readonly="state != 'draft'"/>
+                            <field name="resolution_type" readonly="state in ('resolved', 'rejected')"/>
+                            <field name="user_id" widget="many2one_avatar_user"/>
+                            <field name="company_id" groups="base.group_multi_company" readonly="state != 'draft'"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Return Products &amp; Inspection Lines" name="lines">
+                            <field name="line_ids" readonly="state in ('resolved', 'rejected')">
+                                <tree editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="product_uom_id" optional="hide"/>
+                                    <field name="ordered_qty" optional="show"/>
+                                    <field name="delivered_qty" optional="show"/>
+                                    <field name="return_qty"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                    <field name="unit_price" widget="monetary"/>
+                                    <field name="refund_subtotal" widget="monetary"/>
+                                    <field name="reason_id"/>
+                                    <field name="action_type"/>
+                                    <field name="inspection_state" widget="badge"
+                                           decoration-info="inspection_state == 'pending'"
+                                           decoration-success="inspection_state == 'passed'"
+                                           decoration-warning="inspection_state == 'repair'"
+                                           decoration-danger="inspection_state == 'scrap'"/>
+                                    <field name="inspected_qty" optional="show"/>
+                                    <field name="inspection_notes" optional="hide"/>
+                                </tree>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="total_returned_qty"/>
+                                <field name="total_refund_amount" widget="monetary"/>
+                            </group>
+                        </page>
+                        <page string="Instructions &amp; Notes" name="notes">
+                            <field name="note" placeholder="Enter special handling instructions, shipping carrier tracking, or customer agreements..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_rma_order_search" model="ir.ui.view">
+        <field name="name">rma.order.search</field>
+        <field name="model">rma.order</field>
+        <field name="arch" type="xml">
+            <search string="Search RMA Orders">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="sale_id"/>
+                <field name="picking_id"/>
+                <filter name="draft" string="Draft" domain="[('state', '=', 'draft')]"/>
+                <filter name="approved" string="Approved" domain="[('state', '=', 'approved')]"/>
+                <filter name="received" string="Received" domain="[('state', '=', 'received')]"/>
+                <filter name="inspected" string="Inspected" domain="[('state', '=', 'inspected')]"/>
+                <filter name="resolved" string="Resolved" domain="[('state', '=', 'resolved')]"/>
+                <group>
+                    <filter name="group_partner" string="Customer" context="{'group_by': 'partner_id'}"/>
+                    <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                    <filter name="group_resolution" string="Resolution" context="{'group_by': 'resolution_type'}"/>
+                    <filter name="group_warehouse" string="Warehouse" context="{'group_by': 'warehouse_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_rma_order" model="ir.actions.act_window">
+        <field name="name">RMA Orders</field>
+        <field name="res_model">rma.order</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="context">{'search_default_approved': 1, 'search_default_received': 1}</field>
+    </record>
+</odoo>

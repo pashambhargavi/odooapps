@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_picking_form_inherit_rma" model="ir.ui.view">
+        <field name="name">stock.picking.form.inherit.rma</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_create_rma" string="Create RMA Return" type="object" class="btn-secondary"
+                        invisible="state != 'done' or picking_type_code != 'outgoing'"/>
+            </xpath>
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_rmas" type="object" class="oe_stat_button" icon="fa-refresh"
+                        invisible="rma_count == 0">
+                    <field name="rma_count" widget="statinfo" string="RMA Orders"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+</odoo>
