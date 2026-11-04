@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_rma_reason_user,rma.reason user,model_rma_reason,group_rma_user,1,0,0,0
+access_rma_reason_manager,rma.reason manager,model_rma_reason,group_rma_manager,1,1,1,1
+access_rma_order_user,rma.order user,model_rma_order,group_rma_user,1,1,1,0
+access_rma_order_manager,rma.order manager,model_rma_order,group_rma_manager,1,1,1,1
+access_rma_order_line_user,rma.order.line user,model_rma_order_line,group_rma_user,1,1,1,1
+access_rma_order_line_manager,rma.order.line manager,model_rma_order_line,group_rma_manager,1,1,1,1
+access_rma_inspection_wizard,rma.inspection.wizard user,model_rma_inspection_wizard,group_rma_user,1,1,1,1
+access_rma_inspection_wizard_line,rma.inspection.wizard.line user,model_rma_inspection_wizard_line,group_rma_user,1,1,1,1

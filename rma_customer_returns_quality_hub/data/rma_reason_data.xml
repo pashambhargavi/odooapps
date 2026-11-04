@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="rma_reason_defective" model="rma.reason">
+            <field name="name">Defective / Damaged on Arrival</field>
+            <field name="code">DEFECT</field>
+            <field name="sequence">10</field>
+            <field name="default_action">replacement</field>
+            <field name="description">Product arrived broken, inoperable, or physically damaged.</field>
+        </record>
+        <record id="rma_reason_wrong_item" model="rma.reason">
+            <field name="name">Wrong Item Shipped</field>
+            <field name="code">WRONG_ITEM</field>
+            <field name="sequence">20</field>
+            <field name="default_action">replacement</field>
+            <field name="description">Warehouse shipped incorrect SKU or variant.</field>
+        </record>
+        <record id="rma_reason_buyer_remorse" model="rma.reason">
+            <field name="name">Customer Exchange / No Longer Needed</field>
+            <field name="code">REMORSE</field>
+            <field name="sequence">30</field>
+            <field name="default_action">refund</field>
+            <field name="description">Customer ordered in error or decided against purchase.</field>
+        </record>
+        <record id="rma_reason_warranty" model="rma.reason">
+            <field name="name">Warranty Service Claim</field>
+            <field name="code">WARRANTY</field>
+            <field name="sequence">40</field>
+            <field name="default_action">repair</field>
+            <field name="description">Unit failed within manufacturer warranty window.</field>
+        </record>
+    </data>
+</odoo>

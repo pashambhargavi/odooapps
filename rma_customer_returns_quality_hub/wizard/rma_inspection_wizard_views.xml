@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_rma_inspection_wizard_form" model="ir.ui.view">
+        <field name="name">rma.inspection.wizard.form</field>
+        <field name="model">rma.inspection.wizard</field>
+        <field name="arch" type="xml">
+            <form string="RMA Quality Inspection Workbench">
+                <sheet>
+                    <group>
+                        <group string="Inspection Context">
+                            <field name="rma_id"/>
+                            <field name="global_disposition"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Item Condition &amp; Quantities">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="product_id" readonly="1"/>
+                                    <field name="return_qty"/>
+                                    <field name="inspected_qty"/>
+                                    <field name="inspection_state"/>
+                                    <field name="notes" placeholder="e.g. Scratched surface, full packaging intact"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Technical Observations">
+                            <field name="internal_notes" placeholder="Enter findings from testing, serial number verifications, or technician reports..."/>
+                        </page>
+                    </notebook>
+                    <footer>
+                        <button name="action_apply_inspection" string="Confirm Inspection &amp; Execute Disposition" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>
