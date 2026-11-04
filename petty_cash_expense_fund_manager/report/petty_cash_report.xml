@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Petty Cash Payment Voucher Report -->
+    <record id="action_report_petty_cash_voucher" model="ir.actions.report">
+        <field name="name">Petty Cash Payment Voucher Slip</field>
+        <field name="model">petty.cash.voucher</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">petty_cash_expense_fund_manager.report_petty_cash_voucher_template</field>
+        <field name="report_file">petty_cash_expense_fund_manager.report_petty_cash_voucher_template</field>
+        <field name="binding_model_id" ref="model_petty_cash_voucher"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_petty_cash_voucher_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page" style="font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:13px;color:#1e293b;">
+                        
+                        <!-- Header Banner -->
+                        <div class="row mb-4">
+                            <div class="col-7">
+                                <h2 style="font-size:24px;font-weight:800;color:#017E84;margin-bottom:4px;">PETTY CASH DISBURSEMENT VOUCHER</h2>
+                                <p style="font-size:13px;color:#64748b;margin:0;">Official Cash Disbursement Slip &amp; Expense Authorization</p>
+                            </div>
+                            <div class="col-5 text-end">
+                                <h3 style="font-size:18px;font-weight:700;color:#714B67;margin:0 0 4px 0;" t-field="o.name"/>
+                                <p style="margin:0 0 2px 0;"><strong>Date:</strong> <span t-field="o.date"/></p>
+                                <p style="margin:0;"><strong>Status:</strong> <span style="text-transform:uppercase;font-weight:bold;" t-field="o.state"/></p>
+                            </div>
+                        </div>
+
+                        <!-- Fund & Payee Info Box -->
+                        <div class="row mb-4">
+                            <div class="col-6">
+                                <div style="background-color:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #017E84;border-radius:6px;padding:12px;">
+                                    <strong style="color:#017E84;font-size:12px;text-transform:uppercase;">Payee / Claimant:</strong>
+                                    <h4 style="margin:6px 0 2px 0;font-size:16px;font-weight:bold;" t-field="o.payee"/>
+                                    <div t-if="o.partner_id" style="color:#64748b;">Linked Partner: <span t-field="o.partner_id.name"/></div>
+                                    <div t-if="o.notes" style="margin-top:6px;font-size:12px;"><strong>Purpose:</strong> <span t-field="o.notes"/></div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div style="background-color:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #714B67;border-radius:6px;padding:12px;height:100%;">
+                                    <strong style="color:#714B67;font-size:12px;text-transform:uppercase;">Cash Float Details:</strong>
+                                    <p style="margin:6px 0 2px 0;"><strong>Fund:</strong> <span t-field="o.fund_id.name"/></p>
+                                    <p style="margin:0 0 2px 0;"><strong>Custodian:</strong> <span t-field="o.custodian_id.name"/></p>
+                                    <p style="margin:0;"><strong>Journal Entry:</strong> <span t-field="o.move_id.name" t-if="o.move_id"/><span t-else="">Pending Posting</span></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Line Items Table -->
+                        <table class="table table-sm table-bordered" style="width:100%;font-size:12px;margin-bottom:24px;">
+                            <thead style="background-color:#017E84;color:#ffffff;">
+                                <tr>
+                                    <th style="padding:8px;">#</th>
+                                    <th style="padding:8px;">Description / Purpose</th>
+                                    <th style="padding:8px;">Expense Account</th>
+                                    <th class="text-end" style="padding:8px;">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="idx" t-value="1"/>
+                                <t t-foreach="o.line_ids" t-as="l">
+                                    <tr>
+                                        <td style="padding:6px 8px;width:30px;"><span t-esc="idx"/></td>
+                                        <td style="padding:6px 8px;"><span t-field="l.name"/></td>
+                                        <td style="padding:6px 8px;"><span t-field="l.account_id.code"/> - <span t-field="l.account_id.name"/></td>
+                                        <td class="text-end" style="padding:6px 8px;font-weight:600;"><span t-field="l.amount"/></td>
+                                    </tr>
+                                    <t t-set="idx" t-value="idx + 1"/>
+                                </t>
+                                <tr style="background-color:#f1f5f9;font-weight:bold;">
+                                    <td colspan="3" class="text-end" style="padding:8px;font-size:13px;">TOTAL CASH DISBURSED:</td>
+                                    <td class="text-end" style="padding:8px;font-size:15px;color:#017E84;"><span t-field="o.amount_total"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- 3-Party Signature Verification Block -->
+                        <div class="row" style="margin-top:50px;">
+                            <div class="col-4 text-center">
+                                <div style="border-top:1px solid #94a3b8;padding-top:8px;margin:0 15px;">
+                                    <strong>Received By (Payee)</strong><br/>
+                                    <span style="font-size:11px;color:#64748b;">Signature &amp; Date</span>
+                                </div>
+                            </div>
+                            <div class="col-4 text-center">
+                                <div style="border-top:1px solid #94a3b8;padding-top:8px;margin:0 15px;">
+                                    <strong>Disbursed By (Custodian)</strong><br/>
+                                    <span style="font-size:11px;color:#64748b;" t-field="o.custodian_id.name"/>
+                                </div>
+                            </div>
+                            <div class="col-4 text-center">
+                                <div style="border-top:1px solid #94a3b8;padding-top:8px;margin:0 15px;">
+                                    <strong>Approved By (Finance)</strong><br/>
+                                    <span style="font-size:11px;color:#64748b;">Comptroller Signature</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

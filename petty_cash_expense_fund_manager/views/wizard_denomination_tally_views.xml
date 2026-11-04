@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Denomination Wizard Form -->
+    <record id="view_petty_cash_denomination_wizard_form" model="ir.ui.view">
+        <field name="name">petty.cash.denomination.wizard.form</field>
+        <field name="model">petty.cash.denomination.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Physical Cash Count Workbench">
+                <sheet>
+                    <div class="oe_title">
+                        <h2>Physical Cash Count &amp; Denomination Tally</h2>
+                        <h4>Fund: <field name="fund_id" readonly="1" options="{'no_open': True}"/></h4>
+                    </div>
+                    <group>
+                        <group string="Expected vs Counted">
+                            <field name="system_balance" widget="monetary" options="{'currency_field': 'currency_id'}" readonly="1"/>
+                            <field name="counted_total" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            <field name="discrepancy" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            <field name="discrepancy_status" widget="badge" decoration-success="discrepancy_status == 'match'" decoration-warning="discrepancy_status == 'over'" decoration-danger="discrepancy_status == 'short'"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+
+                    <group string="Physical Bill &amp; Coin Counts">
+                        <group string="Banknotes (High Value)">
+                            <field name="count_1000"/>
+                            <field name="count_500"/>
+                            <field name="count_100"/>
+                            <field name="count_50"/>
+                        </group>
+                        <group string="Banknotes &amp; Coins (Low Value)">
+                            <field name="count_20"/>
+                            <field name="count_10"/>
+                            <field name="count_5"/>
+                            <field name="count_1"/>
+                            <field name="count_coins" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Auditor Observations &amp; Discrepancy Note" name="notes">
+                            <field name="notes" placeholder="Explain any overage or shortage reasons..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <footer>
+                    <button name="action_confirm_tally" string="Save &amp; Verify Cash Count" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Cash Tally List View -->
+    <record id="view_petty_cash_tally_list" model="ir.ui.view">
+        <field name="name">petty.cash.tally.list</field>
+        <field name="model">petty.cash.tally</field>
+        <field name="arch" type="xml">
+            <tree string="Cash Count Tallies">
+                <field name="name"/>
+                <field name="tally_date"/>
+                <field name="fund_id"/>
+                <field name="custodian_id"/>
+                <field name="system_balance" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                <field name="counted_total" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                <field name="discrepancy" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                <field name="discrepancy_status" widget="badge" decoration-success="discrepancy_status == 'match'" decoration-warning="discrepancy_status == 'over'" decoration-danger="discrepancy_status == 'short'"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="state" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Cash Tally Form View -->
+    <record id="view_petty_cash_tally_form" model="ir.ui.view">
+        <field name="name">petty.cash.tally.form</field>
+        <field name="model">petty.cash.tally</field>
+        <field name="arch" type="xml">
+            <form string="Cash Count Audit Tally">
+                <header>
+                    <button name="action_verify" string="Verify Count" type="object" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_approve" string="Approve Audit" type="object" class="btn-success" invisible="state != 'verified'" groups="petty_cash_expense_fund_manager.group_petty_cash_manager"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,verified,approved"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <span class="o_form_label">Denomination Audit Tally</span>
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Fund Context">
+                            <field name="fund_id" readonly="state != 'draft'"/>
+                            <field name="custodian_id"/>
+                            <field name="tally_date" readonly="state != 'draft'"/>
+                        </group>
+                        <group string="Reconciliation Summary">
+                            <field name="system_balance" widget="monetary" options="{'currency_field': 'currency_id'}" readonly="state != 'draft'"/>
+                            <field name="counted_total" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            <field name="discrepancy" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            <field name="discrepancy_status" widget="badge" decoration-success="discrepancy_status == 'match'" decoration-warning="discrepancy_status == 'over'" decoration-danger="discrepancy_status == 'short'"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <group string="Denomination Breakdown">
+                        <group string="Banknotes (High Value)">
+                            <field name="count_1000" readonly="state != 'draft'"/>
+                            <field name="count_500" readonly="state != 'draft'"/>
+                            <field name="count_100" readonly="state != 'draft'"/>
+                            <field name="count_50" readonly="state != 'draft'"/>
+                        </group>
+                        <group string="Banknotes &amp; Coins (Low Value)">
+                            <field name="count_20" readonly="state != 'draft'"/>
+                            <field name="count_10" readonly="state != 'draft'"/>
+                            <field name="count_5" readonly="state != 'draft'"/>
+                            <field name="count_1" readonly="state != 'draft'"/>
+                            <field name="count_coins" widget="monetary" options="{'currency_field': 'currency_id'}" readonly="state != 'draft'"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Auditor Observations &amp; Notes" name="notes">
+                            <field name="notes" placeholder="Notes on cash discrepancies, register count observations..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_petty_cash_tally" model="ir.actions.act_window">
+        <field name="name">Cash Count Tallies</field>
+        <field name="res_model">petty.cash.tally</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

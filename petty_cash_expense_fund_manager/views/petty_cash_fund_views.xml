@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Petty Cash Fund Kanban View -->
+    <record id="view_petty_cash_fund_kanban" model="ir.ui.view">
+        <field name="name">petty.cash.fund.kanban</field>
+        <field name="model">petty.cash.fund</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="custodian_id"/>
+                <field name="float_amount"/>
+                <field name="current_balance"/>
+                <field name="replenishment_threshold"/>
+                <field name="currency_id"/>
+                <field name="state"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_global_click p-2">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <strong class="o_kanban_record_title" style="font-size:16px;"><field name="name"/> (<field name="code"/>)</strong>
+                                <span t-if="record.state.raw_value == 'active'" class="badge text-bg-success">Active</span>
+                                <span t-elif="record.state.raw_value == 'suspended'" class="badge text-bg-warning">Suspended</span>
+                                <span t-elif="record.state.raw_value == 'closed'" class="badge text-bg-danger">Closed</span>
+                                <span t-else="" class="badge text-bg-secondary">Draft</span>
+                            </div>
+                            <div class="text-muted small mb-2">Custodian: <field name="custodian_id"/></div>
+                            <div class="row my-2 p-2 bg-light rounded">
+                                <div class="col-6">
+                                    <span class="text-muted small">Current Cash in Box:</span>
+                                    <div class="fw-bold fs-5" t-att-class="record.current_balance.raw_value &lt;= record.replenishment_threshold.raw_value ? 'text-danger' : 'text-success'">
+                                        <field name="current_balance" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    </div>
+                                </div>
+                                <div class="col-6 text-end">
+                                    <span class="text-muted small">Float Capacity:</span>
+                                    <div class="fw-bold text-dark">
+                                        <field name="float_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div t-if="record.current_balance.raw_value &lt;= record.replenishment_threshold.raw_value and record.state.raw_value == 'active'" class="alert alert-warning py-1 px-2 my-1 text-center small" role="alert">
+                                &#9888; Replenishment Required!
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+                                <button name="action_open_denomination_tally" type="object" class="btn btn-sm btn-outline-primary">
+                                    &#128176; Count Cash
+                                </button>
+                                <button name="action_view_vouchers" type="object" class="btn btn-sm btn-link text-decoration-none">
+                                    Vouchers (<field name="voucher_count"/>)
+                                </button>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Fund List View -->
+    <record id="view_petty_cash_fund_list" model="ir.ui.view">
+        <field name="name">petty.cash.fund.list</field>
+        <field name="model">petty.cash.fund</field>
+        <field name="arch" type="xml">
+            <tree string="Petty Cash Funds" decoration-muted="state == 'closed'">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="custodian_id"/>
+                <field name="float_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                <field name="current_balance" widget="monetary" options="{'currency_field': 'currency_id'}" decoration-danger="current_balance &lt;= replenishment_threshold" decoration-success="current_balance &gt; replenishment_threshold"/>
+                <field name="unreplenished_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="replenishment_threshold" optional="hide"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="state" widget="badge" decoration-success="state == 'active'" decoration-warning="state == 'suspended'" decoration-danger="state == 'closed'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Fund Form View -->
+    <record id="view_petty_cash_fund_form" model="ir.ui.view">
+        <field name="name">petty.cash.fund.form</field>
+        <field name="model">petty.cash.fund</field>
+        <field name="arch" type="xml">
+            <form string="Petty Cash Fund">
+                <header>
+                    <button name="action_activate" string="Activate Fund" type="object" class="btn-primary" invisible="state != 'draft'" groups="petty_cash_expense_fund_manager.group_petty_cash_manager"/>
+                    <button name="action_open_denomination_tally" string="Count Cash &amp; Tally" type="object" class="btn-secondary" invisible="state != 'active'"/>
+                    <button name="action_suspend" string="Suspend Fund" type="object" invisible="state != 'active'" groups="petty_cash_expense_fund_manager.group_petty_cash_manager"/>
+                    <button name="action_close" string="Close Fund" type="object" invisible="state in ('draft', 'closed')" groups="petty_cash_expense_fund_manager.group_petty_cash_manager"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,active,closed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_vouchers" type="object" class="oe_stat_button" icon="fa-file-text-o">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value"><field name="voucher_count"/></span>
+                                <span class="o_stat_text">Vouchers</span>
+                            </div>
+                        </button>
+                        <button name="action_view_replenishments" type="object" class="oe_stat_button" icon="fa-refresh">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value"><field name="replenishment_count"/></span>
+                                <span class="o_stat_text">Replenishments</span>
+                            </div>
+                        </button>
+                        <button name="action_view_tallies" type="object" class="oe_stat_button" icon="fa-calculator">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value"><field name="tally_count"/></span>
+                                <span class="o_stat_text">Cash Tallies</span>
+                            </div>
+                        </button>
+                    </div>
+
+                    <div class="oe_title">
+                        <label for="name" string="Petty Cash Fund Name"/>
+                        <h1><field name="name" placeholder="e.g. HQ Front Desk Float"/></h1>
+                    </div>
+
+                    <group>
+                        <group string="Custodian &amp; Float Limits">
+                            <field name="code" readonly="state != 'draft'"/>
+                            <field name="custodian_id" readonly="state == 'closed'"/>
+                            <field name="float_amount" widget="monetary" options="{'currency_field': 'currency_id'}" readonly="state == 'closed'"/>
+                            <field name="replenishment_threshold" widget="monetary" options="{'currency_field': 'currency_id'}" readonly="state == 'closed'"/>
+                        </group>
+                        <group string="Financial Status &amp; General Ledger">
+                            <field name="current_balance" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            <field name="unreplenished_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            <field name="account_id" readonly="state != 'draft'"/>
+                            <field name="journal_id" readonly="state != 'draft'"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="company_id" groups="base.group_multi_company" readonly="state != 'draft'"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Vouchers in Circulation" name="vouchers">
+                            <field name="voucher_ids" readonly="1">
+                                <tree string="Vouchers" limit="10">
+                                    <field name="name"/>
+                                    <field name="date"/>
+                                    <field name="payee"/>
+                                    <field name="amount_total" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                    <field name="state" widget="badge"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Replenishment History" name="replenishments">
+                            <field name="replenishment_ids" readonly="1">
+                                <tree string="Replenishments" limit="10">
+                                    <field name="name"/>
+                                    <field name="date"/>
+                                    <field name="bank_journal_id"/>
+                                    <field name="total_reimbursement" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                    <field name="state" widget="badge"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Fund Search View -->
+    <record id="view_petty_cash_fund_search" model="ir.ui.view">
+        <field name="name">petty.cash.fund.search</field>
+        <field name="model">petty.cash.fund</field>
+        <field name="arch" type="xml">
+            <search string="Search Funds">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="custodian_id"/>
+                <filter name="active" string="Active Funds" domain="[('state', '=', 'active')]"/>
+                <group>
+                    <filter name="group_custodian" string="Custodian" context="{'group_by': 'custodian_id'}"/>
+                    <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_petty_cash_fund" model="ir.actions.act_window">
+        <field name="name">Petty Cash Funds</field>
+        <field name="res_model">petty.cash.fund</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="search_view_id" ref="view_petty_cash_fund_search"/>
+        <field name="context">{'search_default_active': 1}</field>
+    </record>
+
+</odoo>
