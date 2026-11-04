@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_whatsapp_template_search" model="ir.ui.view">
+        <field name="name">whatsapp.template.search</field>
+        <field name="model">whatsapp.template</field>
+        <field name="arch" type="xml">
+            <search string="Search Templates">
+                <field name="name"/>
+                <field name="model_id"/>
+                <filter string="Active" name="filter_active" domain="[('active', '=', True)]"/>
+                <group>
+                    <filter string="Applies To Model" name="group_model" context="{'group_by': 'model_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_whatsapp_template_list" model="ir.ui.view">
+        <field name="name">whatsapp.template.list</field>
+        <field name="model">whatsapp.template</field>
+        <field name="arch" type="xml">
+            <list string="WhatsApp Templates">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="model_id"/>
+                <field name="header_text" optional="show"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_whatsapp_template_form" model="ir.ui.view">
+        <field name="name">whatsapp.template.form</field>
+        <field name="model">whatsapp.template</field>
+        <field name="arch" type="xml">
+            <form string="WhatsApp Template">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only" string="Template Title"/>
+                        <h1><field name="name" placeholder="e.g. Sales Order Confirmation Notification"/></h1>
+                    </div>
+                    <group>
+                        <group string="Model &amp; Sequence">
+                            <field name="model_id" options="{'no_create': True}"/>
+                            <field name="model" invisible="1"/>
+                            <field name="sequence"/>
+                        </group>
+                        <group string="Scope &amp; Status">
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="active" widget="boolean_toggle"/>
+                        </group>
+                    </group>
+                    <group string="Message Envelope">
+                        <field name="header_text" placeholder="e.g. Order Confirmation (Bold Header)"/>
+                        <field name="body" placeholder="Type message body with placeholders like ${partner_name}, ${amount_total}, ${name}..."/>
+                        <field name="footer_text" placeholder="e.g. Thank you for choosing our services!"/>
+                    </group>
+                    <div class="alert alert-info" role="alert">
+                        <strong>Supported Dynamic Placeholders:</strong><br/>
+                        <code>${partner_name}</code> Customer name &#8226; 
+                        <code>${document_number}</code> / <code>${name}</code> Order/Invoice number &#8226; 
+                        <code>${amount_total}</code> Total with currency &#8226; 
+                        <code>${due_date}</code> Due or order date &#8226; 
+                        <code>${company_name}</code> Company name &#8226; 
+                        <code>${tracking_number}</code> Courier tracking number
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_whatsapp_template" model="ir.actions.act_window">
+        <field name="name">WhatsApp Templates</field>
+        <field name="res_model">whatsapp.template</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create customizable WhatsApp message templates with dynamic placeholders for Orders, Invoices, and Shipments!
+            </p>
+        </field>
+    </record>
+</odoo>

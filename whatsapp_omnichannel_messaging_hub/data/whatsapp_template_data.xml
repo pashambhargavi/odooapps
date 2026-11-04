@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Template 1: Sales Order -->
+        <record id="template_whatsapp_sale_order" model="whatsapp.template">
+            <field name="name">Sales Order Confirmation</field>
+            <field name="sequence">10</field>
+            <field name="model_id" ref="sale.model_sale_order"/>
+            <field name="header_text">Order Confirmation</field>
+            <field name="body">Dear ${partner_name},
+
+Thank you for your order! Your Quotation/Order *${document_number}* for total amount *${amount_total}* has been successfully processed.
+
+We are preparing your items for delivery. If you have any questions, feel free to reply to this message directly.</field>
+            <field name="footer_text">Thank you for choosing ${company_name}!</field>
+        </record>
+
+        <!-- Template 2: Customer Invoice -->
+        <record id="template_whatsapp_account_move" model="whatsapp.template">
+            <field name="name">Customer Invoice &amp; Payment Notice</field>
+            <field name="sequence">20</field>
+            <field name="model_id" ref="account.model_account_move"/>
+            <field name="header_text">Invoice Notification</field>
+            <field name="body">Hello ${partner_name},
+
+Please find your Invoice *${document_number}* for total amount *${amount_total}* with due date *${due_date}*.
+
+Kindly review and let us know once payment has been initiated.</field>
+            <field name="footer_text">Best regards, ${company_name} Accounting Team</field>
+        </record>
+
+        <!-- Template 3: Stock Picking / Delivery -->
+        <record id="template_whatsapp_stock_picking" model="whatsapp.template">
+            <field name="name">Delivery Order Dispatched</field>
+            <field name="sequence">30</field>
+            <field name="model_id" ref="stock.model_stock_picking"/>
+            <field name="header_text">Shipping &amp; Delivery Update</field>
+            <field name="body">Greetings ${partner_name},
+
+Great news! Your delivery shipment *${document_number}* has been packaged and dispatched.
+Tracking Reference: *${tracking_number}*
+
+Our courier partner will deliver your package shortly.</field>
+            <field name="footer_text">Safe delivery guaranteed by ${company_name}</field>
+        </record>
+
+        <!-- Template 4: Contact Follow-up -->
+        <record id="template_whatsapp_res_partner" model="whatsapp.template">
+            <field name="name">Customer Greetings &amp; Support</field>
+            <field name="sequence">40</field>
+            <field name="model_id" ref="base.model_res_partner"/>
+            <field name="header_text">Support &amp; Customer Care</field>
+            <field name="body">Hello ${partner_name},
+
+Thank you for reaching out to ${company_name}. How can we assist your business today?</field>
+            <field name="footer_text">We are here to help!</field>
+        </record>
+    </data>
+</odoo>

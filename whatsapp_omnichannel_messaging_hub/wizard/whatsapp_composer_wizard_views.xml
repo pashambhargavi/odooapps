@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_whatsapp_composer_wizard_form" model="ir.ui.view">
+        <field name="name">whatsapp.composer.wizard.form</field>
+        <field name="model">whatsapp.composer.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Send WhatsApp Message">
+                <sheet>
+                    <div class="oe_title">
+                        <h2>Direct WhatsApp Dispatch</h2>
+                    </div>
+                    <group>
+                        <group string="Recipient Information">
+                            <field name="partner_id" readonly="1"/>
+                            <field name="mobile_number" placeholder="e.g. +1 555 123 4567 or 919876543210"/>
+                        </group>
+                        <group string="Document &amp; Template">
+                            <field name="record_ref" readonly="1"/>
+                            <field name="template_id" options="{'no_create': True}"/>
+                            <field name="res_model" invisible="1"/>
+                            <field name="res_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <group string="Message Preview &amp; Edit">
+                        <field name="message_body" placeholder="Type your WhatsApp message or select a template..." nolabel="1"/>
+                    </group>
+                    <div class="alert alert-info" role="alert">
+                        <strong>Zero API Cost:</strong> Clicking "Send via WhatsApp" opens WhatsApp Web / Mobile directly with the recipient and pre-filled message formatted for 1-click delivery.
+                    </div>
+                </sheet>
+                <footer>
+                    <button name="action_send_whatsapp" string="Send via WhatsApp" type="object" class="btn-success"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

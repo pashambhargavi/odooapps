@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_whatsapp_message_log_search" model="ir.ui.view">
+        <field name="name">whatsapp.message.log.search</field>
+        <field name="model">whatsapp.message.log</field>
+        <field name="arch" type="xml">
+            <search string="Search WhatsApp Logs">
+                <field name="name" string="Subject / Customer / Phone" filter_domain="['|', '|', ('name', 'ilike', self), ('recipient_name', 'ilike', self), ('mobile_number', 'ilike', self)]"/>
+                <field name="recipient_name"/>
+                <field name="mobile_number"/>
+                <field name="user_id"/>
+                <separator/>
+                <filter string="Sent" name="filter_sent" domain="[('state', '=', 'sent')]"/>
+                <filter string="Failed" name="filter_failed" domain="[('state', '=', 'failed')]"/>
+                <group>
+                    <filter string="Sender User" name="group_user" context="{'group_by': 'user_id'}"/>
+                    <filter string="Status" name="group_status" context="{'group_by': 'state'}"/>
+                    <filter string="Sent Date" name="group_date" context="{'group_by': 'date_sent:day'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_whatsapp_message_log_list" model="ir.ui.view">
+        <field name="name">whatsapp.message.log.list</field>
+        <field name="model">whatsapp.message.log</field>
+        <field name="arch" type="xml">
+            <list string="WhatsApp Message Logs" decoration-success="state == 'sent'" decoration-danger="state == 'failed'">
+                <field name="date_sent"/>
+                <field name="recipient_name"/>
+                <field name="mobile_number"/>
+                <field name="record_ref"/>
+                <field name="user_id" widget="many2one_avatar_user"/>
+                <field name="state" widget="badge" decoration-success="state == 'sent'" decoration-danger="state == 'failed'"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_whatsapp_message_log_form" model="ir.ui.view">
+        <field name="name">whatsapp.message.log.form</field>
+        <field name="model">whatsapp.message.log</field>
+        <field name="arch" type="xml">
+            <form string="WhatsApp Audit Log">
+                <header>
+                    <button name="action_open_record" string="Open Linked Document" type="object" class="btn-primary" invisible="not res_model or not res_id"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <span class="o_form_label">Dispatched WhatsApp Log</span>
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Recipient">
+                            <field name="recipient_name" readonly="1"/>
+                            <field name="mobile_number" readonly="1"/>
+                        </group>
+                        <group string="Audit Metadata">
+                            <field name="date_sent" readonly="1"/>
+                            <field name="user_id" readonly="1"/>
+                            <field name="record_ref" readonly="1"/>
+                            <field name="res_model" invisible="1"/>
+                            <field name="res_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <group string="Delivered Message Body">
+                        <field name="body" readonly="1" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_whatsapp_message_log" model="ir.actions.act_window">
+        <field name="name">Message Logs</field>
+        <field name="res_model">whatsapp.message.log</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Comprehensive audit trail tracking all WhatsApp communications sent across Orders, Invoices, and Shipments.
+            </p>
+        </field>
+    </record>
+</odoo>
