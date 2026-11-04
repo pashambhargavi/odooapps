@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Root Menu -->
+    <menuitem id="menu_whatsapp_root"
+              name="WhatsApp"
+              web_icon="whatsapp_omnichannel_messaging_hub,static/description/icon.png"
+              sequence="40"/>
+
+    <!-- Submenus -->
+    <menuitem id="menu_whatsapp_logs"
+              name="Message Logs"
+              parent="menu_whatsapp_root"
+              action="action_whatsapp_message_log"
+              sequence="10"/>
+
+    <menuitem id="menu_whatsapp_config"
+              name="Configuration"
+              parent="menu_whatsapp_root"
+              groups="whatsapp_omnichannel_messaging_hub.group_whatsapp_manager"
+              sequence="90"/>
+
+    <menuitem id="menu_whatsapp_templates"
+              name="Message Templates"
+              parent="menu_whatsapp_config"
+              action="action_whatsapp_template"
+              sequence="10"/>
+</odoo>
