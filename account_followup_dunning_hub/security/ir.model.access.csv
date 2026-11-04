@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_followup_level_user,account.followup.level.user,model_account_followup_level,group_followup_user,1,0,0,0
+access_followup_level_manager,account.followup.level.manager,model_account_followup_level,group_followup_manager,1,1,1,1
+access_followup_history_user,account.followup.history.user,model_account_followup_history,group_followup_user,1,1,1,0
+access_followup_history_manager,account.followup.history.manager,model_account_followup_history,group_followup_manager,1,1,1,1
+access_followup_wizard_user,account.followup.manual.wizard.user,model_account_followup_manual_wizard,group_followup_user,1,1,1,1
+access_followup_wizard_manager,account.followup.manual.wizard.manager,model_account_followup_manual_wizard,group_followup_manager,1,1,1,1

@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Partner Follow-up Kanban View -->
+    <record id="view_partner_followup_kanban" model="ir.ui.view">
+        <field name="name">res.partner.followup.kanban</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile" create="false">
+                <field name="name"/>
+                <field name="total_overdue_amount"/>
+                <field name="currency_id"/>
+                <field name="max_days_overdue"/>
+                <field name="latest_followup_level_id"/>
+                <field name="followup_status"/>
+                <field name="next_followup_date"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_global_click p-2">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <strong class="o_kanban_record_title" style="font-size:15px;"><field name="name"/></strong>
+                                <span t-if="record.followup_status.raw_value == 'on_hold'" class="badge text-bg-danger">Credit Hold</span>
+                                <span t-elif="record.followup_status.raw_value == 'in_need_of_action'" class="badge text-bg-warning">Action Due</span>
+                                <span t-elif="record.followup_status.raw_value == 'with_overdue'" class="badge text-bg-info">Overdue</span>
+                            </div>
+                            <div class="row my-2">
+                                <div class="col-6">
+                                    <span class="text-muted small">Overdue Balance:</span>
+                                    <div class="fw-bold fs-6 text-danger">
+                                        <field name="total_overdue_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    </div>
+                                </div>
+                                <div class="col-6 text-end">
+                                    <span class="text-muted small">Max Delay:</span>
+                                    <div class="fw-bold">
+                                        <field name="max_days_overdue"/> Days
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+                                <span class="small text-muted">
+                                    Next Action: <field name="next_followup_date"/>
+                                </span>
+                                <div>
+                                    <button name="action_trigger_manual_followup" type="object" class="btn btn-sm btn-primary">
+                                        Follow-Up
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Partner Follow-up List View -->
+    <record id="view_partner_followup_list" model="ir.ui.view">
+        <field name="name">res.partner.followup.list</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <tree string="Customer Follow-up Control Center" create="false">
+                <field name="name"/>
+                <field name="total_overdue_amount" widget="monetary" options="{'currency_field': 'currency_id'}" decoration-danger="total_overdue_amount &gt; 0"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="max_days_overdue" decoration-danger="max_days_overdue &gt; 30" decoration-warning="max_days_overdue &gt; 0"/>
+                <field name="unpaid_invoice_count"/>
+                <field name="latest_followup_level_id"/>
+                <field name="latest_followup_date"/>
+                <field name="next_followup_date"/>
+                <field name="followup_status" widget="badge" decoration-danger="followup_status == 'on_hold'" decoration-warning="followup_status == 'in_need_of_action'" decoration-info="followup_status == 'with_overdue'"/>
+                <button name="action_trigger_manual_followup" type="object" string="Follow-Up" class="btn-primary" icon="fa-bell"/>
+                <button name="action_print_statement_of_account" type="object" string="Statement" class="btn-secondary" icon="fa-print"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Partner Follow-up Search View -->
+    <record id="view_partner_followup_search" model="ir.ui.view">
+        <field name="name">res.partner.followup.search</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <search string="Search Follow-up Customers">
+                <field name="name"/>
+                <filter name="filter_with_overdue" string="Has Overdue Balance" domain="[('followup_status', '=', 'with_overdue')]"/>
+                <filter name="filter_action_due" string="Action Due Today" domain="[('next_followup_date', '&lt;=', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter name="filter_on_hold" string="Credit Hold Applied" domain="[('latest_followup_level_id.auto_credit_hold', '=', True)]"/>
+                <separator/>
+                <filter name="filter_excluded" string="Excluded from Dunning" domain="[('exclude_from_followup', '=', True)]"/>
+                <group>
+                    <filter name="group_level" string="Current Level" context="{'group_by': 'latest_followup_level_id'}"/>
+                    <filter name="group_next_date" string="Next Action Date" context="{'group_by': 'next_followup_date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Partner Form View Inheritance -->
+    <record id="view_partner_form_followup_inherit" model="ir.ui.view">
+        <field name="name">res.partner.form.followup.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <!-- Smart Button Box -->
+            <div name="button_box" position="inside">
+                <button name="action_trigger_manual_followup" type="object" class="oe_stat_button" icon="fa-phone" invisible="total_overdue_amount == 0">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_value"><field name="total_overdue_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/></span>
+                        <span class="o_stat_text">Overdue Due</span>
+                    </div>
+                </button>
+                <button name="action_print_statement_of_account" type="object" class="oe_stat_button" icon="fa-file-text-o">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_text">Statement PDF</span>
+                    </div>
+                </button>
+                <button name="action_view_followup_history" type="object" class="oe_stat_button" icon="fa-history">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_value"><field name="unpaid_invoice_count"/></span>
+                        <span class="o_stat_text">Unpaid Invoices</span>
+                    </div>
+                </button>
+            </div>
+
+            <!-- Follow-up Tab in Notebook -->
+            <xpath expr="//notebook" position="inside">
+                <page string="Payment Follow-Up &amp; Dunning" name="followup_tab">
+                    <group>
+                        <group string="Dunning Status &amp; Scheduling">
+                            <field name="followup_status" widget="badge"/>
+                            <field name="latest_followup_level_id"/>
+                            <field name="latest_followup_date"/>
+                            <field name="next_followup_date"/>
+                            <field name="exclude_from_followup"/>
+                        </group>
+                        <group string="Financial Exposure">
+                            <field name="total_due_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            <field name="total_overdue_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            <field name="max_days_overdue"/>
+                            <field name="unpaid_invoice_count"/>
+                        </group>
+                    </group>
+                    <field name="followup_history_ids">
+                        <tree string="Follow-up History" create="false" edit="false">
+                            <field name="action_date"/>
+                            <field name="action_type"/>
+                            <field name="followup_level_id"/>
+                            <field name="total_overdue_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            <field name="currency_id" column_invisible="1"/>
+                            <field name="promised_payment_date"/>
+                            <field name="notes"/>
+                            <field name="user_id"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Window Action: Customer Follow-Up Control Center -->
+    <record id="action_partner_followup_hub" model="ir.actions.act_window">
+        <field name="name">Payment Follow-Up &amp; Dunning Hub</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('view_partner_followup_list')}),
+            (0, 0, {'view_mode': 'kanban', 'view_id': ref('view_partner_followup_kanban')}),
+        ]"/>
+        <field name="search_view_id" ref="view_partner_followup_search"/>
+        <field name="context">{'search_default_filter_with_overdue': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Zero overdue customer balances found! Excellent credit management.
+            </p>
+        </field>
+    </record>
+
+</odoo>

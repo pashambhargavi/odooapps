@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Level 1: Friendly Reminder Email Template -->
+        <record id="email_template_followup_level_1" model="mail.template">
+            <field name="name">Payment Reminder: Level 1 (Friendly Notice)</field>
+            <field name="model_id" ref="base.model_res_partner"/>
+            <field name="subject">Friendly Reminder: Outstanding Balance with {{ object.company_id.name }}</field>
+            <field name="email_from">{{ (object.company_id.email or user.email_formatted) }}</field>
+            <field name="partner_to">{{ object.id }}</field>
+            <field name="body_html" type="html">
+                <div style="font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:14px;color:#1e293b;line-height:1.6;">
+                    <p>Dear <strong t-out="object.name">Customer</strong>,</p>
+                    <p>This is a gentle reminder that our records show an overdue balance on your account with <strong><t t-out="object.company_id.name"/></strong>.</p>
+                    <div style="background-color:#f8fafc;border-left:4px solid #017E84;padding:14px 18px;margin:18px 0;border-radius:4px;">
+                        <p style="margin:0 0 6px 0;"><strong>Total Overdue Amount:</strong> <span style="font-size:16px;color:#017E84;font-weight:bold;"><t t-out="format_amount(object.total_overdue_amount, object.currency_id)"/></span></p>
+                        <p style="margin:0;"><strong>Number of Overdue Invoices:</strong> <t t-out="object.unpaid_invoice_count"/></p>
+                    </div>
+                    <p>If you have already processed this payment, please disregard this message. Otherwise, we would appreciate it if you could verify the payment status.</p>
+                    <p>For any billing inquiries, please contact our accounts department at <strong t-out="object.company_id.email or 'accounts'"/>.</p>
+                    <p>Best regards,<br/><strong><t t-out="object.company_id.name"/></strong></p>
+                </div>
+            </field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+
+        <!-- Level 2: Urgent Notice Email Template -->
+        <record id="email_template_followup_level_2" model="mail.template">
+            <field name="name">Payment Reminder: Level 2 (Urgent Notice)</field>
+            <field name="model_id" ref="base.model_res_partner"/>
+            <field name="subject">Urgent: Overdue Invoices Pending with {{ object.company_id.name }}</field>
+            <field name="email_from">{{ (object.company_id.email or user.email_formatted) }}</field>
+            <field name="partner_to">{{ object.id }}</field>
+            <field name="body_html" type="html">
+                <div style="font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:14px;color:#1e293b;line-height:1.6;">
+                    <p>Dear <strong t-out="object.name">Customer</strong>,</p>
+                    <p>We are writing to draw your urgent attention to your account with <strong><t t-out="object.company_id.name"/></strong>. Despite our previous notice, we have not received settlement for the following overdue balance:</p>
+                    <div style="background-color:#fffbeb;border-left:4px solid #d97706;padding:14px 18px;margin:18px 0;border-radius:4px;">
+                        <p style="margin:0 0 6px 0;"><strong>Overdue Balance Due:</strong> <span style="font-size:18px;color:#d97706;font-weight:bold;"><t t-out="format_amount(object.total_overdue_amount, object.currency_id)"/></span></p>
+                        <p style="margin:0;"><strong>Max Overdue Days:</strong> <t t-out="object.max_days_overdue"/> Days</p>
+                    </div>
+                    <p>Please arrange payment as soon as possible to avoid any interruption to your credit services.</p>
+                    <p>Best regards,<br/>Credit Control Team &#8226; <strong><t t-out="object.company_id.name"/></strong></p>
+                </div>
+            </field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+
+        <!-- Level 3: Formal Demand Notice Email Template -->
+        <record id="email_template_followup_level_3" model="mail.template">
+            <field name="name">Payment Reminder: Level 3 (Formal Demand)</field>
+            <field name="model_id" ref="base.model_res_partner"/>
+            <field name="subject">FORMAL DEMAND: Immediate Settlement Required - {{ object.company_id.name }}</field>
+            <field name="email_from">{{ (object.company_id.email or user.email_formatted) }}</field>
+            <field name="partner_to">{{ object.id }}</field>
+            <field name="body_html" type="html">
+                <div style="font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:14px;color:#1e293b;line-height:1.6;">
+                    <p>Dear <strong t-out="object.name">Customer</strong>,</p>
+                    <p>This is a formal demand regarding unpaid invoices that remain severely past due on your account with <strong><t t-out="object.company_id.name"/></strong>.</p>
+                    <div style="background-color:#fef2f2;border-left:4px solid #dc2626;padding:14px 18px;margin:18px 0;border-radius:4px;">
+                        <p style="margin:0 0 6px 0;"><strong>Total Outstanding Overdue:</strong> <span style="font-size:18px;color:#dc2626;font-weight:bold;"><t t-out="format_amount(object.total_overdue_amount, object.currency_id)"/></span></p>
+                        <p style="margin:0;"><strong>Current Status:</strong> Serious Overdue Escalation (Level 3)</p>
+                    </div>
+                    <p>Please remit the full balance within 48 hours or contact our finance department immediately to agree on a formal payment schedule.</p>
+                    <p>Best regards,<br/>Finance Directorate &#8226; <strong><t t-out="object.company_id.name"/></strong></p>
+                </div>
+            </field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+    </data>
+</odoo>

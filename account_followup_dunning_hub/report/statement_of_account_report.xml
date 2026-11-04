@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_statement_of_account" model="ir.actions.report">
+        <field name="name">Statement of Account &amp; Overdue Notice</field>
+        <field name="model">res.partner</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">account_followup_dunning_hub.report_statement_of_account_template</field>
+        <field name="report_file">account_followup_dunning_hub.report_statement_of_account_template</field>
+        <field name="binding_model_id" ref="base.model_res_partner"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_statement_of_account_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page" style="font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#1e293b;font-size:13px;">
+                        
+                        <!-- Header Banner -->
+                        <div class="row mb-4">
+                            <div class="col-7">
+                                <h2 style="font-size:24px;font-weight:800;color:#017E84;margin-bottom:6px;">STATEMENT OF ACCOUNT</h2>
+                                <p style="font-size:13px;color:#64748b;margin:0;">Official Outstanding Balance &amp; Overdue Invoices Summary</p>
+                            </div>
+                            <div class="col-5 text-end">
+                                <p style="margin:0 0 4px 0;"><strong>Statement Date:</strong> <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%b-%Y')"/></p>
+                                <p style="margin:0;"><strong>Account Number:</strong> <span t-field="o.ref" t-if="o.ref"/><span t-else="">CUST-<t t-esc="o.id"/></span></p>
+                            </div>
+                        </div>
+
+                        <!-- Customer & Company Info Box -->
+                        <div class="row mb-4">
+                            <div class="col-6">
+                                <div style="background-color:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #017E84;border-radius:6px;padding:14px;">
+                                    <strong style="color:#017E84;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;">Customer Details:</strong>
+                                    <h4 style="margin:6px 0 4px 0;font-size:16px;font-weight:700;" t-field="o.name"/>
+                                    <div t-if="o.street" t-field="o.street"/>
+                                    <div>
+                                        <span t-if="o.city" t-field="o.city"/>, 
+                                        <span t-if="o.state_id" t-field="o.state_id.name"/> 
+                                        <span t-if="o.zip" t-field="o.zip"/>
+                                    </div>
+                                    <div t-if="o.country_id" t-field="o.country_id.name"/>
+                                    <div t-if="o.vat" style="margin-top:4px;"><strong>Tax ID:</strong> <span t-field="o.vat"/></div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div style="background-color:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #714B67;border-radius:6px;padding:14px;height:100%;">
+                                    <strong style="color:#714B67;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;">Account Status Summary:</strong>
+                                    <table style="width:100%;margin-top:6px;font-size:13px;">
+                                        <tr>
+                                            <td style="padding:3px 0;"><strong>Total Outstanding Due:</strong></td>
+                                            <td class="text-end" style="padding:3px 0;font-weight:bold;">
+                                                <span t-esc="o.total_due_amount" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:3px 0;color:#dc2626;"><strong>Total Overdue Amount:</strong></td>
+                                            <td class="text-end" style="padding:3px 0;color:#dc2626;font-weight:bold;font-size:15px;">
+                                                <span t-esc="o.total_overdue_amount" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:3px 0;"><strong>Current Dunning Level:</strong></td>
+                                            <td class="text-end" style="padding:3px 0;">
+                                                <span t-field="o.latest_followup_level_id.name" t-if="o.latest_followup_level_id"/>
+                                                <span t-else="">Normal</span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Invoices Table -->
+                        <h4 style="font-size:15px;font-weight:700;color:#0f172a;margin-bottom:8px;">Unpaid &amp; Overdue Invoices</h4>
+                        <t t-set="unpaid_moves" t-value="o._get_unpaid_customer_invoices()"/>
+                        <table class="table table-sm table-bordered" style="width:100%;font-size:12px;margin-bottom:24px;">
+                            <thead style="background-color:#017E84;color:#ffffff;">
+                                <tr>
+                                    <th style="padding:8px;">Invoice #</th>
+                                    <th style="padding:8px;">Invoice Date</th>
+                                    <th style="padding:8px;">Due Date</th>
+                                    <th class="text-end" style="padding:8px;">Total Amount</th>
+                                    <th class="text-end" style="padding:8px;">Balance Due</th>
+                                    <th class="text-center" style="padding:8px;">Days Overdue</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="unpaid_moves" t-as="inv">
+                                    <tr t-att-style="'background-color: #fef2f2;' if inv.is_overdue else 'background-color: #ffffff;'">
+                                        <td style="padding:6px 8px;font-weight:600;"><span t-field="inv.name"/></td>
+                                        <td style="padding:6px 8px;"><span t-field="inv.invoice_date"/></td>
+                                        <td style="padding:6px 8px;"><span t-field="inv.invoice_date_due"/></td>
+                                        <td class="text-end" style="padding:6px 8px;"><span t-field="inv.amount_total"/></td>
+                                        <td class="text-end" style="padding:6px 8px;font-weight:bold;"><span t-field="inv.amount_residual"/></td>
+                                        <td class="text-center" style="padding:6px 8px;">
+                                            <t t-if="inv.is_overdue">
+                                                <span style="color:#dc2626;font-weight:bold;" t-esc="inv.days_overdue"/> Days
+                                            </t>
+                                            <t t-else="">
+                                                <span style="color:#16a34a;">Current</span>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <tr t-if="not unpaid_moves">
+                                    <td colspan="6" class="text-center" style="padding:14px;color:#64748b;">No outstanding invoices found. Account is fully settled.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- Payment Instructions Box -->
+                        <div style="background-color:#f1f5f9;border:1px solid #cbd5e1;border-radius:6px;padding:14px;margin-top:20px;">
+                            <strong style="color:#0f172a;font-size:13px;">Remittance &amp; Payment Instructions:</strong>
+                            <p style="margin:6px 0 0 0;font-size:12px;color:#334155;line-height:1.6;">
+                                Please transfer the overdue balance to our designated bank account quoting your Customer ID or Invoice Number as payment reference. For payment proof or inquiries, reply directly to this statement or email <strong><t t-esc="o.company_id.email or 'finance'"/></strong>.
+                            </p>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
