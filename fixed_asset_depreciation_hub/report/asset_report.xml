@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_fixed_asset" model="ir.actions.report">
+        <field name="name">Depreciation Schedule</field>
+        <field name="model">fixed.asset</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">fixed_asset_depreciation_hub.report_fixed_asset</field>
+        <field name="report_file">fixed_asset_depreciation_hub.report_fixed_asset</field>
+        <field name="print_report_name">'Depreciation Schedule - %s' % object.name</field>
+        <field name="binding_model_id" ref="model_fixed_asset"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_fixed_asset">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2>Depreciation Schedule: <span t-field="o.name"/></h2>
+                        <div class="row mt-3 mb-3">
+                            <div class="col-6">
+                                <strong>Category:</strong> <span t-field="o.category_id"/><br/>
+                                <strong>Reference:</strong> <span t-field="o.reference"/><br/>
+                                <strong>Acquisition Date:</strong> <span t-field="o.acquisition_date"/><br/>
+                                <strong>Method:</strong> <span t-field="o.method"/>
+                                (<span t-field="o.method_number"/> x <span t-field="o.method_period"/>)
+                            </div>
+                            <div class="col-6">
+                                <strong>Gross Value:</strong> <span t-field="o.original_value"/><br/>
+                                <strong>Salvage Value:</strong> <span t-field="o.salvage_value"/><br/>
+                                <strong>Posted Depreciation:</strong> <span t-field="o.depreciated_value"/><br/>
+                                <strong>Net Book Value:</strong> <span t-field="o.book_value"/>
+                            </div>
+                        </div>
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Date</th>
+                                    <th class="text-end">Depreciation</th>
+                                    <th class="text-end">Cumulative</th>
+                                    <th class="text-end">Remaining</th>
+                                    <th>Entry</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="o.line_ids" t-as="line">
+                                    <td><span t-field="line.sequence"/></td>
+                                    <td><span t-field="line.date"/></td>
+                                    <td class="text-end"><span t-field="line.amount"/></td>
+                                    <td class="text-end"><span t-field="line.depreciated_value"/></td>
+                                    <td class="text-end"><span t-field="line.remaining_value"/></td>
+                                    <td><span t-if="line.move_posted" t-field="line.move_id"/><span t-else="">Planned</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_move_form_fixed_asset" model="ir.ui.view">
+        <field name="name">account.move.form.fixed.asset</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_created_assets" type="object" class="oe_stat_button" icon="fa-building"
+                        invisible="created_asset_count == 0">
+                    <field name="created_asset_count" widget="statinfo" string="Assets"/>
+                </button>
+            </xpath>
+            <xpath expr="//field[@name='invoice_line_ids']/list/field[@name='account_id']" position="after">
+                <field name="asset_category_id" optional="show"
+                       column_invisible="parent.move_type not in ('in_invoice', 'in_refund')"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
