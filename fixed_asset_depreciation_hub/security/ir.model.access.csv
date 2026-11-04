@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_fixed_asset_category_billing,fixed.asset.category billing,model_fixed_asset_category,account.group_account_invoice,1,0,0,0
+access_fixed_asset_category_manager,fixed.asset.category manager,model_fixed_asset_category,account.group_account_manager,1,1,1,1
+access_fixed_asset_billing,fixed.asset billing,model_fixed_asset,account.group_account_invoice,1,1,1,0
+access_fixed_asset_manager,fixed.asset manager,model_fixed_asset,account.group_account_manager,1,1,1,1
+access_fixed_asset_line_billing,fixed.asset.line billing,model_fixed_asset_line,account.group_account_invoice,1,1,1,1
+access_fixed_asset_dispose_wizard_manager,fixed.asset.dispose.wizard manager,model_fixed_asset_dispose_wizard,account.group_account_manager,1,1,1,1

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_fixed_asset_root" name="Fixed Assets" sequence="46"
+              web_icon="fixed_asset_depreciation_hub,static/description/icon.png"
+              groups="account.group_account_invoice"/>
+    <menuitem id="menu_fixed_asset" name="Assets" parent="menu_fixed_asset_root"
+              action="action_fixed_asset" sequence="10"/>
+    <menuitem id="menu_fixed_asset_reporting" name="Reporting" parent="menu_fixed_asset_root" sequence="20"/>
+    <menuitem id="menu_fixed_asset_line" name="Depreciation Analysis" parent="menu_fixed_asset_reporting"
+              action="action_fixed_asset_line" sequence="10"/>
+    <menuitem id="menu_fixed_asset_config" name="Configuration" parent="menu_fixed_asset_root" sequence="90"
+              groups="account.group_account_manager"/>
+    <menuitem id="menu_fixed_asset_category" name="Asset Categories" parent="menu_fixed_asset_config"
+              action="action_fixed_asset_category" sequence="10"/>
+</odoo>

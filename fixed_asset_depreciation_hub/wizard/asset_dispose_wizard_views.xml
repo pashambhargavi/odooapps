@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_fixed_asset_dispose_wizard_form" model="ir.ui.view">
+        <field name="name">fixed.asset.dispose.wizard.form</field>
+        <field name="model">fixed.asset.dispose.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Dispose Asset">
+                <group>
+                    <field name="asset_id"/>
+                    <field name="disposal_date"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="original_value"/>
+                    <field name="depreciated_value"/>
+                    <field name="book_value"/>
+                </group>
+                <div class="alert alert-warning" role="alert">
+                    Unposted depreciation lines will be removed. A journal entry will credit the asset account
+                    with the gross value, debit accumulated depreciation, and book the net book value
+                    on the category's disposal loss account.
+                </div>
+                <footer>
+                    <button name="action_dispose" type="object" string="Dispose Asset" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>
