@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_petty_cash_fund_user,petty.cash.fund.user,model_petty_cash_fund,group_petty_cash_user,1,0,0,0
+access_petty_cash_fund_manager,petty.cash.fund.manager,model_petty_cash_fund,group_petty_cash_manager,1,1,1,1
+access_petty_cash_voucher_user,petty.cash.voucher.user,model_petty_cash_voucher,group_petty_cash_user,1,1,1,0
+access_petty_cash_voucher_manager,petty.cash.voucher.manager,model_petty_cash_voucher,group_petty_cash_manager,1,1,1,1
+access_petty_cash_voucher_line_user,petty.cash.voucher.line.user,model_petty_cash_voucher_line,group_petty_cash_user,1,1,1,1
+access_petty_cash_voucher_line_manager,petty.cash.voucher.line.manager,model_petty_cash_voucher_line,group_petty_cash_manager,1,1,1,1
+access_petty_cash_replenishment_user,petty.cash.replenishment.user,model_petty_cash_replenishment,group_petty_cash_user,1,1,1,0
+access_petty_cash_replenishment_manager,petty.cash.replenishment.manager,model_petty_cash_replenishment,group_petty_cash_manager,1,1,1,1
+access_petty_cash_tally_user,petty.cash.tally.user,model_petty_cash_tally,group_petty_cash_user,1,1,1,0
+access_petty_cash_tally_manager,petty.cash.tally.manager,model_petty_cash_tally,group_petty_cash_manager,1,1,1,1
+access_petty_cash_wizard_user,petty.cash.denomination.wizard.user,model_petty_cash_denomination_wizard,group_petty_cash_user,1,1,1,1
+access_petty_cash_wizard_manager,petty.cash.denomination.wizard.manager,model_petty_cash_denomination_wizard,group_petty_cash_manager,1,1,1,1

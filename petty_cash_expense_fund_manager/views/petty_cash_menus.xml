@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Top-Level Petty Cash Menu -->
+    <menuitem id="menu_petty_cash_root"
+              name="Petty Cash"
+              parent="account.menu_finance"
+              sequence="32"/>
+
+    <!-- Cash Funds -->
+    <menuitem id="menu_action_petty_cash_fund"
+              name="Petty Cash Funds"
+              parent="menu_petty_cash_root"
+              action="action_petty_cash_fund"
+              sequence="10"/>
+
+    <!-- Expense Vouchers -->
+    <menuitem id="menu_action_petty_cash_voucher"
+              name="Expense Vouchers"
+              parent="menu_petty_cash_root"
+              action="action_petty_cash_voucher"
+              sequence="20"/>
+
+    <!-- Replenishment Orders -->
+    <menuitem id="menu_action_petty_cash_replenishment"
+              name="Replenishment Orders"
+              parent="menu_petty_cash_root"
+              action="action_petty_cash_replenishment"
+              sequence="30"/>
+
+    <!-- Cash Count Tallies -->
+    <menuitem id="menu_action_petty_cash_tally"
+              name="Cash Count Tallies"
+              parent="menu_petty_cash_root"
+              action="action_petty_cash_tally"
+              sequence="40"/>
+</odoo>

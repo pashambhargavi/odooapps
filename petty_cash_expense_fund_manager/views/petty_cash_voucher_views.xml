@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Petty Cash Voucher List View -->
+    <record id="view_petty_cash_voucher_list" model="ir.ui.view">
+        <field name="name">petty.cash.voucher.list</field>
+        <field name="model">petty.cash.voucher</field>
+        <field name="arch" type="xml">
+            <list string="Petty Cash Vouchers" decoration-muted="state == 'cancelled'" decoration-success="state == 'replenished'" decoration-info="state == 'paid'">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="fund_id"/>
+                <field name="payee"/>
+                <field name="amount_total" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="custodian_id"/>
+                <field name="state" widget="badge" decoration-warning="state == 'submitted'" decoration-primary="state == 'approved'" decoration-info="state == 'paid'" decoration-success="state == 'replenished'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Petty Cash Voucher Form View -->
+    <record id="view_petty_cash_voucher_form" model="ir.ui.view">
+        <field name="name">petty.cash.voucher.form</field>
+        <field name="model">petty.cash.voucher</field>
+        <field name="arch" type="xml">
+            <form string="Petty Cash Expense Slip">
+                <header>
+                    <button name="action_submit" string="Submit to Custodian" type="object" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_approve" string="Approve Voucher" type="object" class="btn-primary" invisible="state != 'submitted'" groups="petty_cash_expense_fund_manager.group_petty_cash_user"/>
+                    <button name="action_pay" string="Disburse Cash &amp; Post Entry" type="object" class="btn-success" invisible="state != 'approved'" groups="petty_cash_expense_fund_manager.group_petty_cash_user"/>
+                    <button name="%(action_report_petty_cash_voucher)d" string="Print Voucher Slip" type="action" class="btn-secondary" invisible="state == 'draft'"/>
+                    <button name="action_cancel" string="Cancel" type="object" invisible="state in ('paid', 'replenished', 'cancelled')"/>
+                    <button name="action_reset_draft" string="Reset to Draft" type="object" invisible="state != 'cancelled'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,submitted,approved,paid,replenished"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <span class="o_form_label">Expense Voucher Slip</span>
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Expense Details">
+                            <field name="fund_id" readonly="state != 'draft'"/>
+                            <field name="payee" readonly="state in ('paid', 'replenished', 'cancelled')"/>
+                            <field name="partner_id" readonly="state in ('paid', 'replenished', 'cancelled')"/>
+                            <field name="date" readonly="state in ('paid', 'replenished', 'cancelled')"/>
+                        </group>
+                        <group string="Custodian &amp; Financial Control">
+                            <field name="custodian_id"/>
+                            <field name="company_id" groups="base.group_multi_company" readonly="state != 'draft'"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="move_id" invisible="not move_id"/>
+                            <field name="replenishment_id" invisible="not replenishment_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Expenditure Breakdown" name="lines">
+                            <field name="line_ids" readonly="state in ('paid', 'replenished', 'cancelled')">
+                                <list editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="name"/>
+                                    <field name="account_id"/>
+                                    <field name="amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                </list>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="amount_total" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            </group>
+                        </page>
+                        <page string="Business Purpose &amp; Justification" name="notes">
+                            <field name="notes" placeholder="Enter business purpose, project details, or expense justification..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_petty_cash_voucher_search" model="ir.ui.view">
+        <field name="name">petty.cash.voucher.search</field>
+        <field name="model">petty.cash.voucher</field>
+        <field name="arch" type="xml">
+            <search string="Search Vouchers">
+                <field name="name"/>
+                <field name="payee"/>
+                <field name="fund_id"/>
+                <filter name="draft" string="Draft" domain="[('state', '=', 'draft')]"/>
+                <filter name="pending_approval" string="Pending Approval" domain="[('state', '=', 'submitted')]"/>
+                <filter name="approved" string="Approved (Ready to Disburse)" domain="[('state', '=', 'approved')]"/>
+                <filter name="paid_unreplenished" string="Paid (Awaiting Replenishment)" domain="[('state', '=', 'paid')]"/>
+                <filter name="replenished" string="Replenished" domain="[('state', '=', 'replenished')]"/>
+                <group>
+                    <filter name="group_fund" string="Petty Cash Fund" context="{'group_by': 'fund_id'}"/>
+                    <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                    <filter name="group_date" string="Date" context="{'group_by': 'date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_petty_cash_voucher" model="ir.actions.act_window">
+        <field name="name">Expense Vouchers</field>
+        <field name="res_model">petty.cash.voucher</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_petty_cash_voucher_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first petty cash expense voucher slip!
+            </p>
+        </field>
+    </record>
+</odoo>
