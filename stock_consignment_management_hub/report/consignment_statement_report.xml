@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_consignment_statement" model="ir.actions.report">
+        <field name="name">Consignment Stock Statement</field>
+        <field name="model">consignment.agreement</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">stock_consignment_management_hub.report_consignment_statement_document</field>
+        <field name="report_file">stock_consignment_management_hub.report_consignment_statement_document</field>
+        <field name="print_report_name">'Consignment_Statement_%s' % (object.name or 'Agreement')</field>
+        <field name="binding_model_id" ref="model_consignment_agreement"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_consignment_statement_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page" style="font-family: Arial, sans-serif; color: #1e293b; font-size: 13px;">
+                        <!-- Report Header Banner -->
+                        <div style="border-bottom: 3px solid #0d9488; padding-bottom: 12px; margin-bottom: 20px;">
+                            <div class="row align-items-center">
+                                <div class="col-8">
+                                    <h2 style="font-weight: 800; color: #0f172a; margin: 0; text-transform: uppercase; letter-spacing: 0.5px;">
+                                        Consignment Stock Statement
+                                    </h2>
+                                    <div style="font-size: 13px; color: #64748b; margin-top: 4px;">
+                                        Periodic Consignment Inventory, Ownership &amp; Consumption Reconciliation
+                                    </div>
+                                </div>
+                                <div class="col-4 text-end">
+                                    <div style="background-color: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 8px 12px; display: inline-block;">
+                                        <div style="font-size: 11px; text-transform: uppercase; color: #64748b; font-weight: bold;">Agreement Ref</div>
+                                        <div style="font-size: 15px; font-weight: bold; color: #0f172a;"><t t-out="o.name"/></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Partner & Agreement Metadata -->
+                        <div class="row mb-4" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 10px;">
+                            <div class="col-6">
+                                <strong style="color: #475569; font-size: 11px; text-transform: uppercase;">Consignment Partner:</strong>
+                                <h4 style="font-weight: 700; color: #0f172a; margin: 2px 0 6px 0;"><t t-out="o.partner_id.name"/></h4>
+                                <div t-if="o.partner_id.street"><t t-out="o.partner_id.street"/></div>
+                                <div t-if="o.partner_id.city"><t t-out="o.partner_id.city"/>, <t t-out="o.partner_id.country_id.name"/></div>
+                            </div>
+                            <div class="col-6">
+                                <table class="table table-sm table-borderless mb-0">
+                                    <tr>
+                                        <td class="text-muted" style="width: 45%;"><strong>Consignment Type:</strong></td>
+                                        <td>
+                                            <t t-if="o.consignment_type == 'vendor'">
+                                                <strong style="color: #0284c7;">Vendor Consignment (Inward)</strong>
+                                            </t>
+                                            <t t-else="">
+                                                <strong style="color: #059669;">Customer Consignment (Outward)</strong>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-muted"><strong>Stock Location:</strong></td>
+                                        <td><t t-out="o.location_id.display_name"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-muted"><strong>Effective Date:</strong></td>
+                                        <td><t t-out="o.date_start"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-muted"><strong>Billing Frequency:</strong></td>
+                                        <td><t t-out="o.billing_frequency"/></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Summary Stat Boxes -->
+                        <div class="row mb-4">
+                            <div class="col-6">
+                                <div style="background-color: #f0fdfa; border-left: 4px solid #0d9488; padding: 12px; border-radius: 4px;">
+                                    <div style="font-size: 11px; color: #115e59; font-weight: bold; text-transform: uppercase;">On-Hand Consigned Units</div>
+                                    <div style="font-size: 22px; font-weight: bold; color: #0f766e;"><t t-out="o.total_active_stock_qty"/> Units</div>
+                                    <small style="color: #14b8a6;">Physical units held under title retention</small>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div style="background-color: #f8fafc; border-left: 4px solid #0f172a; padding: 12px; border-radius: 4px;">
+                                    <div style="font-size: 11px; color: #334155; font-weight: bold; text-transform: uppercase;">Total Consigned Valuation</div>
+                                    <div style="font-size: 22px; font-weight: bold; color: #0f172a;"><t t-out="o.total_active_stock_value" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></div>
+                                    <small style="color: #64748b;">Current stock valuation at agreed price</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Consigned Products Table -->
+                        <div class="mb-4">
+                            <h5 style="font-weight: 700; color: #0f172a; margin-bottom: 8px;">Consigned Inventory Status &amp; Consumption Reconciliation</h5>
+                            <table class="table table-bordered table-sm" style="font-size: 12px;">
+                                <thead style="background-color: #f1f5f9; color: #334155;">
+                                    <tr>
+                                        <th>Product Description</th>
+                                        <th class="text-center">Agreed Price</th>
+                                        <th class="text-center">Max Limit</th>
+                                        <th class="text-center">On-Hand Qty</th>
+                                        <th class="text-center">Total Consumed</th>
+                                        <th class="text-center">Unbilled Qty</th>
+                                        <th class="text-end">Current Valuation</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="o.line_ids" t-as="line">
+                                        <tr>
+                                            <td><strong><t t-out="line.product_id.display_name"/></strong></td>
+                                            <td class="text-center"><t t-out="line.unit_price" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
+                                            <td class="text-center"><t t-out="line.max_stock_limit"/></td>
+                                            <td class="text-center"><strong><t t-out="line.current_stock_qty"/></strong></td>
+                                            <td class="text-center"><t t-out="line.total_consumed_qty"/></td>
+                                            <td class="text-center">
+                                                <t t-if="line.unbilled_consumed_qty &gt; 0">
+                                                    <span style="color: #dc2626; font-weight: bold;"><t t-out="line.unbilled_consumed_qty"/></span>
+                                                </t>
+                                                <t t-else="">0.0</t>
+                                            </td>
+                                            <td class="text-end"><strong><t t-out="line.current_stock_qty * line.unit_price" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></strong></td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                                <tfoot>
+                                    <tr style="background-color: #f8fafc; font-weight: bold;">
+                                        <td colspan="3" class="text-end">Total On-Hand Inventory:</td>
+                                        <td class="text-center"><t t-out="o.total_active_stock_qty"/></td>
+                                        <td colspan="2"></td>
+                                        <td class="text-end"><t t-out="o.total_active_stock_value" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+
+                        <!-- Terms & Conditions Clause -->
+                        <div class="row mb-4" t-if="o.terms_conditions">
+                            <div class="col-12">
+                                <div style="border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px; background-color: #f8fafc;">
+                                    <strong style="color: #475569; font-size: 11px; text-transform: uppercase;">Title Retention &amp; Terms Clause:</strong>
+                                    <p style="margin: 4px 0 0 0; font-size: 11px; color: #334155;"><t t-out="o.terms_conditions"/></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Signatures -->
+                        <div class="row mt-5" style="page-break-inside: avoid;">
+                            <div class="col-6 text-center">
+                                <div style="border-top: 1px solid #94a3b8; padding-top: 8px; margin: 0 40px;">
+                                    <strong>Consignor Authorized Representative</strong>
+                                    <div style="font-size: 11px; color: #64748b;">(Vendor / Supply Principal)</div>
+                                </div>
+                            </div>
+                            <div class="col-6 text-center">
+                                <div style="border-top: 1px solid #94a3b8; padding-top: 8px; margin: 0 40px;">
+                                    <strong>Consignee Warehouse Custodian</strong>
+                                    <div style="font-size: 11px; color: #64748b;">(Internal Warehouse Manager)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
