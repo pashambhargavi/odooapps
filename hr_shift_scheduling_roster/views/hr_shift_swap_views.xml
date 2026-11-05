@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Swap Request List View -->
+    <record id="view_hr_shift_swap_tree" model="ir.ui.view">
+        <field name="name">hr.shift.swap.request.tree</field>
+        <field name="model">hr.shift.swap.request</field>
+        <field name="arch" type="xml">
+            <tree string="Shift Trades &amp; Swaps" decoration-info="state == 'draft'" decoration-warning="state == 'peer_accepted'" decoration-success="state == 'manager_approved'" decoration-danger="state == 'rejected'">
+                <field name="name"/>
+                <field name="requesting_employee_id"/>
+                <field name="original_shift_id"/>
+                <field name="swap_type"/>
+                <field name="target_employee_id"/>
+                <field name="target_shift_id"/>
+                <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-warning="state == 'peer_accepted'" decoration-success="state == 'manager_approved'" decoration-danger="state == 'rejected'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Swap Request Form View -->
+    <record id="view_hr_shift_swap_form" model="ir.ui.view">
+        <field name="name">hr.shift.swap.request.form</field>
+        <field name="model">hr.shift.swap.request</field>
+        <field name="arch" type="xml">
+            <form string="Shift Swap &amp; Trade Request">
+                <header>
+                    <button name="action_peer_accept" string="Accept Trade (Peer)" type="object" class="btn-primary" invisible="state != 'draft' or swap_type != 'peer'"/>
+                    <button name="action_manager_approve" string="Approve Swap &amp; Update Roster" type="object" class="btn-success" invisible="state not in ('draft', 'peer_accepted')"/>
+                    <button name="action_reject" string="Reject" type="object" class="btn-danger" invisible="state not in ('draft', 'peer_accepted')"/>
+                    <button name="action_cancel" string="Cancel" type="object" invisible="state in ('manager_approved', 'cancelled')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,peer_accepted,manager_approved"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <span class="o_form_label">Shift Trade Request</span>
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Originating Shift">
+                            <field name="requesting_employee_id"/>
+                            <field name="original_shift_id"/>
+                            <field name="swap_type"/>
+                        </group>
+                        <group string="Proposed Peer Exchange">
+                            <field name="target_employee_id" invisible="swap_type != 'peer'" required="swap_type == 'peer'"/>
+                            <field name="target_shift_id" invisible="swap_type != 'peer'"/>
+                            <field name="manager_id" readonly="1" invisible="not manager_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <group string="Trade Justification">
+                        <field name="reason" placeholder="Explain the scheduling conflict, medical appointment, or personal constraint..."/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Swap Request Search View -->
+    <record id="view_hr_shift_swap_search" model="ir.ui.view">
+        <field name="name">hr.shift.swap.request.search</field>
+        <field name="model">hr.shift.swap.request</field>
+        <field name="arch" type="xml">
+            <search string="Search Shift Trades">
+                <field name="name"/>
+                <field name="requesting_employee_id"/>
+                <field name="target_employee_id"/>
+                <separator/>
+                <filter string="Pending Approval" name="filter_pending" domain="[('state', 'in', ('draft', 'peer_accepted'))]"/>
+                <filter string="Approved Trades" name="filter_approved" domain="[('state', '=', 'manager_approved')]"/>
+                <group>
+                    <filter string="Requesting Colleague" name="group_by_requesting" context="{'group_by': 'requesting_employee_id'}"/>
+                    <filter string="Trade Format" name="group_by_type" context="{'group_by': 'swap_type'}"/>
+                    <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Swap Request Action -->
+    <record id="action_hr_shift_swap" model="ir.actions.act_window">
+        <field name="name">Shift Trade Marketplace</field>
+        <field name="res_model">hr.shift.swap.request</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_hr_shift_swap_search"/>
+        <field name="context">{'search_default_filter_pending': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Review and approve peer shift swap and trade requests
+            </p>
+        </field>
+    </record>
+</odoo>
