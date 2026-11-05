@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Root Menu -->
+    <menuitem id="menu_qms_root"
+              name="Quality (QMS)"
+              web_icon="iso_quality_management_qms,static/description/icon.png"
+              sequence="55"/>
+
+    <!-- Main Navigation Submenus -->
+    <menuitem id="menu_qms_ncr_main"
+              name="Non-Conformances"
+              parent="menu_qms_root"
+              sequence="10"/>
+
+    <menuitem id="menu_qms_ncr_all"
+              name="Non-Conformance Reports (NCR)"
+              parent="menu_qms_ncr_main"
+              action="action_qms_ncr"
+              sequence="10"/>
+
+    <menuitem id="menu_qms_capa_main"
+              name="CAPA &amp; 8D"
+              parent="menu_qms_root"
+              sequence="20"/>
+
+    <menuitem id="menu_qms_capa_all"
+              name="8D Corrective Actions"
+              parent="menu_qms_capa_main"
+              action="action_qms_capa"
+              sequence="10"/>
+
+    <menuitem id="menu_qms_audit_main"
+              name="Audits &amp; Checklists"
+              parent="menu_qms_root"
+              sequence="30"/>
+
+    <menuitem id="menu_qms_audit_all"
+              name="ISO Quality Audits"
+              parent="menu_qms_audit_main"
+              action="action_qms_audit"
+              sequence="10"/>
+
+    <menuitem id="menu_qms_risk_main"
+              name="Risk Register (FMEA)"
+              parent="menu_qms_root"
+              sequence="40"/>
+
+    <menuitem id="menu_qms_risk_all"
+              name="Clause 6.1 Risk Register"
+              parent="menu_qms_risk_main"
+              action="action_qms_risk"
+              sequence="10"/>
+</odoo>

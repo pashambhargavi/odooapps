@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Audit List View -->
+    <record id="view_qms_audit_list" model="ir.ui.view">
+        <field name="name">qms.audit.list</field>
+        <field name="model">qms.audit</field>
+        <field name="arch" type="xml">
+            <list string="ISO Quality Audits" decoration-danger="overall_result == 'failed'" decoration-warning="overall_result == 'conditional'" decoration-success="overall_result == 'passed'">
+                <field name="name"/>
+                <field name="title"/>
+                <field name="audit_type"/>
+                <field name="standard"/>
+                <field name="audit_date"/>
+                <field name="lead_auditor_id"/>
+                <field name="major_nc_count" string="Major NC"/>
+                <field name="minor_nc_count" string="Minor NC"/>
+                <field name="observation_count" string="OFI"/>
+                <field name="overall_result" widget="badge" decoration-danger="overall_result == 'failed'" decoration-warning="overall_result == 'conditional'" decoration-success="overall_result == 'passed'"/>
+                <field name="state" widget="badge" decoration-info="state in ('draft', 'in_progress')" decoration-warning="state == 'findings_review'" decoration-success="state == 'closed'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Audit Form View -->
+    <record id="view_qms_audit_form" model="ir.ui.view">
+        <field name="name">qms.audit.form</field>
+        <field name="model">qms.audit</field>
+        <field name="arch" type="xml">
+            <form string="ISO Quality Audit">
+                <header>
+                    <button name="action_load_iso9001_template" string="Load ISO 9001:2015 Checklist" type="object" class="btn-secondary" invisible="state != 'draft'"/>
+                    <button name="action_start" string="Begin Audit" type="object" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_review" string="Submit Findings for Review" type="object" class="btn-primary" invisible="state != 'in_progress'"/>
+                    <button name="action_close" string="Approve &amp; Close Audit" type="object" class="btn-success" invisible="state != 'findings_review'"/>
+                    <button name="action_cancel" string="Cancel" type="object" invisible="state in ('closed', 'cancelled')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,in_progress,findings_review,closed"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <span class="o_form_label">Quality Audit Session</span>
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                        <h2>
+                            <field name="title" placeholder="e.g., Annual ISO 9001:2015 Internal Audit - Machining &amp; Assembly"/>
+                        </h2>
+                    </div>
+                    <group>
+                        <group string="Audit Framework">
+                            <field name="audit_type"/>
+                            <field name="standard"/>
+                            <field name="audit_date"/>
+                            <field name="completion_date" readonly="1" invisible="not completion_date"/>
+                        </group>
+                        <group string="Auditor &amp; Target">
+                            <field name="lead_auditor_id"/>
+                            <field name="auditor_ids" widget="many2many_tags"/>
+                            <field name="department_id" invisible="audit_type == 'supplier'"/>
+                            <field name="partner_id" invisible="audit_type != 'supplier'"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+
+                    <div class="alert alert-info d-flex justify-content-around py-2 my-2 text-center" role="alert">
+                        <div>
+                            <span class="text-muted d-block small">Evaluated Clauses</span>
+                            <strong class="fs-5"><field name="total_findings"/></strong>
+                        </div>
+                        <div>
+                            <span class="text-muted d-block small">Major NCs</span>
+                            <strong class="fs-5 text-danger"><field name="major_nc_count"/></strong>
+                        </div>
+                        <div>
+                            <span class="text-muted d-block small">Minor NCs</span>
+                            <strong class="fs-5 text-warning"><field name="minor_nc_count"/></strong>
+                        </div>
+                        <div>
+                            <span class="text-muted d-block small">Observations</span>
+                            <strong class="fs-5 text-primary"><field name="observation_count"/></strong>
+                        </div>
+                        <div>
+                            <span class="text-muted d-block small">Overall Conclusion</span>
+                            <field name="overall_result" widget="badge" decoration-danger="overall_result == 'failed'" decoration-warning="overall_result == 'conditional'" decoration-success="overall_result == 'passed'"/>
+                        </div>
+                    </div>
+
+                    <notebook>
+                        <page string="Audit Checklist &amp; Findings" name="checklist_lines">
+                            <field name="line_ids">
+                                <list editable="bottom" decoration-danger="result == 'major_nc'" decoration-warning="result == 'minor_nc'" decoration-info="result == 'observation'">
+                                    <field name="clause"/>
+                                    <field name="requirement"/>
+                                    <field name="result"/>
+                                    <field name="evidence"/>
+                                    <field name="ncr_id" readonly="1"/>
+                                    <button name="action_generate_ncr" string="Create NCR" type="object" icon="fa-exclamation-triangle" invisible="result not in ('major_nc', 'minor_nc') or ncr_id" title="Generate NCR"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Executive Summary &amp; Recommendations" name="summary">
+                            <group>
+                                <field name="executive_summary" placeholder="Summary of positive findings, areas for improvement, and overall readiness for external surveillance audit..."/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Audit Search View -->
+    <record id="view_qms_audit_search" model="ir.ui.view">
+        <field name="name">qms.audit.search</field>
+        <field name="model">qms.audit</field>
+        <field name="arch" type="xml">
+            <search string="Search ISO Audits">
+                <field name="name" string="Audit Ref / Scope" filter_domain="['|', ('name', 'ilike', self), ('title', 'ilike', self)]"/>
+                <field name="lead_auditor_id"/>
+                <field name="department_id"/>
+                <separator/>
+                <filter string="Scheduled / In Progress" name="filter_active" domain="[('state', 'in', ('draft', 'in_progress', 'findings_review'))]"/>
+                <filter string="Internal Audits" name="filter_internal" domain="[('audit_type', '=', 'internal')]"/>
+                <filter string="Supplier Audits" name="filter_supplier" domain="[('audit_type', '=', 'supplier')]"/>
+                <separator/>
+                <filter string="Audits with Non-Conformances" name="filter_ncs" domain="['|', ('major_nc_count', '&gt;', 0), ('minor_nc_count', '&gt;', 0)]"/>
+                <group>
+                    <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
+                    <filter string="Standard" name="group_by_standard" context="{'group_by': 'standard'}"/>
+                    <filter string="Lead Auditor" name="group_by_auditor" context="{'group_by': 'lead_auditor_id'}"/>
+                    <filter string="Overall Conclusion" name="group_by_result" context="{'group_by': 'overall_result'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Audit Action -->
+    <record id="action_qms_audit" model="ir.actions.act_window">
+        <field name="name">Quality Audits &amp; Checklists</field>
+        <field name="res_model">qms.audit</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_qms_audit_search"/>
+        <field name="context">{'search_default_filter_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Schedule and conduct an ISO Quality Audit
+            </p>
+            <p>
+                Evaluate processes against ISO 9001:2015, IATF 16949, or AS9100 clauses. Document objective evidence, track major and minor non-conformances, and auto-generate NCRs.
+            </p>
+        </field>
+    </record>
+</odoo>

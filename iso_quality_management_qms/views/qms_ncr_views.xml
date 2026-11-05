@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- NCR List View -->
+    <record id="view_qms_ncr_list" model="ir.ui.view">
+        <field name="name">qms.ncr.list</field>
+        <field name="model">qms.ncr</field>
+        <field name="arch" type="xml">
+            <list string="Non-Conformance Reports (NCR)" decoration-danger="severity == 'critical'" decoration-warning="severity == 'major'" decoration-muted="state == 'closed'">
+                <field name="name"/>
+                <field name="title"/>
+                <field name="source_type"/>
+                <field name="product_id"/>
+                <field name="partner_id"/>
+                <field name="severity" widget="badge" decoration-danger="severity == 'critical'" decoration-warning="severity == 'major'" decoration-info="severity == 'minor'"/>
+                <field name="detection_stage"/>
+                <field name="qty_rejected"/>
+                <field name="disposition"/>
+                <field name="user_id"/>
+                <field name="state" widget="badge" decoration-info="state in ('draft', 'under_review')" decoration-warning="state == 'quarantined'" decoration-primary="state == 'capa_required'" decoration-success="state == 'closed'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- NCR Kanban View -->
+    <record id="view_qms_ncr_kanban" model="ir.ui.view">
+        <field name="name">qms.ncr.kanban</field>
+        <field name="model">qms.ncr</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_small_column">
+                <field name="name"/>
+                <field name="title"/>
+                <field name="product_id"/>
+                <field name="partner_id"/>
+                <field name="severity"/>
+                <field name="source_type"/>
+                <field name="state"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_global_click">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <strong class="text-primary"><field name="name"/></strong>
+                                <field name="severity" widget="badge" decoration-danger="severity == 'critical'" decoration-warning="severity == 'major'" decoration-info="severity == 'minor'"/>
+                            </div>
+                            <div class="font-weight-bold text-dark mb-1">
+                                <field name="title"/>
+                            </div>
+                            <div class="text-muted small mb-1">
+                                <i class="fa fa-cube me-1" title="Product"/> <field name="product_id"/>
+                            </div>
+                            <div t-if="record.partner_id.raw_value" class="text-muted small mb-2">
+                                <i class="fa fa-building-o me-1" title="Partner"/> <field name="partner_id"/>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center border-top pt-2 mt-2">
+                                <span class="badge bg-secondary"><field name="source_type"/></span>
+                                <field name="user_id" widget="many2one_avatar_user"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- NCR Form View -->
+    <record id="view_qms_ncr_form" model="ir.ui.view">
+        <field name="name">qms.ncr.form</field>
+        <field name="model">qms.ncr</field>
+        <field name="arch" type="xml">
+            <form string="Non-Conformance Report (NCR)">
+                <header>
+                    <button name="action_submit" string="Submit for QA Review" type="object" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_quarantine" string="Quarantine Defective Stock" type="object" class="btn-warning" invisible="state != 'under_review'"/>
+                    <button name="action_create_capa" string="Initiate 8D CAPA" type="object" class="btn-primary" invisible="state not in ('under_review', 'quarantined')"/>
+                    <button name="action_close" string="Close NCR" type="object" class="btn-success" invisible="state not in ('under_review', 'quarantined', 'capa_required')"/>
+                    <button name="action_cancel" string="Cancel" type="object" invisible="state in ('closed', 'cancelled')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,under_review,quarantined,capa_required,closed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_capa" type="object" class="oe_stat_button" icon="fa-wrench">
+                            <field name="capa_count" widget="statinfo" string="8D CAPA"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <span class="o_form_label">Quality Non-Conformance Report</span>
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                        <h2>
+                            <field name="title" placeholder="e.g., Dimensional Tolerance Exceeded on Hydraulic Fitting"/>
+                        </h2>
+                    </div>
+                    <group>
+                        <group string="Origin &amp; Classification">
+                            <field name="source_type"/>
+                            <field name="partner_id" invisible="source_type not in ('supplier', 'customer')"/>
+                            <field name="severity"/>
+                            <field name="detection_stage"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group string="Affected Material">
+                            <field name="product_id"/>
+                            <field name="lot_id"/>
+                            <label for="qty_affected"/>
+                            <div class="o_row">
+                                <field name="qty_affected"/>
+                                <field name="uom_id"/>
+                            </div>
+                            <label for="qty_rejected"/>
+                            <div class="o_row">
+                                <field name="qty_rejected"/>
+                                <field name="uom_id"/>
+                            </div>
+                            <field name="disposition"/>
+                            <field name="quarantine_location_id" invisible="state == 'draft'"/>
+                        </group>
+                    </group>
+                    <group string="Traceability Links">
+                        <group>
+                            <field name="stock_picking_id"/>
+                            <field name="purchase_order_id"/>
+                        </group>
+                        <group>
+                            <field name="sale_order_id"/>
+                            <field name="user_id"/>
+                            <field name="qa_manager_id"/>
+                            <field name="close_date" readonly="1" invisible="not close_date"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Defect Description &amp; Containment" name="defect_details">
+                            <group>
+                                <field name="description" placeholder="Describe the non-conformance in detail: what was observed, deviations from drawing/spec, measured values..."/>
+                                <field name="containment_action" placeholder="Immediate actions taken to contain defective lot: Quarantine tag applied, production line halted, warehouse hold placed..."/>
+                            </group>
+                        </page>
+                        <page string="Linked CAPA Investigations" name="linked_capa" invisible="capa_count == 0">
+                            <field name="capa_ids" readonly="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="title"/>
+                                    <field name="state"/>
+                                    <field name="assigned_to_id"/>
+                                    <field name="initial_rpn"/>
+                                    <field name="residual_rpn"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- NCR Search View -->
+    <record id="view_qms_ncr_search" model="ir.ui.view">
+        <field name="name">qms.ncr.search</field>
+        <field name="model">qms.ncr</field>
+        <field name="arch" type="xml">
+            <search string="Search Non-Conformance Reports">
+                <field name="name" string="NCR Ref / Title" filter_domain="['|', ('name', 'ilike', self), ('title', 'ilike', self)]"/>
+                <field name="product_id"/>
+                <field name="partner_id"/>
+                <field name="user_id"/>
+                <separator/>
+                <filter string="Active NCRs" name="filter_active" domain="[('state', 'in', ('draft', 'under_review', 'quarantined', 'capa_required'))]"/>
+                <filter string="Quarantined Defective Stock" name="filter_quarantined" domain="[('state', '=', 'quarantined')]"/>
+                <filter string="CAPA In Progress" name="filter_capa_required" domain="[('state', '=', 'capa_required')]"/>
+                <separator/>
+                <filter string="Critical Severity" name="filter_critical" domain="[('severity', '=', 'critical')]"/>
+                <filter string="Major Severity" name="filter_major" domain="[('severity', '=', 'major')]"/>
+                <separator/>
+                <filter string="Supplier Non-Conformances" name="filter_supplier" domain="[('source_type', '=', 'supplier')]"/>
+                <filter string="Customer Complaints" name="filter_customer" domain="[('source_type', '=', 'customer')]"/>
+                <filter string="Internal Production Defects" name="filter_internal" domain="[('source_type', '=', 'internal')]"/>
+                <group>
+                    <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
+                    <filter string="Severity" name="group_by_severity" context="{'group_by': 'severity'}"/>
+                    <filter string="Source Type" name="group_by_source" context="{'group_by': 'source_type'}"/>
+                    <filter string="Product" name="group_by_product" context="{'group_by': 'product_id'}"/>
+                    <filter string="Detection Stage" name="group_by_stage" context="{'group_by': 'detection_stage'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- NCR Action -->
+    <record id="action_qms_ncr" model="ir.actions.act_window">
+        <field name="name">Non-Conformance Reports (NCR)</field>
+        <field name="res_model">qms.ncr</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="search_view_id" ref="view_qms_ncr_search"/>
+        <field name="context">{'search_default_filter_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Record your first Quality Non-Conformance Report (NCR)
+            </p>
+            <p>
+                Capture internal defects, incoming vendor shipment rejects, or customer complaints. Establish immediate containment actions and trigger ISO 9001:2015 8D CAPA investigations.
+            </p>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Report Action -->
+    <record id="action_report_qms_8d" model="ir.actions.report">
+        <field name="name">8D Quality Investigation Report</field>
+        <field name="model">qms.capa</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">iso_quality_management_qms.report_qms_8d_template</field>
+        <field name="report_file">iso_quality_management_qms.report_qms_8d_template</field>
+        <field name="print_report_name">'8D_Report_' + (object.name or '').replace('/', '_')</field>
+        <field name="binding_model_id" ref="model_qms_capa"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- QWeb Template -->
+    <template id="report_qms_8d_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page" style="font-family: 'Segoe UI', Roboto, sans-serif; font-size: 13px; color: #1e293b;">
+
+                        <!-- Report Header Box -->
+                        <div style="border-bottom: 3px solid #0f172a; padding-bottom: 12px; margin-bottom: 20px;">
+                            <div class="row align-items-center">
+                                <div class="col-8">
+                                    <h2 style="color: #0f172a; font-weight: 800; margin: 0; font-size: 24px;">
+                                        8D PROBLEM SOLVING &amp; CAPA REPORT
+                                    </h2>
+                                    <div style="color: #64748b; font-size: 13px; margin-top: 4px;">
+                                        ISO 9001:2015 Clause 10.2 • IATF 16949 • AS9100 Corrective Action Dossier
+                                    </div>
+                                </div>
+                                <div class="col-4 text-end">
+                                    <div style="font-size: 18px; font-weight: 700; color: #2563eb;">
+                                        <span t-field="doc.name"/>
+                                    </div>
+                                    <div style="font-size: 12px; color: #64748b;">
+                                        Status: <strong><span t-field="doc.state"/></strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Investigation Metadata & FMEA Matrix -->
+                        <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 14px; margin-bottom: 20px;">
+                            <div class="row">
+                                <div class="col-6">
+                                    <div style="margin-bottom: 6px;"><strong>Subject:</strong> <span t-field="doc.title"/></div>
+                                    <div style="margin-bottom: 6px;"><strong>Originating NCR:</strong> <span t-field="doc.ncr_id.name"/></div>
+                                    <div style="margin-bottom: 6px;"><strong>Affected Product:</strong> <span t-field="doc.product_id.display_name"/></div>
+                                    <div><strong>Customer / Vendor:</strong> <span t-field="doc.partner_id.name"/></div>
+                                </div>
+                                <div class="col-6">
+                                    <div style="margin-bottom: 6px;"><strong>Lead Investigator:</strong> <span t-field="doc.assigned_to_id.name"/></div>
+                                    <div style="margin-bottom: 6px;"><strong>Initial RPN (Pre-CAPA):</strong> <span style="color: #dc2626; font-weight: 700;" t-field="doc.initial_rpn"/> (S:<span t-field="doc.initial_severity"/> O:<span t-field="doc.initial_occurrence"/> D:<span t-field="doc.initial_detection"/>)</div>
+                                    <div style="margin-bottom: 6px;"><strong>Residual RPN (Post-CAPA):</strong> <span style="color: #16a34a; font-weight: 700;" t-field="doc.residual_rpn"/> (S:<span t-field="doc.residual_severity"/> O:<span t-field="doc.residual_occurrence"/> D:<span t-field="doc.residual_detection"/>)</div>
+                                    <div><strong>Risk Reduction:</strong> <span style="color: #2563eb; font-weight: 700;" t-field="doc.rpn_reduction_pct"/>%</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- D1 Team & D2 Problem -->
+                        <div style="margin-bottom: 16px;">
+                            <h4 style="background-color: #0f172a; color: #ffffff; padding: 6px 10px; font-size: 13px; font-weight: 700; border-radius: 4px; margin-bottom: 8px;">
+                                D1: CROSS-FUNCTIONAL TEAM &amp; D2: PROBLEM DEFINITION (5W2H)
+                            </h4>
+                            <div style="border: 1px solid #e2e8f0; border-radius: 4px; padding: 10px;">
+                                <div style="margin-bottom: 6px;"><strong>Team Champion:</strong> <span t-field="doc.team_leader_id.name"/> | <strong>Lead:</strong> <span t-field="doc.assigned_to_id.name"/></div>
+                                <div><strong>Problem Statement:</strong></div>
+                                <p style="color: #334155; margin: 4px 0 0 0;" t-field="doc.problem_statement"/>
+                            </div>
+                        </div>
+
+                        <!-- D3 Containment -->
+                        <div style="margin-bottom: 16px;">
+                            <h4 style="background-color: #0f172a; color: #ffffff; padding: 6px 10px; font-size: 13px; font-weight: 700; border-radius: 4px; margin-bottom: 8px;">
+                                D3: IMMEDIATE INTERIM CONTAINMENT ACTIONS (ICA)
+                            </h4>
+                            <div style="border: 1px solid #e2e8f0; border-radius: 4px; padding: 10px;">
+                                <p style="color: #334155; margin: 0;" t-field="doc.containment_actions"/>
+                                <div style="margin-top: 6px; font-size: 11px; color: #64748b;">
+                                    Containment Date: <span t-field="doc.containment_date"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- D4 Root Cause -->
+                        <div style="margin-bottom: 16px;">
+                            <h4 style="background-color: #0f172a; color: #ffffff; padding: 6px 10px; font-size: 13px; font-weight: 700; border-radius: 4px; margin-bottom: 8px;">
+                                D4: ROOT CAUSE ANALYSIS (5-WHYS &amp; DETERMINATION)
+                            </h4>
+                            <div style="border: 1px solid #e2e8f0; border-radius: 4px; padding: 10px;">
+                                <div t-if="doc.why_1" style="margin-bottom: 4px;"><strong>Why 1:</strong> <span t-field="doc.why_1"/></div>
+                                <div t-if="doc.why_2" style="margin-bottom: 4px;"><strong>Why 2:</strong> <span t-field="doc.why_2"/></div>
+                                <div t-if="doc.why_3" style="margin-bottom: 4px;"><strong>Why 3:</strong> <span t-field="doc.why_3"/></div>
+                                <div t-if="doc.why_4" style="margin-bottom: 4px;"><strong>Why 4:</strong> <span t-field="doc.why_4"/></div>
+                                <div t-if="doc.why_5" style="margin-bottom: 6px;"><strong>Why 5 (Root Cause):</strong> <strong style="color: #b91c1c;" t-field="doc.why_5"/></div>
+                                <div style="border-top: 1px solid #f1f5f9; padding-top: 6px;">
+                                    <strong>Root Cause Synthesis:</strong>
+                                    <p style="color: #334155; margin: 2px 0 0 0;" t-field="doc.root_cause_summary"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- D5 Corrective Actions -->
+                        <div style="margin-bottom: 16px;">
+                            <h4 style="background-color: #0f172a; color: #ffffff; padding: 6px 10px; font-size: 13px; font-weight: 700; border-radius: 4px; margin-bottom: 8px;">
+                                D5: PERMANENT CORRECTIVE ACTION PLAN (PCA)
+                            </h4>
+                            <table style="width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 4px;">
+                                <thead>
+                                    <tr style="background-color: #f1f5f9; border-bottom: 2px solid #cbd5e1;">
+                                        <th style="padding: 6px 8px; text-align: left;">Action Deliverable</th>
+                                        <th style="padding: 6px 8px; text-align: left;">Type</th>
+                                        <th style="padding: 6px 8px; text-align: left;">Owner</th>
+                                        <th style="padding: 6px 8px; text-align: left;">Deadline</th>
+                                        <th style="padding: 6px 8px; text-align: center;">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="doc.action_line_ids" t-as="act" style="border-bottom: 1px solid #e2e8f0;">
+                                        <td style="padding: 6px 8px;"><span t-field="act.name"/></td>
+                                        <td style="padding: 6px 8px;"><span t-field="act.action_type"/></td>
+                                        <td style="padding: 6px 8px;"><span t-field="act.assigned_to_id.name"/></td>
+                                        <td style="padding: 6px 8px;"><span t-field="act.deadline"/></td>
+                                        <td style="padding: 6px 8px; text-align: center;"><span t-field="act.state"/></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- D6 & D7 -->
+                        <div style="margin-bottom: 16px;">
+                            <h4 style="background-color: #0f172a; color: #ffffff; padding: 6px 10px; font-size: 13px; font-weight: 700; border-radius: 4px; margin-bottom: 8px;">
+                                D6: EFFECTIVENESS VERIFICATION &amp; D7: SYSTEMIC PREVENTION
+                            </h4>
+                            <div style="border: 1px solid #e2e8f0; border-radius: 4px; padding: 10px;">
+                                <div style="margin-bottom: 6px;">
+                                    <strong>D6 Verification Method:</strong> <span t-field="doc.verification_method"/> | 
+                                    <strong>Verified By:</strong> <span t-field="doc.verified_by_id.name"/> (<span t-field="doc.verification_date"/>)
+                                </div>
+                                <div style="margin-bottom: 8px;"><strong>Evidence of Zero Recurrence:</strong> <span t-field="doc.verification_result"/></div>
+                                <div style="border-top: 1px solid #f1f5f9; padding-top: 6px;">
+                                    <strong>D7 Recurrence Prevention / Standardization:</strong>
+                                    <p style="color: #334155; margin: 2px 0 0 0;" t-field="doc.preventive_actions"/>
+                                    <div t-if="doc.sop_updated" style="margin-top: 4px; font-size: 11px; color: #15803d;">
+                                        ✓ Standard Operating Procedure (SOP) Updated: <strong><span t-field="doc.sop_reference"/></strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Signatures D8 -->
+                        <div style="margin-top: 25px;">
+                            <table style="width: 100%; border-collapse: collapse; text-align: center; font-size: 11px;">
+                                <tr>
+                                    <td style="width: 32%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 4px;">
+                                        <div style="color: #64748b; margin-bottom: 30px;">Prepared by (Lead Investigator)</div>
+                                        <div style="border-top: 1px dashed #94a3b8; padding-top: 4px;">
+                                            <strong t-field="doc.assigned_to_id.name"/><br/>
+                                            <span style="color: #64748b;">Quality Assurance Engineer</span>
+                                        </div>
+                                    </td>
+                                    <td style="width: 2%;"></td>
+                                    <td style="width: 32%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 4px;">
+                                        <div style="color: #64748b; margin-bottom: 30px;">Reviewed by (Process / Team Champion)</div>
+                                        <div style="border-top: 1px dashed #94a3b8; padding-top: 4px;">
+                                            <strong t-field="doc.team_leader_id.name"/><br/>
+                                            <span style="color: #64748b;">Operations / Engineering Lead</span>
+                                        </div>
+                                    </td>
+                                    <td style="width: 2%;"></td>
+                                    <td style="width: 32%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 4px;">
+                                        <div style="color: #64748b; margin-bottom: 30px;">Approved by (Quality Director / Lead Auditor)</div>
+                                        <div style="border-top: 1px dashed #94a3b8; padding-top: 4px;">
+                                            <strong>Quality Director</strong><br/>
+                                            <span style="color: #64748b;">Date: <span t-field="doc.close_date"/></span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

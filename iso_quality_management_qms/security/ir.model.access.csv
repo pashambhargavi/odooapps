@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_qms_ncr_user,qms.ncr.user,model_qms_ncr,group_qms_user,1,1,1,0
+access_qms_ncr_manager,qms.ncr.manager,model_qms_ncr,group_qms_manager,1,1,1,1
+access_qms_capa_user,qms.capa.user,model_qms_capa,group_qms_user,1,1,1,0
+access_qms_capa_manager,qms.capa.manager,model_qms_capa,group_qms_manager,1,1,1,1
+access_qms_capa_action_user,qms.capa.action.user,model_qms_capa_action,group_qms_user,1,1,1,0
+access_qms_capa_action_manager,qms.capa.action.manager,model_qms_capa_action,group_qms_manager,1,1,1,1
+access_qms_audit_user,qms.audit.user,model_qms_audit,group_qms_user,1,1,1,0
+access_qms_audit_manager,qms.audit.manager,model_qms_audit,group_qms_manager,1,1,1,1
+access_qms_audit_line_user,qms.audit.line.user,model_qms_audit_line,group_qms_user,1,1,1,0
+access_qms_audit_line_manager,qms.audit.line.manager,model_qms_audit_line,group_qms_manager,1,1,1,1
+access_qms_risk_user,qms.risk.user,model_qms_risk,group_qms_user,1,1,1,0
+access_qms_risk_manager,qms.risk.manager,model_qms_risk,group_qms_manager,1,1,1,1

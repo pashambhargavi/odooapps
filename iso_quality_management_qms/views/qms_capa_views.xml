@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- CAPA List View -->
+    <record id="view_qms_capa_list" model="ir.ui.view">
+        <field name="name">qms.capa.list</field>
+        <field name="model">qms.capa</field>
+        <field name="arch" type="xml">
+            <list string="Corrective &amp; Preventive Actions (8D CAPA)" decoration-danger="initial_rpn &gt; 200 and state != 'd8_closed'" decoration-warning="state in ('d1_team', 'd2_problem', 'd3_containment', 'd4_root_cause')" decoration-success="state == 'd8_closed'">
+                <field name="name"/>
+                <field name="title"/>
+                <field name="capa_type"/>
+                <field name="source"/>
+                <field name="product_id"/>
+                <field name="assigned_to_id"/>
+                <field name="initial_rpn" string="Init RPN"/>
+                <field name="residual_rpn" string="Res RPN"/>
+                <field name="rpn_reduction_pct" string="Reduction %"/>
+                <field name="state" widget="badge" decoration-info="state in ('d1_team', 'd2_problem', 'd3_containment')" decoration-warning="state in ('d4_root_cause', 'd5_actions')" decoration-primary="state in ('d6_verification', 'd7_prevention')" decoration-success="state == 'd8_closed'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- CAPA Kanban View -->
+    <record id="view_qms_capa_kanban" model="ir.ui.view">
+        <field name="name">qms.capa.kanban</field>
+        <field name="model">qms.capa</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_small_column">
+                <field name="name"/>
+                <field name="title"/>
+                <field name="capa_type"/>
+                <field name="assigned_to_id"/>
+                <field name="initial_rpn"/>
+                <field name="residual_rpn"/>
+                <field name="state"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_global_click">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <strong class="text-primary"><field name="name"/></strong>
+                                <span class="badge bg-secondary"><field name="capa_type"/></span>
+                            </div>
+                            <div class="font-weight-bold text-dark mb-1">
+                                <field name="title"/>
+                            </div>
+                            <div class="d-flex justify-content-between text-muted small mb-2">
+                                <span>Init RPN: <strong class="text-danger"><field name="initial_rpn"/></strong></span>
+                                <span>Residual: <strong class="text-success"><field name="residual_rpn"/></strong></span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center border-top pt-2 mt-2">
+                                <field name="assigned_to_id" widget="many2one_avatar_user"/>
+                                <span class="text-muted small"><field name="action_completed_count"/> / <field name="action_count"/> Actions Done</span>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- CAPA Form View (8 Disciplines) -->
+    <record id="view_qms_capa_form" model="ir.ui.view">
+        <field name="name">qms.capa.form</field>
+        <field name="model">qms.capa</field>
+        <field name="arch" type="xml">
+            <form string="8D Corrective Action (CAPA)">
+                <header>
+                    <button name="action_advance_stage" string="Advance to Next 8D Stage" type="object" class="btn-primary" invisible="state in ('d8_closed', 'cancelled')"/>
+                    <button name="action_close_capa" string="Close CAPA (D8)" type="object" class="btn-success" invisible="state != 'd7_prevention'"/>
+                    <button name="action_cancel" string="Cancel" type="object" invisible="state in ('d8_closed', 'cancelled')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="d1_team,d2_problem,d3_containment,d4_root_cause,d5_actions,d6_verification,d7_prevention,d8_closed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <!-- Stat buttons -->
+                    </div>
+                    <div class="oe_title">
+                        <span class="o_form_label">8D Corrective &amp; Preventive Action</span>
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                        <h2>
+                            <field name="title" placeholder="e.g., Elimination of Porosity Defects in Cast Aluminum Valve Bodies"/>
+                        </h2>
+                    </div>
+                    <group>
+                        <group string="Classification &amp; Origin">
+                            <field name="capa_type"/>
+                            <field name="source"/>
+                            <field name="ncr_id" invisible="source != 'ncr'"/>
+                            <field name="audit_id" invisible="source != 'audit'"/>
+                            <field name="product_id"/>
+                            <field name="partner_id"/>
+                        </group>
+                        <group string="FMEA Risk Priority Numbers (RPN)">
+                            <label for="initial_severity" string="Initial RPN (S x O x D)"/>
+                            <div class="o_row">
+                                <span>S: </span><field name="initial_severity"/>
+                                <span>O: </span><field name="initial_occurrence"/>
+                                <span>D: </span><field name="initial_detection"/>
+                                <span class="badge bg-danger ms-2">RPN: <field name="initial_rpn"/></span>
+                            </div>
+                            <label for="residual_severity" string="Residual RPN (S x O x D)"/>
+                            <div class="o_row">
+                                <span>S: </span><field name="residual_severity"/>
+                                <span>O: </span><field name="residual_occurrence"/>
+                                <span>D: </span><field name="residual_detection"/>
+                                <span class="badge bg-success ms-2">RPN: <field name="residual_rpn"/></span>
+                            </div>
+                            <field name="rpn_reduction_pct" widget="percentage"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <!-- D1 & D2 -->
+                        <page string="D1 Team &amp; D2 Problem Definition" name="d1_d2">
+                            <group string="D1: Champion &amp; Cross-Functional Team">
+                                <field name="assigned_to_id"/>
+                                <field name="team_leader_id"/>
+                                <field name="team_member_ids" widget="many2many_tags"/>
+                            </group>
+                            <group string="D2: Problem Description (5W2H Standard)">
+                                <field name="problem_statement" placeholder="What is the defect? Where was it detected? When did it start? How many units are affected? What is the trend?"/>
+                                <field name="is_contained"/>
+                            </group>
+                        </page>
+
+                        <!-- D3 -->
+                        <page string="D3 Containment Actions" name="d3_containment">
+                            <group string="D3: Immediate Containment Countermeasures">
+                                <field name="containment_actions" placeholder="Immediate containment measures: Quarantine suspect warehouse stock, implement 100% sorting gate at end-of-line, recall affected transit batches..."/>
+                                <field name="containment_date"/>
+                            </group>
+                        </page>
+
+                        <!-- D4 -->
+                        <page string="D4 Root Cause Analysis" name="d4_root_cause">
+                            <group string="5-Whys Interactive Root Cause Method">
+                                <field name="why_1" placeholder="Why did the defect occur on the line?"/>
+                                <field name="why_2" placeholder="Why was that condition present?"/>
+                                <field name="why_3" placeholder="Why did the standard process not prevent it?"/>
+                                <field name="why_4" placeholder="Why did inspection fail to detect it?"/>
+                                <field name="why_5" placeholder="Fundamental root cause (policy, design, system failure)"/>
+                                <field name="root_cause_summary" placeholder="Summary statement of root cause determination"/>
+                            </group>
+                            <group string="Ishikawa 6M Fishbone Analysis">
+                                <group>
+                                    <field name="ishikawa_man"/>
+                                    <field name="ishikawa_machine"/>
+                                    <field name="ishikawa_material"/>
+                                </group>
+                                <group>
+                                    <field name="ishikawa_method"/>
+                                    <field name="ishikawa_measurement"/>
+                                    <field name="ishikawa_environment"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <!-- D5 -->
+                        <page string="D5 Corrective Action Plan" name="d5_actions">
+                            <field name="action_line_ids">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="action_type"/>
+                                    <field name="assigned_to_id"/>
+                                    <field name="deadline"/>
+                                    <field name="completion_date"/>
+                                    <field name="state" widget="badge" decoration-info="state == 'in_progress'" decoration-success="state in ('completed', 'verified')"/>
+                                    <button name="action_start" string="Start" type="object" icon="fa-play" invisible="state != 'draft'" title="Start Action"/>
+                                    <button name="action_complete" string="Complete" type="object" icon="fa-check" invisible="state not in ('draft', 'in_progress')" title="Complete Action"/>
+                                    <button name="action_verify" string="Verify" type="object" icon="fa-certificate" invisible="state != 'completed'" title="Verify Action"/>
+                                </list>
+                            </field>
+                        </page>
+
+                        <!-- D6 -->
+                        <page string="D6 Verification of Effectiveness" name="d6_verification">
+                            <group string="D6: Verification &amp; Validation of Countermeasures">
+                                <field name="verification_method"/>
+                                <field name="verification_result" placeholder="Document quantitative proof of effectiveness: zero defect count across 3 production runs, Cpk improved from 0.92 to 1.48, audit findings clean..."/>
+                                <field name="verified_by_id"/>
+                                <field name="verification_date"/>
+                            </group>
+                        </page>
+
+                        <!-- D7 & D8 -->
+                        <page string="D7 Prevention &amp; D8 Team Closure" name="d7_d8">
+                            <group string="D7: Systemic Recurrence Prevention &amp; Standardization">
+                                <field name="preventive_actions" placeholder="How was the permanent fix standardized across other product families, machines or facilities?"/>
+                                <field name="sop_updated"/>
+                                <field name="sop_reference" invisible="not sop_updated"/>
+                            </group>
+                            <group string="D8: Team Recognition &amp; Formal Closure">
+                                <field name="closure_notes" placeholder="Congratulate and recognize the 8D team members. Document lessons learned for organizational knowledge base..."/>
+                                <field name="close_date" readonly="1"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- CAPA Search View -->
+    <record id="view_qms_capa_search" model="ir.ui.view">
+        <field name="name">qms.capa.search</field>
+        <field name="model">qms.capa</field>
+        <field name="arch" type="xml">
+            <search string="Search Corrective Actions">
+                <field name="name" string="CAPA Ref / Title" filter_domain="['|', ('name', 'ilike', self), ('title', 'ilike', self)]"/>
+                <field name="assigned_to_id"/>
+                <field name="product_id"/>
+                <field name="ncr_id"/>
+                <separator/>
+                <filter string="Open 8D CAPAs" name="filter_open" domain="[('state', '!=', 'd8_closed')]"/>
+                <filter string="Root Cause Investigation (D4)" name="filter_d4" domain="[('state', '=', 'd4_root_cause')]"/>
+                <filter string="Corrective Actions (D5)" name="filter_d5" domain="[('state', '=', 'd5_actions')]"/>
+                <filter string="Verification (D6)" name="filter_d6" domain="[('state', '=', 'd6_verification')]"/>
+                <filter string="Closed CAPAs (D8)" name="filter_closed" domain="[('state', '=', 'd8_closed')]"/>
+                <separator/>
+                <filter string="High Initial Risk (RPN &gt; 120)" name="filter_high_rpn" domain="[('initial_rpn', '&gt;', 120)]"/>
+                <group>
+                    <filter string="8D Stage" name="group_by_stage" context="{'group_by': 'state'}"/>
+                    <filter string="CAPA Type" name="group_by_type" context="{'group_by': 'capa_type'}"/>
+                    <filter string="Lead Investigator" name="group_by_assigned" context="{'group_by': 'assigned_to_id'}"/>
+                    <filter string="Source" name="group_by_source" context="{'group_by': 'source'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- CAPA Action -->
+    <record id="action_qms_capa" model="ir.actions.act_window">
+        <field name="name">Corrective &amp; Preventive Actions (8D CAPA)</field>
+        <field name="res_model">qms.capa</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="search_view_id" ref="view_qms_capa_search"/>
+        <field name="context">{'search_default_filter_open': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Initiate an 8D Corrective and Preventive Action (CAPA)
+            </p>
+            <p>
+                Follow the world-standard 8 Disciplines (8D) problem-solving methodology, execute 5-Whys and Ishikawa Fishbone analysis, formulate action plans, and track RPN risk reduction.
+            </p>
+        </field>
+    </record>
+</odoo>
