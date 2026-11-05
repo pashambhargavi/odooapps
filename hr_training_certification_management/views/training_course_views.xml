@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Course List View -->
+    <record id="view_training_course_list" model="ir.ui.view">
+        <field name="name">training.course.list</field>
+        <field name="model">training.course</field>
+        <field name="arch" type="xml">
+            <list string="Training Courses">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="category"/>
+                <field name="duration_hours" widget="float_time"/>
+                <field name="validity_months"/>
+                <field name="passing_score"/>
+                <field name="session_count"/>
+                <field name="certified_count"/>
+                <field name="compliance_rate" widget="progressbar"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Course Form View -->
+    <record id="view_training_course_form" model="ir.ui.view">
+        <field name="name">training.course.form</field>
+        <field name="model">training.course</field>
+        <field name="arch" type="xml">
+            <form string="Training Course">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_sessions" type="object" class="oe_stat_button" icon="fa-calendar">
+                            <field name="session_count" widget="statinfo" string="Sessions"/>
+                        </button>
+                        <button name="action_view_certified" type="object" class="oe_stat_button" icon="fa-certificate">
+                            <field name="certified_count" widget="statinfo" string="Certified Staff"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="code" string="Course Code"/>
+                        <h1>
+                            <field name="code" placeholder="e.g. SAF-OSHA-10"/>
+                        </h1>
+                        <label for="name" string="Course Title"/>
+                        <h2>
+                            <field name="name" placeholder="e.g. OSHA 10-Hour Safety Certification"/>
+                        </h2>
+                    </div>
+                    <group>
+                        <group name="course_basics" string="Course Parameters">
+                            <field name="category"/>
+                            <field name="delivery_mode"/>
+                            <field name="duration_hours" widget="float_time"/>
+                            <field name="validity_months"/>
+                            <field name="passing_score"/>
+                        </group>
+                        <group name="course_provider" string="Provider &amp; Faculty">
+                            <field name="training_provider"/>
+                            <field name="instructor_name"/>
+                            <field name="compliance_rate" widget="progressbar"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="active" widget="boolean_toggle"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Mandatory Compliance Matrix" name="compliance_matrix">
+                            <group>
+                                <field name="job_ids" widget="many2many_tags" placeholder="Select job positions where this certification is legally mandatory..."/>
+                                <field name="department_ids" widget="many2many_tags" placeholder="Select departments requiring this training..."/>
+                            </group>
+                            <p class="text-muted">
+                                ℹ️ Employees assigned to any of the selected job positions or departments will be automatically audited for compliance and flagged during gap analysis.
+                            </p>
+                        </page>
+                        <page string="Syllabus &amp; Description" name="description">
+                            <field name="description" placeholder="Enter course syllabus, prerequisite requirements, learning objectives, and test instructions..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Course Search View -->
+    <record id="view_training_course_search" model="ir.ui.view">
+        <field name="name">training.course.search</field>
+        <field name="model">training.course</field>
+        <field name="arch" type="xml">
+            <search string="Search Courses">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="training_provider"/>
+                <filter string="Health &amp; Safety" name="filter_safety" domain="[('category', '=', 'safety')]"/>
+                <filter string="GMP &amp; Regulatory" name="filter_compliance" domain="[('category', '=', 'compliance')]"/>
+                <filter string="Technical Operations" name="filter_technical" domain="[('category', '=', 'technical')]"/>
+                <filter string="Archived" name="filter_archived" domain="[('active', '=', False)]"/>
+                <group>
+                    <filter string="Category" name="group_category" context="{'group_by': 'category'}"/>
+                    <filter string="Delivery Mode" name="group_delivery" context="{'group_by': 'delivery_mode'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Course Action -->
+    <record id="action_training_course" model="ir.actions.act_window">
+        <field name="name">Courses &amp; Certifications</field>
+        <field name="res_model">training.course</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_training_course_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Define your corporate compliance courses and certifications!
+            </p>
+        </field>
+    </record>
+</odoo>

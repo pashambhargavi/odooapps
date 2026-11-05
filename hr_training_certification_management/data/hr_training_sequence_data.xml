@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Sequence for Training Session -->
+        <record id="seq_training_session" model="ir.sequence">
+            <field name="name">Training Session Reference</field>
+            <field name="code">training.session</field>
+            <field name="prefix">TRN/%(range_year)s/</field>
+            <field name="padding">4</field>
+            <field name="use_date_range">True</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!-- Sequence for Training Participation Record -->
+        <record id="seq_training_participation" model="ir.sequence">
+            <field name="name">Training Participation Record</field>
+            <field name="code">training.participation</field>
+            <field name="prefix">REC/%(range_year)s/</field>
+            <field name="padding">5</field>
+            <field name="use_date_range">True</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!-- Sequence for Official Certificate Number -->
+        <record id="seq_training_certificate" model="ir.sequence">
+            <field name="name">Digital Certificate Verification Code</field>
+            <field name="code">training.certificate</field>
+            <field name="prefix">CERT-%(range_year)s-</field>
+            <field name="padding">5</field>
+            <field name="use_date_range">True</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!-- Sequence for Compliance Matrix Audit -->
+        <record id="seq_training_compliance_matrix" model="ir.sequence">
+            <field name="name">Compliance Matrix Audit Reference</field>
+            <field name="code">training.compliance.matrix</field>
+            <field name="prefix">AUD/%(range_year)s/</field>
+            <field name="padding">4</field>
+            <field name="use_date_range">True</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>

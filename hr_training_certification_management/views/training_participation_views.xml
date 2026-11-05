@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Participation List View -->
+    <record id="view_training_participation_list" model="ir.ui.view">
+        <field name="name">training.participation.list</field>
+        <field name="model">training.participation</field>
+        <field name="arch" type="xml">
+            <list string="Training Records &amp; Certifications" decoration-success="certificate_status == 'valid'" decoration-warning="certificate_status == 'expiring_soon'" decoration-danger="certificate_status == 'expired'" decoration-muted="certificate_status in ('draft', 'revoked')">
+                <field name="certificate_number"/>
+                <field name="employee_id"/>
+                <field name="course_id"/>
+                <field name="department_id"/>
+                <field name="attendance_status"/>
+                <field name="score"/>
+                <field name="evaluation_result" widget="badge" decoration-success="evaluation_result == 'passed'" decoration-danger="evaluation_result == 'failed'"/>
+                <field name="issue_date"/>
+                <field name="expiry_date"/>
+                <field name="days_until_expiry"/>
+                <field name="certificate_status" widget="badge" decoration-success="certificate_status == 'valid'" decoration-warning="certificate_status == 'expiring_soon'" decoration-danger="certificate_status == 'expired'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Participation Form View -->
+    <record id="view_training_participation_form" model="ir.ui.view">
+        <field name="name">training.participation.form</field>
+        <field name="model">training.participation</field>
+        <field name="arch" type="xml">
+            <form string="Training &amp; Certification Record">
+                <header>
+                    <button name="action_issue_certificate" string="Issue Official Certificate" type="object" class="oe_highlight" invisible="certificate_status in ('valid', 'expiring_soon')"/>
+                    <button name="action_print_certificate" string="Print Certificate PDF" type="object" class="oe_highlight" invisible="certificate_status not in ('valid', 'expiring_soon')"/>
+                    <button name="action_revoke_certificate" string="Revoke Certificate" type="object" invisible="certificate_status not in ('valid', 'expiring_soon')"/>
+                    <field name="certificate_status" widget="statusbar" statusbar_visible="draft,valid,expired"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="certificate_number" string="Certificate Number"/>
+                        <h1>
+                            <field name="certificate_number" placeholder="Not Issued Yet"/>
+                        </h1>
+                        <label for="name" string="Record Reference"/>
+                        <h3>
+                            <field name="name"/>
+                        </h3>
+                    </div>
+                    <group>
+                        <group name="participant_info" string="Participant &amp; Course">
+                            <field name="employee_id"/>
+                            <field name="job_id"/>
+                            <field name="department_id"/>
+                            <field name="course_id"/>
+                            <field name="session_id"/>
+                        </group>
+                        <group name="evaluation_info" string="Evaluation &amp; Expiry">
+                            <field name="attendance_status"/>
+                            <field name="score"/>
+                            <field name="passing_score"/>
+                            <field name="evaluation_result"/>
+                            <field name="issue_date"/>
+                            <field name="expiry_date"/>
+                            <field name="days_until_expiry"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Evaluator Remarks" name="remarks">
+                            <field name="evaluator_notes" placeholder="Enter practical assessment notes, instructor feedback, or recertification requirements..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Participation Search View -->
+    <record id="view_training_participation_search" model="ir.ui.view">
+        <field name="name">training.participation.search</field>
+        <field name="model">training.participation</field>
+        <field name="arch" type="xml">
+            <search string="Search Training Records">
+                <field name="employee_id"/>
+                <field name="course_id"/>
+                <field name="certificate_number"/>
+                <filter string="Valid Certifications" name="filter_valid" domain="[('certificate_status', '=', 'valid')]"/>
+                <filter string="Expiring Soon (&lt;30 Days)" name="filter_expiring" domain="[('certificate_status', '=', 'expiring_soon')]"/>
+                <filter string="Expired Certifications" name="filter_expired" domain="[('certificate_status', '=', 'expired')]"/>
+                <filter string="Passed" name="filter_passed" domain="[('evaluation_result', '=', 'passed')]"/>
+                <filter string="Failed" name="filter_failed" domain="[('evaluation_result', '=', 'failed')]"/>
+                <group>
+                    <filter string="Employee" name="group_employee" context="{'group_by': 'employee_id'}"/>
+                    <filter string="Course" name="group_course" context="{'group_by': 'course_id'}"/>
+                    <filter string="Department" name="group_department" context="{'group_by': 'department_id'}"/>
+                    <filter string="Certificate Status" name="group_status" context="{'group_by': 'certificate_status'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Participation Action -->
+    <record id="action_training_participation" model="ir.actions.act_window">
+        <field name="name">Training Records &amp; Certifications</field>
+        <field name="res_model">training.participation</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_training_participation_search"/>
+        <field name="context">{'search_default_filter_valid': 1}</field>
+    </record>
+</odoo>

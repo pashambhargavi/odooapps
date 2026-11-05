@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Compliance Matrix List View -->
+    <record id="view_training_compliance_matrix_list" model="ir.ui.view">
+        <field name="name">training.compliance.matrix.list</field>
+        <field name="model">training.compliance.matrix</field>
+        <field name="arch" type="xml">
+            <list string="Compliance Audits" decoration-success="compliance_score &gt;= 95.0" decoration-warning="compliance_score &gt;= 80.0 and compliance_score &lt; 95.0" decoration-danger="compliance_score &lt; 80.0">
+                <field name="name"/>
+                <field name="department_id"/>
+                <field name="job_id"/>
+                <field name="total_requirements"/>
+                <field name="compliant_count"/>
+                <field name="gap_count"/>
+                <field name="compliance_score" widget="progressbar"/>
+                <field name="create_date"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Compliance Matrix Form View -->
+    <record id="view_training_compliance_matrix_form" model="ir.ui.view">
+        <field name="name">training.compliance.matrix.form</field>
+        <field name="model">training.compliance.matrix</field>
+        <field name="arch" type="xml">
+            <form string="Compliance Audit Matrix">
+                <header>
+                    <button name="action_generate_audit_lines" string="⚡ Run Compliance Audit" type="object" class="oe_highlight"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="Audit Reference"/>
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group name="audit_target" string="Audit Scope">
+                            <field name="department_id" placeholder="Leave empty for all departments..."/>
+                            <field name="job_id" placeholder="Leave empty for all job positions..."/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group name="audit_kpis" string="Compliance Metrics">
+                            <field name="total_requirements"/>
+                            <field name="compliant_count"/>
+                            <field name="gap_count"/>
+                            <field name="compliance_score" widget="progressbar"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Compliance Gap Analysis" name="gap_analysis">
+                            <field name="line_ids">
+                                <list decoration-success="status == 'compliant'" decoration-warning="status == 'expiring_soon'" decoration-danger="status in ('expired', 'missing')">
+                                    <field name="employee_id"/>
+                                    <field name="job_id"/>
+                                    <field name="department_id"/>
+                                    <field name="course_id"/>
+                                    <field name="category"/>
+                                    <field name="last_certified_date"/>
+                                    <field name="expiry_date"/>
+                                    <field name="status" widget="badge" decoration-success="status == 'compliant'" decoration-warning="status == 'expiring_soon'" decoration-danger="status in ('expired', 'missing')"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Compliance Matrix Action -->
+    <record id="action_training_compliance_matrix" model="ir.actions.act_window">
+        <field name="name">Compliance Gap Matrix</field>
+        <field name="res_model">training.compliance.matrix</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Audit departmental job compliance against mandatory OSHA, GMP, and quality regulations!
+            </p>
+        </field>
+    </record>
+</odoo>

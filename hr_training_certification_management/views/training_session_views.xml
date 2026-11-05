@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Session List View -->
+    <record id="view_training_session_list" model="ir.ui.view">
+        <field name="name">training.session.list</field>
+        <field name="model">training.session</field>
+        <field name="arch" type="xml">
+            <list string="Training Sessions" decoration-info="state == 'draft'" decoration-warning="state == 'in_progress'" decoration-success="state == 'completed'" decoration-muted="state == 'cancelled'">
+                <field name="name"/>
+                <field name="course_id"/>
+                <field name="category"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="location"/>
+                <field name="enrolled_count"/>
+                <field name="max_capacity"/>
+                <field name="passed_count"/>
+                <field name="pass_rate" widget="progressbar"/>
+                <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-primary="state == 'confirmed'" decoration-warning="state == 'in_progress'" decoration-success="state == 'completed'" decoration-danger="state == 'cancelled'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Session Calendar View -->
+    <record id="view_training_session_calendar" model="ir.ui.view">
+        <field name="name">training.session.calendar</field>
+        <field name="model">training.session</field>
+        <field name="arch" type="xml">
+            <calendar string="Training Schedule" date_start="start_date" date_stop="end_date" color="course_id" mode="month">
+                <field name="name"/>
+                <field name="course_id"/>
+                <field name="location"/>
+                <field name="state"/>
+            </calendar>
+        </field>
+    </record>
+
+    <!-- Session Form View -->
+    <record id="view_training_session_form" model="ir.ui.view">
+        <field name="name">training.session.form</field>
+        <field name="model">training.session</field>
+        <field name="arch" type="xml">
+            <form string="Training Session">
+                <header>
+                    <button name="action_confirm" string="Confirm Session" type="object" class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_start" string="Start Session" type="object" class="oe_highlight" invisible="state != 'confirmed'"/>
+                    <button name="action_complete" string="Complete &amp; Certify Attendees" type="object" class="oe_highlight" invisible="state != 'in_progress'"/>
+                    <button name="action_auto_enroll_mandatory" string="⚡ Auto-Enroll Non-Compliant Staff" type="object" class="btn-secondary" invisible="state in ('completed', 'cancelled')"/>
+                    <button name="action_cancel" string="Cancel Session" type="object" invisible="state in ('completed', 'cancelled')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,in_progress,completed"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="Session Code"/>
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group name="session_info" string="Session Logistics">
+                            <field name="course_id" readonly="state == 'completed'"/>
+                            <field name="category"/>
+                            <field name="start_date" readonly="state == 'completed'"/>
+                            <field name="end_date" readonly="state == 'completed'"/>
+                            <field name="location"/>
+                        </group>
+                        <group name="session_metrics" string="Capacity &amp; Results">
+                            <field name="instructor_name"/>
+                            <field name="max_capacity"/>
+                            <field name="enrolled_count"/>
+                            <field name="passed_count"/>
+                            <field name="pass_rate" widget="progressbar"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Attendees &amp; Evaluation" name="attendees">
+                            <field name="participation_ids">
+                                <list editable="bottom" decoration-success="evaluation_result == 'passed'" decoration-danger="evaluation_result == 'failed'" decoration-warning="attendance_status == 'absent'">
+                                    <field name="employee_id"/>
+                                    <field name="job_id"/>
+                                    <field name="department_id"/>
+                                    <field name="attendance_status"/>
+                                    <field name="score"/>
+                                    <field name="passing_score"/>
+                                    <field name="evaluation_result"/>
+                                    <field name="certificate_number"/>
+                                    <field name="certificate_status" widget="badge" decoration-success="certificate_status == 'valid'" decoration-danger="certificate_status == 'expired'"/>
+                                    <button name="action_issue_certificate" string="Certify" type="object" icon="fa-certificate" invisible="evaluation_result == 'passed' or attendance_status != 'attended'"/>
+                                    <button name="action_print_certificate" string="Print Certificate" type="object" icon="fa-print" invisible="certificate_status not in ('valid', 'expiring_soon')"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Session Notes &amp; Handouts" name="notes">
+                            <field name="notes" placeholder="Enter session guidelines, virtual meeting links, or reference material links..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Session Action -->
+    <record id="action_training_session" model="ir.actions.act_window">
+        <field name="name">Training Sessions &amp; Batches</field>
+        <field name="res_model">training.session</field>
+        <field name="view_mode">calendar,list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Schedule a training session or batch event!
+            </p>
+        </field>
+    </record>
+</odoo>

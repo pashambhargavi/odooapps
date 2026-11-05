@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_training_course_user,training.course.user,model_training_course,group_training_user,1,0,0,0
+access_training_course_manager,training.course.manager,model_training_course,group_training_manager,1,1,1,1
+access_training_session_user,training.session.user,model_training_session,group_training_user,1,0,0,0
+access_training_session_manager,training.session.manager,model_training_session,group_training_manager,1,1,1,1
+access_training_participation_user,training.participation.user,model_training_participation,group_training_user,1,0,0,0
+access_training_participation_manager,training.participation.manager,model_training_participation,group_training_manager,1,1,1,1
+access_training_compliance_matrix_user,training.compliance.matrix.user,model_training_compliance_matrix,group_training_user,1,0,0,0
+access_training_compliance_matrix_manager,training.compliance.matrix.manager,model_training_compliance_matrix,group_training_manager,1,1,1,1
+access_training_compliance_matrix_line_user,training.compliance.matrix.line.user,model_training_compliance_matrix_line,group_training_user,1,0,0,0
+access_training_compliance_matrix_line_manager,training.compliance.matrix.line.manager,model_training_compliance_matrix_line,group_training_manager,1,1,1,1
