@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Smart Button on Stock Picking Form -->
+    <record id="view_picking_form_inherit_qms" model="ir.ui.view">
+        <field name="name">stock.picking.form.inherit.qms</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_qms_ncrs" type="object" class="oe_stat_button" icon="fa-exclamation-triangle" title="Quality NCRs">
+                    <field name="ncr_count" widget="statinfo" string="Quality NCR"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Smart Button on Purchase Order Form -->
+    <record id="view_purchase_order_form_inherit_qms" model="ir.ui.view">
+        <field name="name">purchase.order.form.inherit.qms</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_qms_ncrs" type="object" class="oe_stat_button" icon="fa-exclamation-triangle" title="Supplier Quality NCRs">
+                    <field name="ncr_count" widget="statinfo" string="Supplier NCR"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Smart Button on Sale Order Form -->
+    <record id="view_sale_order_form_inherit_qms" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.qms</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_qms_ncrs" type="object" class="oe_stat_button" icon="fa-exclamation-circle" title="Customer Quality Issues">
+                    <field name="ncr_count" widget="statinfo" string="Quality Issues"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+</odoo>

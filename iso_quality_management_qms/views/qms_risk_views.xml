@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Risk Register List View -->
+    <record id="view_qms_risk_list" model="ir.ui.view">
+        <field name="name">qms.risk.list</field>
+        <field name="model">qms.risk</field>
+        <field name="arch" type="xml">
+            <tree string="Quality Risk Register &amp; FMEA" decoration-danger="risk_level == 'critical'" decoration-warning="risk_level == 'high'" decoration-info="risk_level == 'medium'" decoration-muted="state == 'closed'">
+                <field name="name"/>
+                <field name="title"/>
+                <field name="department_id"/>
+                <field name="process_step"/>
+                <field name="severity" string="S"/>
+                <field name="occurrence" string="O"/>
+                <field name="detection" string="D"/>
+                <field name="initial_rpn" string="Init RPN"/>
+                <field name="residual_rpn" string="Res RPN"/>
+                <field name="rpn_reduction_pct" string="Reduction %"/>
+                <field name="risk_level" widget="badge" decoration-danger="risk_level == 'critical'" decoration-warning="risk_level == 'high'" decoration-info="risk_level == 'medium'" decoration-success="risk_level == 'low'"/>
+                <field name="responsible_id"/>
+                <field name="state" widget="badge" decoration-info="state in ('draft', 'assessed')" decoration-warning="state == 'mitigated'" decoration-success="state in ('accepted', 'closed')"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Risk Register Form View -->
+    <record id="view_qms_risk_form" model="ir.ui.view">
+        <field name="name">qms.risk.form</field>
+        <field name="model">qms.risk</field>
+        <field name="arch" type="xml">
+            <form string="Quality Risk &amp; FMEA">
+                <header>
+                    <button name="action_assess" string="Submit Assessment" type="object" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_mitigate" string="Confirm Mitigation" type="object" class="btn-primary" invisible="state != 'assessed'"/>
+                    <button name="action_accept" string="Accept Residual Risk" type="object" class="btn-success" invisible="state != 'mitigated'"/>
+                    <button name="action_close" string="Close / Retire Risk" type="object" invisible="state in ('draft', 'closed')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,assessed,mitigated,accepted,closed"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <span class="o_form_label">ISO 9001 Clause 6.1 Quality Risk / Failure Mode</span>
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                        <h2>
+                            <field name="title" placeholder="e.g., Coolant Contamination Causing Tool Wear &amp; Surface Scratching"/>
+                        </h2>
+                    </div>
+                    <group>
+                        <group string="Process Context">
+                            <field name="department_id"/>
+                            <field name="process_step" placeholder="e.g., CNC Milling Stage 2"/>
+                            <field name="responsible_id"/>
+                            <field name="review_date"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group string="Risk Classification">
+                            <field name="risk_level" widget="badge" decoration-danger="risk_level == 'critical'" decoration-warning="risk_level == 'high'" decoration-info="risk_level == 'medium'" decoration-success="risk_level == 'low'"/>
+                            <field name="rpn_reduction_pct" widget="percentage"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group string="Failure Mechanism &amp; Impact">
+                            <field name="potential_cause" placeholder="Why could this failure happen? Mechanism of failure..."/>
+                            <field name="potential_effect" placeholder="What happens if it fails? Impact on customer, scrap rate, safety..."/>
+                        </group>
+                        <group string="Mitigation &amp; Error Proofing">
+                            <field name="mitigation_action" placeholder="Preventive control plan, automated sensors, double-check fixtures, maintenance SOP..."/>
+                        </group>
+                    </group>
+
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <div class="card p-3 bg-light">
+                                <h5 class="text-danger font-weight-bold">Initial Risk Assessment (Pre-Mitigation)</h5>
+                                <div class="row text-center mt-2">
+                                    <div class="col-4">
+                                        <label for="severity" class="small text-muted">Severity (1-10)</label>
+                                        <field name="severity" class="form-control text-center"/>
+                                    </div>
+                                    <div class="col-4">
+                                        <label for="occurrence" class="small text-muted">Occurrence (1-10)</label>
+                                        <field name="occurrence" class="form-control text-center"/>
+                                    </div>
+                                    <div class="col-4">
+                                        <label for="detection" class="small text-muted">Detection (1-10)</label>
+                                        <field name="detection" class="form-control text-center"/>
+                                    </div>
+                                </div>
+                                <div class="text-center mt-3">
+                                    <span class="text-muted">Initial Risk Priority Number:</span>
+                                    <h3 class="text-danger font-weight-bold"><field name="initial_rpn"/></h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card p-3 bg-light">
+                                <h5 class="text-success font-weight-bold">Residual Risk Assessment (Post-Mitigation)</h5>
+                                <div class="row text-center mt-2">
+                                    <div class="col-4">
+                                        <label for="revised_severity" class="small text-muted">Severity (1-10)</label>
+                                        <field name="revised_severity" class="form-control text-center"/>
+                                    </div>
+                                    <div class="col-4">
+                                        <label for="revised_occurrence" class="small text-muted">Occurrence (1-10)</label>
+                                        <field name="revised_occurrence" class="form-control text-center"/>
+                                    </div>
+                                    <div class="col-4">
+                                        <label for="revised_detection" class="small text-muted">Detection (1-10)</label>
+                                        <field name="revised_detection" class="form-control text-center"/>
+                                    </div>
+                                </div>
+                                <div class="text-center mt-3">
+                                    <span class="text-muted">Residual Risk Priority Number:</span>
+                                    <h3 class="text-success font-weight-bold"><field name="residual_rpn"/></h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Risk Register Search View -->
+    <record id="view_qms_risk_search" model="ir.ui.view">
+        <field name="name">qms.risk.search</field>
+        <field name="model">qms.risk</field>
+        <field name="arch" type="xml">
+            <search string="Search Risk Register">
+                <field name="name" string="Risk Ref / Title" filter_domain="['|', ('name', 'ilike', self), ('title', 'ilike', self)]"/>
+                <field name="department_id"/>
+                <field name="responsible_id"/>
+                <separator/>
+                <filter string="Critical Risks (RPN &gt; 250)" name="filter_critical" domain="[('risk_level', '=', 'critical')]"/>
+                <filter string="High Risks (RPN 121 - 250)" name="filter_high" domain="[('risk_level', '=', 'high')]"/>
+                <filter string="Active Risks" name="filter_active" domain="[('state', 'in', ('draft', 'assessed', 'mitigated', 'accepted'))]"/>
+                <group>
+                    <filter string="Risk Level" name="group_by_risk_level" context="{'group_by': 'risk_level'}"/>
+                    <filter string="Department" name="group_by_dept" context="{'group_by': 'department_id'}"/>
+                    <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
+                    <filter string="Risk Owner" name="group_by_owner" context="{'group_by': 'responsible_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Risk Register Action -->
+    <record id="action_qms_risk" model="ir.actions.act_window">
+        <field name="name">Quality Risk Register (FMEA)</field>
+        <field name="res_model">qms.risk</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_qms_risk_search"/>
+        <field name="context">{'search_default_filter_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Establish your ISO 9001:2015 Clause 6.1 Quality Risk Register
+            </p>
+            <p>
+                Proactively quantify process risks and failure modes through Severity, Occurrence, and Detection scores. Model error-proofing mitigations and track RPN reductions.
+            </p>
+        </field>
+    </record>
+</odoo>
