@@ -21,6 +21,7 @@ Key Features:
     """,
     'author': 'Bhargavi Pasham',
     'website': 'https://github.com/pashambhargavi/odooapps',
+    'support': 'bhargavipasham2000@gmail.com',
     # 'price': 179.00,
     # 'currency': 'EUR',
     'license': 'LGPL-3',
