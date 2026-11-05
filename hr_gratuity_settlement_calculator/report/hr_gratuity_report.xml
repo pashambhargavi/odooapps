@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_hr_gratuity_settlement" model="ir.actions.report">
+        <field name="name">Final Settlement Statement</field>
+        <field name="model">hr.gratuity.settlement</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hr_gratuity_settlement_calculator.report_hr_gratuity_settlement_document</field>
+        <field name="report_file">hr_gratuity_settlement_calculator.report_hr_gratuity_settlement_document</field>
+        <field name="print_report_name">'EOS_Settlement_%s' % (object.name or 'Statement')</field>
+        <field name="binding_model_id" ref="model_hr_gratuity_settlement"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_hr_gratuity_settlement_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page" style="font-family: Arial, sans-serif; color: #1e293b; font-size: 13px;">
+                        <!-- Report Header Banner -->
+                        <div style="border-bottom: 3px solid #0284c7; padding-bottom: 12px; margin-bottom: 20px;">
+                            <div class="row align-items-center">
+                                <div class="col-8">
+                                    <h2 style="font-weight: 800; color: #0f172a; margin: 0; text-transform: uppercase; letter-spacing: 0.5px;">
+                                        End of Service Settlement Statement
+                                    </h2>
+                                    <div style="font-size: 13px; color: #64748b; margin-top: 4px;">
+                                        Statutory Severance Gratuity, Leave Encashment &amp; Final Clearance Discharge
+                                    </div>
+                                </div>
+                                <div class="col-4 text-end">
+                                    <div style="background-color: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 8px 12px; display: inline-block;">
+                                        <div style="font-size: 11px; text-transform: uppercase; color: #64748b; font-weight: bold;">Settlement Ref</div>
+                                        <div style="font-size: 15px; font-weight: bold; color: #0f172a;"><t t-out="o.name"/></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Employee Profile & Employment Parameters -->
+                        <div class="row mb-4" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 10px;">
+                            <div class="col-6">
+                                <strong style="color: #475569; font-size: 11px; text-transform: uppercase;">Employee Details:</strong>
+                                <h4 style="font-weight: 700; color: #0f172a; margin: 2px 0 6px 0;"><t t-out="o.employee_id.name"/></h4>
+                                <div><strong>Department: </strong><t t-out="o.department_id.name"/></div>
+                                <div><strong>Designation: </strong><t t-out="o.job_id.name"/></div>
+                                <div t-if="o.employee_id.work_email"><i class="fa fa-envelope"/> <t t-out="o.employee_id.work_email"/></div>
+                            </div>
+                            <div class="col-6">
+                                <table class="table table-sm table-borderless mb-0">
+                                    <tr>
+                                        <td class="text-muted" style="width: 45%;"><strong>Joining Date:</strong></td>
+                                        <td><t t-out="o.joining_date"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-muted"><strong>Last Working Day:</strong></td>
+                                        <td><strong><t t-out="o.leaving_date"/></strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-muted"><strong>Total Service Tenure:</strong></td>
+                                        <td><strong style="color: #0284c7;"><t t-out="o.service_display"/></strong> (<t t-out="o.service_years"/> Yrs)</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-muted"><strong>Separation Reason:</strong></td>
+                                        <td><t t-out="o.departure_reason"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-muted"><strong>Statutory Rule:</strong></td>
+                                        <td><t t-out="o.gratuity_rule_id.name"/></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Stat Boxes -->
+                        <div class="row mb-4">
+                            <div class="col-3">
+                                <div style="background-color: #f0f9ff; border-left: 4px solid #0284c7; padding: 10px; border-radius: 4px;">
+                                    <div style="font-size: 11px; color: #0369a1; font-weight: bold; text-transform: uppercase;">Monthly Basic Wage</div>
+                                    <div style="font-size: 18px; font-weight: bold; color: #0c4a6e;"><t t-out="o.basic_salary" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></div>
+                                    <small style="color: #0284c7;">Calculation basis</small>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div style="background-color: #f8fafc; border-left: 4px solid #475569; padding: 10px; border-radius: 4px;">
+                                    <div style="font-size: 11px; color: #334155; font-weight: bold; text-transform: uppercase;">Daily Wage Divisor</div>
+                                    <div style="font-size: 18px; font-weight: bold; color: #0f172a;"><t t-out="o.daily_wage" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></div>
+                                    <small style="color: #64748b;">Per day statutory rate</small>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div style="background-color: #f0fdf4; border-left: 4px solid #16a34a; padding: 10px; border-radius: 4px;">
+                                    <div style="font-size: 11px; color: #15803d; font-weight: bold; text-transform: uppercase;">Statutory Gratuity</div>
+                                    <div style="font-size: 18px; font-weight: bold; color: #14532d;"><t t-out="o.gratuity_amount" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></div>
+                                    <small style="color: #16a34a;">Severance entitlement</small>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div style="background-color: #fef2f2; border-left: 4px solid #dc2626; padding: 10px; border-radius: 4px;">
+                                    <div style="font-size: 11px; color: #b91c1c; font-weight: bold; text-transform: uppercase;">Total Deductions</div>
+                                    <div style="font-size: 18px; font-weight: bold; color: #7f1d1d;"><t t-out="o.total_deductions" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></div>
+                                    <small style="color: #dc2626;">Loans &amp; recoveries</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Earnings & Deductions Tables -->
+                        <div class="row mb-4">
+                            <div class="col-6">
+                                <h5 style="font-weight: 700; color: #0284c7; margin-bottom: 8px;">Earnings &amp; Statutory Entitlements</h5>
+                                <table class="table table-bordered table-sm" style="font-size: 12px;">
+                                    <thead style="background-color: #f1f5f9;">
+                                        <tr>
+                                            <th>Description</th>
+                                            <th class="text-end">Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>End of Service Gratuity (<t t-out="o.service_years"/> Yrs)</td>
+                                            <td class="text-end"><strong><t t-out="o.gratuity_amount" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></strong></td>
+                                        </tr>
+                                        <tr t-if="o.leave_salary_encashment &gt; 0">
+                                            <td>Unused Annual Leave Encashment (<t t-out="o.unused_leave_days"/> Days)</td>
+                                            <td class="text-end"><t t-out="o.leave_salary_encashment" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
+                                        </tr>
+                                        <tr t-if="o.pending_salary_amount &gt; 0">
+                                            <td>Unpaid Final Month Salary (<t t-out="o.pending_salary_days"/> Days)</td>
+                                            <td class="text-end"><t t-out="o.pending_salary_amount" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
+                                        </tr>
+                                        <tr t-if="o.air_ticket_amount &gt; 0">
+                                            <td>Repatriation Airfare Allowance</td>
+                                            <td class="text-end"><t t-out="o.air_ticket_amount" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
+                                        </tr>
+                                        <tr t-if="o.notice_pay_amount &gt; 0 and o.notice_pay_type == 'payable'">
+                                            <td>Payable in Lieu of Notice Period</td>
+                                            <td class="text-end"><t t-out="o.notice_pay_amount" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
+                                        </tr>
+                                        <tr t-if="o.other_allowances &gt; 0">
+                                            <td>Other Discretionary Allowances</td>
+                                            <td class="text-end"><t t-out="o.other_allowances" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr style="background-color: #f8fafc; font-weight: bold;">
+                                            <td>Total Gross Entitlements:</td>
+                                            <td class="text-end text-primary"><t t-out="o.total_entitlements" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+
+                            <div class="col-6">
+                                <h5 style="font-weight: 700; color: #dc2626; margin-bottom: 8px;">Recoveries &amp; Deductions</h5>
+                                <table class="table table-bordered table-sm" style="font-size: 12px;">
+                                    <thead style="background-color: #f1f5f9;">
+                                        <tr>
+                                            <th>Description</th>
+                                            <th class="text-end">Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Company Loans &amp; Salary Advances</td>
+                                            <td class="text-end"><t t-out="o.loan_deduction" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Company Asset Loss / Property Damage</td>
+                                            <td class="text-end"><t t-out="o.asset_damage_deduction" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
+                                        </tr>
+                                        <tr t-if="o.notice_pay_amount &gt; 0 and o.notice_pay_type == 'deducted'">
+                                            <td>Short Notice Period Penalty Deduction</td>
+                                            <td class="text-end"><t t-out="o.notice_pay_amount" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
+                                        </tr>
+                                        <tr t-if="o.other_deductions &gt; 0">
+                                            <td>Other Deductions</td>
+                                            <td class="text-end"><t t-out="o.other_deductions" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr style="background-color: #f8fafc; font-weight: bold;">
+                                            <td>Total Deductions:</td>
+                                            <td class="text-end text-danger"><t t-out="o.total_deductions" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+
+                                <!-- Net Settlement Box -->
+                                <div style="background-color: #ecfdf5; border: 2px solid #10b981; border-radius: 6px; padding: 12px; margin-top: 15px; text-align: center;">
+                                    <div style="font-size: 12px; font-weight: bold; color: #065f46; text-transform: uppercase;">Net Payable to Employee</div>
+                                    <h2 style="color: #047857; margin: 4px 0; font-weight: 900;"><t t-out="o.net_payable" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></h2>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Department Clearance Status -->
+                        <div class="mb-4">
+                            <h6 style="font-weight: 700; color: #0f172a; margin-bottom: 6px;">Departmental Exit Clearance Status:</h6>
+                            <table class="table table-bordered table-sm text-center" style="font-size: 11px;">
+                                <tr style="background-color: #f8fafc;">
+                                    <td><strong>IT &amp; Systems:</strong> <t t-if="o.clearance_it"><span style="color: #16a34a; font-weight: bold;">[CLEARED]</span></t><t t-else=""><span style="color: #dc2626;">[PENDING]</span></t></td>
+                                    <td><strong>Finance &amp; Credit:</strong> <t t-if="o.clearance_finance"><span style="color: #16a34a; font-weight: bold;">[CLEARED]</span></t><t t-else=""><span style="color: #dc2626;">[PENDING]</span></t></td>
+                                    <td><strong>Admin &amp; Facilities:</strong> <t t-if="o.clearance_admin"><span style="color: #16a34a; font-weight: bold;">[CLEARED]</span></t><t t-else=""><span style="color: #dc2626;">[PENDING]</span></t></td>
+                                    <td><strong>HR &amp; Visa:</strong> <t t-if="o.clearance_hr"><span style="color: #16a34a; font-weight: bold;">[CLEARED]</span></t><t t-else=""><span style="color: #dc2626;">[PENDING]</span></t></td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <!-- Full Discharge Declaration -->
+                        <div class="mb-4" style="border: 1px solid #cbd5e1; border-radius: 6px; padding: 10px; background-color: #f8fafc; font-size: 11px; line-height: 1.5;">
+                            <strong>FULL AND FINAL DISCHARGE OF LIABILITY DECLARATION:</strong><br/>
+                            I, <strong style="color: #0f172a;"><t t-out="o.employee_id.name"/></strong>, hereby acknowledge receipt of the above net settlement amount as full, complete, and final settlement of all my salaries, allowances, leave entitlements, gratuity, and any statutory claims under the applicable Labor Law. I hereby release and discharge the company from any and all liabilities, claims, or demands arising out of or related to my employment and termination thereof.
+                        </div>
+
+                        <!-- Signatures -->
+                        <div class="row mt-5" style="page-break-inside: avoid;">
+                            <div class="col-4 text-center">
+                                <div style="border-top: 1px solid #94a3b8; padding-top: 8px; margin: 0 15px;">
+                                    <strong><t t-out="o.employee_id.name"/></strong>
+                                    <div style="font-size: 11px; color: #64748b;">Employee Signature &amp; Date</div>
+                                </div>
+                            </div>
+                            <div class="col-4 text-center">
+                                <div style="border-top: 1px solid #94a3b8; padding-top: 8px; margin: 0 15px;">
+                                    <strong>Human Resources Director</strong>
+                                    <div style="font-size: 11px; color: #64748b;">HR Authorization</div>
+                                </div>
+                            </div>
+                            <div class="col-4 text-center">
+                                <div style="border-top: 1px solid #94a3b8; padding-top: 8px; margin: 0 15px;">
+                                    <strong>Chief Financial Officer / Finance Lead</strong>
+                                    <div style="font-size: 11px; color: #64748b;">Financial Disbursement Sign-Off</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

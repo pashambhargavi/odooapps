@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Settlement Kanban View -->
+    <record id="view_hr_gratuity_settlement_kanban" model="ir.ui.view">
+        <field name="name">hr.gratuity.settlement.kanban</field>
+        <field name="model">hr.gratuity.settlement</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile" sample="1">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="departure_reason"/>
+                <field name="service_display"/>
+                <field name="gratuity_amount"/>
+                <field name="net_payable"/>
+                <field name="currency_id"/>
+                <field name="state"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <strong class="fs-5 text-truncate"><field name="employee_id"/></strong>
+                            <span t-attf-class="badge #{record.state.raw_value in ['paid', 'posted'] ? 'text-bg-success' : (record.state.raw_value == 'approved' ? 'text-bg-primary' : 'text-bg-info')}">
+                                <field name="state"/>
+                            </span>
+                        </div>
+                        <div class="text-muted small mb-2">
+                            <i class="fa fa-briefcase me-1" title="Reason"/> <field name="departure_reason"/> | <field name="name"/>
+                        </div>
+                        <div class="row g-2 p-2 bg-light rounded my-2">
+                            <div class="col-6">
+                                <span class="text-muted small">Service: </span>
+                                <strong><field name="service_display"/></strong>
+                            </div>
+                            <div class="col-6 text-end">
+                                <span class="text-muted small">Gratuity: </span>
+                                <strong><field name="gratuity_amount" widget="monetary"/></strong>
+                            </div>
+                            <div class="col-12 mt-1 border-top pt-1">
+                                <span class="text-muted small">Net Payable: </span>
+                                <strong class="text-primary fs-6"><field name="net_payable" widget="monetary"/></strong>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mt-2 pt-2 border-top">
+                            <span class="text-muted small"><field name="department_id"/></span>
+                            <field name="leaving_date"/>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Settlement List View -->
+    <record id="view_hr_gratuity_settlement_list" model="ir.ui.view">
+        <field name="name">hr.gratuity.settlement.list</field>
+        <field name="model">hr.gratuity.settlement</field>
+        <field name="arch" type="xml">
+            <list string="End of Service Settlements">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="department_id"/>
+                <field name="leaving_date"/>
+                <field name="departure_reason" widget="badge"/>
+                <field name="service_display" string="Tenure"/>
+                <field name="basic_salary" widget="monetary"/>
+                <field name="gratuity_amount" widget="monetary" string="Gratuity"/>
+                <field name="total_entitlements" widget="monetary" optional="hide"/>
+                <field name="total_deductions" widget="monetary" optional="hide"/>
+                <field name="net_payable" widget="monetary" string="Net Payable" decoration-success="net_payable &gt; 0"/>
+                <field name="all_cleared" widget="boolean_toggle" string="Cleared"/>
+                <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-primary="state in ['calculated', 'cleared']" decoration-warning="state == 'approved'" decoration-success="state in ['posted', 'paid']" decoration-danger="state == 'cancelled'"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Settlement Form View -->
+    <record id="view_hr_gratuity_settlement_form" model="ir.ui.view">
+        <field name="name">hr.gratuity.settlement.form</field>
+        <field name="model">hr.gratuity.settlement</field>
+        <field name="arch" type="xml">
+            <form string="End of Service Settlement">
+                <header>
+                    <button name="action_calculate_gratuity" string="Compute Entitlements" type="object" class="oe_highlight" invisible="state not in ['draft', 'calculated']"/>
+                    <button name="action_sign_clearance" string="Sign-off Department Clearance" type="object" class="btn-info" invisible="state != 'calculated'"/>
+                    <button name="action_approve" string="Approve Final Settlement" type="object" class="btn-primary" invisible="state != 'cleared'"/>
+                    <button name="action_post_accounting_entry" string="Post to General Ledger" type="object" class="btn-success" invisible="state != 'approved'"/>
+                    <button name="action_mark_paid" string="Mark as Paid" type="object" class="btn-success" invisible="state != 'posted'"/>
+                    <button name="action_print_settlement_report" string="Print Final Settlement PDF" type="object" class="btn-outline-primary" icon="fa-print"/>
+                    <button name="action_reset_draft" string="Reset to Draft" type="object" invisible="state in ['draft', 'paid']"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,calculated,cleared,approved,posted,paid"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="Settlement Dossier"/>
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group string="Employee &amp; Separation Profile">
+                            <field name="employee_id" readonly="state != 'draft'"/>
+                            <field name="department_id"/>
+                            <field name="job_id"/>
+                            <field name="departure_reason" readonly="state != 'draft'"/>
+                            <field name="gratuity_rule_id" readonly="state != 'draft'"/>
+                        </group>
+                        <group string="Employment Horizon &amp; Wage Basis">
+                            <field name="joining_date" readonly="state != 'draft'"/>
+                            <field name="leaving_date" readonly="state != 'draft'"/>
+                            <field name="service_display" readonly="1"/>
+                            <field name="basic_salary" widget="monetary" readonly="state != 'draft'"/>
+                            <field name="allowances_amount" widget="monetary" readonly="state != 'draft'"/>
+                            <field name="daily_wage" widget="monetary" readonly="1"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+
+                    <div class="row mt16 mb24">
+                        <div class="col-md-3">
+                            <div class="p-3 bg-light rounded text-center border-start border-primary border-4">
+                                <small class="text-muted text-uppercase fw-bold">Tenure Worked</small>
+                                <h3 class="mb-0 text-primary mt-1"><field name="service_years"/> Yrs</h3>
+                                <small class="text-muted"><field name="total_days_worked"/> calendar days</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="p-3 bg-light rounded text-center border-start border-info border-4">
+                                <small class="text-muted text-uppercase fw-bold">Statutory Gratuity</small>
+                                <h3 class="mb-0 text-info mt-1"><field name="gratuity_amount" widget="monetary"/></h3>
+                                <small class="text-muted">Statutory severance pay</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="p-3 bg-light rounded text-center border-start border-warning border-4">
+                                <small class="text-muted text-uppercase fw-bold">Total Deductions</small>
+                                <h3 class="mb-0 text-warning mt-1"><field name="total_deductions" widget="monetary"/></h3>
+                                <small class="text-muted">Loans, advances &amp; shortfalls</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="p-3 bg-light rounded text-center border-start border-success border-4">
+                                <small class="text-muted text-uppercase fw-bold">Net Final Settlement</small>
+                                <h3 class="mb-0 text-success mt-1"><field name="net_payable" widget="monetary"/></h3>
+                                <small class="text-muted">Total net severance payable</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <notebook>
+                        <page string="Financial Entitlements &amp; Deductions" name="breakdown">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5 class="text-primary font-weight-bold mb-3">Earnings &amp; Statutory Entitlements</h5>
+                                    <group>
+                                        <field name="gratuity_amount" widget="monetary" readonly="1"/>
+                                        <label for="unused_leave_days" string="Unused Annual Leave"/>
+                                        <div class="o_row">
+                                            <field name="unused_leave_days" class="oe_inline" readonly="state != 'draft'"/> Days
+                                            <span class="ms-3 fw-bold">= <field name="leave_salary_encashment" widget="monetary" class="oe_inline" readonly="1"/></span>
+                                        </div>
+                                        <label for="pending_salary_days" string="Pending Days in Month"/>
+                                        <div class="o_row">
+                                            <field name="pending_salary_days" class="oe_inline" readonly="state != 'draft'"/> Days
+                                            <span class="ms-3 fw-bold">= <field name="pending_salary_amount" widget="monetary" class="oe_inline" readonly="1"/></span>
+                                        </div>
+                                        <field name="air_ticket_amount" widget="monetary" readonly="state != 'draft'"/>
+                                        <field name="notice_pay_type" readonly="state != 'draft'"/>
+                                        <field name="notice_pay_amount" widget="monetary" invisible="notice_pay_type != 'payable'" readonly="state != 'draft'"/>
+                                        <field name="other_allowances" widget="monetary" readonly="state != 'draft'"/>
+                                        <field name="total_entitlements" widget="monetary" readonly="1" class="fw-bold fs-6 text-primary"/>
+                                    </group>
+                                </div>
+                                <div class="col-md-6 border-start">
+                                    <h5 class="text-danger font-weight-bold mb-3">Recoveries &amp; Deductions</h5>
+                                    <group>
+                                        <field name="loan_deduction" widget="monetary" readonly="state != 'draft'"/>
+                                        <field name="asset_damage_deduction" widget="monetary" readonly="state != 'draft'"/>
+                                        <field name="notice_pay_amount" string="Short Notice Deduction" widget="monetary" invisible="notice_pay_type != 'deducted'" readonly="state != 'draft'"/>
+                                        <field name="other_deductions" widget="monetary" readonly="state != 'draft'"/>
+                                        <field name="total_deductions" widget="monetary" readonly="1" class="fw-bold fs-6 text-danger"/>
+                                    </group>
+                                    <div class="p-3 bg-light rounded mt-4 border border-success">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="fw-bold fs-5">Net Payable to Employee:</span>
+                                            <span class="fw-bold fs-4 text-success"><field name="net_payable" widget="monetary"/></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </page>
+
+                        <page string="Exit Clearance Checklist" name="clearance">
+                            <p class="text-muted">All department clearances must be verified and checked prior to managerial approval.</p>
+                            <group>
+                                <group string="IT &amp; Systems Clearance">
+                                    <field name="clearance_it"/>
+                                    <field name="clearance_it_user_id"/>
+                                </group>
+                                <group string="Finance &amp; Accounts Clearance">
+                                    <field name="clearance_finance"/>
+                                    <field name="clearance_finance_user_id"/>
+                                </group>
+                                <group string="Admin &amp; Facilities Clearance">
+                                    <field name="clearance_admin"/>
+                                    <field name="clearance_admin_user_id"/>
+                                </group>
+                                <group string="HR &amp; Visa Clearance">
+                                    <field name="clearance_hr"/>
+                                    <field name="clearance_hr_user_id"/>
+                                    <field name="all_cleared" widget="boolean_toggle" readonly="1"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Accounting &amp; General Ledger" name="accounting">
+                            <group>
+                                <group string="Settlement Journal &amp; Accounts">
+                                    <field name="journal_id" readonly="state in ['posted', 'paid']"/>
+                                    <field name="account_expense_id" readonly="state in ['posted', 'paid']"/>
+                                    <field name="account_liability_id" readonly="state in ['posted', 'paid']"/>
+                                </group>
+                                <group string="Generated General Ledger Entry">
+                                    <field name="move_id" readonly="1"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Legal Notes &amp; Observations" name="notes">
+                            <field name="notes" placeholder="Enter exit interview summary, legal references, settlement terms, or special approval notes..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Settlement Search View -->
+    <record id="view_hr_gratuity_settlement_search" model="ir.ui.view">
+        <field name="name">hr.gratuity.settlement.search</field>
+        <field name="model">hr.gratuity.settlement</field>
+        <field name="arch" type="xml">
+            <search string="Search Settlements">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="department_id"/>
+                <filter string="Calculated / Cleared" name="cleared" domain="[('state', 'in', ['calculated', 'cleared'])]"/>
+                <filter string="Approved" name="approved" domain="[('state', '=', 'approved')]"/>
+                <filter string="Paid" name="paid" domain="[('state', '=', 'paid')]"/>
+                <separator/>
+                <filter string="Termination" name="term" domain="[('departure_reason', '=', 'termination')]"/>
+                <filter string="Resignation" name="resig" domain="[('departure_reason', '=', 'resignation')]"/>
+                <group>
+                    <filter string="Employee" name="group_employee" context="{'group_by': 'employee_id'}"/>
+                    <filter string="Department" name="group_department" context="{'group_by': 'department_id'}"/>
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Reason" name="group_reason" context="{'group_by': 'departure_reason'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Settlement Action -->
+    <record id="action_hr_gratuity_settlement" model="ir.actions.act_window">
+        <field name="name">End of Service Settlements</field>
+        <field name="res_model">hr.gratuity.settlement</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="search_view_id" ref="view_hr_gratuity_settlement_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first End of Service Final Settlement!
+            </p>
+            <p>
+                Calculate statutory severance gratuity under UAE Decree 33, Saudi Articles 84/85, or custom GCC labor law rules with leave salary encashment and accounting postings.
+            </p>
+        </field>
+    </record>
+</odoo>
