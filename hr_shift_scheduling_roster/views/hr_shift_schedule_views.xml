@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Shift Schedule List View -->
+    <record id="view_hr_shift_schedule_list" model="ir.ui.view">
+        <field name="name">hr.shift.schedule.list</field>
+        <field name="model">hr.shift.schedule</field>
+        <field name="arch" type="xml">
+            <list string="Scheduled Shifts" decoration-danger="has_conflict" decoration-warning="is_open_shift" decoration-success="state == 'confirmed'" decoration-muted="state in ('completed', 'cancelled')">
+                <field name="date"/>
+                <field name="shift_template_id"/>
+                <field name="employee_id"/>
+                <field name="department_id"/>
+                <field name="planned_hours" string="Hours"/>
+                <field name="differential_rate" string="Differential %"/>
+                <field name="is_open_shift" widget="boolean_toggle"/>
+                <field name="has_conflict" widget="boolean"/>
+                <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-warning="state == 'scheduled'" decoration-success="state == 'confirmed'" decoration-primary="state == 'swapped'" decoration-danger="state == 'absent'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Shift Schedule Calendar View -->
+    <record id="view_hr_shift_schedule_calendar" model="ir.ui.view">
+        <field name="name">hr.shift.schedule.calendar</field>
+        <field name="model">hr.shift.schedule</field>
+        <field name="arch" type="xml">
+            <calendar string="Shift Schedule" date_start="start_datetime" date_stop="end_datetime" color="color" mode="week" quick_create="false">
+                <field name="employee_id" avatar_field="image_128"/>
+                <field name="shift_template_id"/>
+                <field name="department_id"/>
+                <field name="state"/>
+            </calendar>
+        </field>
+    </record>
+
+    <!-- Shift Schedule Kanban View -->
+    <record id="view_hr_shift_schedule_kanban" model="ir.ui.view">
+        <field name="name">hr.shift.schedule.kanban</field>
+        <field name="model">hr.shift.schedule</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="date" class="o_kanban_small_column">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="shift_template_id"/>
+                <field name="date"/>
+                <field name="planned_hours"/>
+                <field name="is_open_shift"/>
+                <field name="has_conflict"/>
+                <field name="state"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_global_click">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <strong class="text-primary"><field name="shift_template_id"/></strong>
+                                <field name="state" widget="badge" decoration-warning="state == 'scheduled'" decoration-success="state == 'confirmed'" decoration-info="state == 'draft'"/>
+                            </div>
+                            <div class="font-weight-bold text-dark mb-1">
+                                <t t-if="record.employee_id.raw_value">
+                                    <field name="employee_id"/>
+                                </t>
+                                <t t-else="">
+                                    <span class="badge bg-warning text-dark">OPEN SHIFT (Unassigned)</span>
+                                </t>
+                            </div>
+                            <div t-if="record.has_conflict.raw_value" class="text-danger small font-weight-bold mb-1">
+                                <i class="fa fa-exclamation-triangle me-1" title="Conflict Warning"/> <field name="conflict_reason"/>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center border-top pt-2 mt-2 text-muted small">
+                                <span><field name="planned_hours"/> Hours</span>
+                                <field name="department_id"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Shift Schedule Form View -->
+    <record id="view_hr_shift_schedule_form" model="ir.ui.view">
+        <field name="name">hr.shift.schedule.form</field>
+        <field name="model">hr.shift.schedule</field>
+        <field name="arch" type="xml">
+            <form string="Shift Assignment">
+                <header>
+                    <button name="action_confirm_attendance" string="Confirm Shift" type="object" class="btn-success" invisible="state not in ('draft', 'scheduled')"/>
+                    <button name="action_claim_open_shift" string="Claim Open Shift" type="object" class="btn-primary" invisible="not is_open_shift"/>
+                    <button name="action_request_swap" string="Request Swap / Trade" type="object" class="btn-secondary" invisible="is_open_shift or state not in ('scheduled', 'confirmed')"/>
+                    <button name="action_mark_absent" string="Mark No-Show / Absent" type="object" class="btn-danger" invisible="state not in ('scheduled', 'confirmed')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,scheduled,confirmed,completed"/>
+                </header>
+                <sheet>
+                    <div invisible="not has_conflict" class="alert alert-danger" role="alert">
+                        <strong><i class="fa fa-exclamation-triangle me-2" title="Conflict Alert"/>Schedule Conflict Detected: </strong>
+                        <field name="conflict_reason"/>
+                    </div>
+                    <div class="oe_title">
+                        <span class="o_form_label">Shift Duty Assignment</span>
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Shift Assignment">
+                            <field name="shift_template_id"/>
+                            <field name="date"/>
+                            <field name="employee_id" placeholder="Select colleague or leave blank for open pool"/>
+                            <field name="is_open_shift" widget="boolean_toggle"/>
+                            <field name="department_id"/>
+                        </group>
+                        <group string="Duration &amp; Differentials">
+                            <field name="start_datetime" readonly="1"/>
+                            <field name="end_datetime" readonly="1"/>
+                            <field name="planned_hours"/>
+                            <field name="differential_rate" widget="percentage"/>
+                            <field name="roster_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Shift Swap &amp; Trade Requests" name="swaps" invisible="not swap_request_ids">
+                            <field name="swap_request_ids" readonly="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="requesting_employee_id"/>
+                                    <field name="target_employee_id"/>
+                                    <field name="swap_type"/>
+                                    <field name="state" widget="badge"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Shift Schedule Search View -->
+    <record id="view_hr_shift_schedule_search" model="ir.ui.view">
+        <field name="name">hr.shift.schedule.search</field>
+        <field name="model">hr.shift.schedule</field>
+        <field name="arch" type="xml">
+            <search string="Search Scheduled Shifts">
+                <field name="employee_id"/>
+                <field name="shift_template_id"/>
+                <field name="department_id"/>
+                <field name="date"/>
+                <separator/>
+                <filter string="Open Shifts (Unassigned)" name="filter_open_shifts" domain="[('is_open_shift', '=', True)]"/>
+                <filter string="Schedule Conflicts" name="filter_conflicts" domain="[('has_conflict', '=', True)]"/>
+                <separator/>
+                <filter string="Scheduled / Confirmed" name="filter_active" domain="[('state', 'in', ('scheduled', 'confirmed'))]"/>
+                <filter string="Completed" name="filter_completed" domain="[('state', '=', 'completed')]"/>
+                <group>
+                    <filter string="Employee" name="group_by_employee" context="{'group_by': 'employee_id'}"/>
+                    <filter string="Department" name="group_by_dept" context="{'group_by': 'department_id'}"/>
+                    <filter string="Shift Template" name="group_by_template" context="{'group_by': 'shift_template_id'}"/>
+                    <filter string="Shift Date" name="group_by_date" context="{'group_by': 'date'}"/>
+                    <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Shift Schedule All Action -->
+    <record id="action_hr_shift_schedule" model="ir.actions.act_window">
+        <field name="name">Duty Schedule Calendar</field>
+        <field name="res_model">hr.shift.schedule</field>
+        <field name="view_mode">calendar,list,kanban,form</field>
+        <field name="search_view_id" ref="view_hr_shift_schedule_search"/>
+        <field name="context">{'search_default_filter_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Plan and inspect employee duty schedules in calendar and list views
+            </p>
+        </field>
+    </record>
+
+    <!-- Open Shift Bidding Action -->
+    <record id="action_hr_shift_schedule_open" model="ir.actions.act_window">
+        <field name="name">Open Shift Bidding Pool</field>
+        <field name="res_model">hr.shift.schedule</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="search_view_id" ref="view_hr_shift_schedule_search"/>
+        <field name="domain">[('is_open_shift', '=', True)]</field>
+        <field name="context">{'search_default_filter_open_shifts': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No unassigned shifts currently in the open pool
+            </p>
+            <p>
+                Staff can review open shift slots released by peers or created by planners and claim them directly.
+            </p>
+        </field>
+    </record>
+</odoo>

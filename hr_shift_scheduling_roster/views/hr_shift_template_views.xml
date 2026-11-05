@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Shift Template List View -->
+    <record id="view_hr_shift_template_list" model="ir.ui.view">
+        <field name="name">hr.shift.template.list</field>
+        <field name="model">hr.shift.template</field>
+        <field name="arch" type="xml">
+            <list string="Shift Templates">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="shift_type" widget="badge"/>
+                <field name="start_time" widget="float_time"/>
+                <field name="end_time" widget="float_time"/>
+                <field name="duration_hours" string="Net Hours"/>
+                <field name="differential_rate" string="Differential %"/>
+                <field name="required_headcount" string="Target Staff"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Shift Template Form View -->
+    <record id="view_hr_shift_template_form" model="ir.ui.view">
+        <field name="name">hr.shift.template.form</field>
+        <field name="model">hr.shift.template</field>
+        <field name="arch" type="xml">
+            <form string="Shift Definition Template">
+                <sheet>
+                    <div class="oe_title">
+                        <span class="o_form_label">Shift Definition</span>
+                        <h1>
+                            <field name="name" placeholder="e.g. Day / Morning Shift"/>
+                        </h1>
+                        <h2>
+                            <field name="code" placeholder="e.g. MS-08"/>
+                        </h2>
+                    </div>
+                    <group>
+                        <group string="Shift Timing &amp; Working Hours">
+                            <field name="shift_type"/>
+                            <field name="start_time" widget="float_time"/>
+                            <field name="end_time" widget="float_time"/>
+                            <field name="break_duration" widget="float_time"/>
+                            <field name="duration_hours" readonly="1"/>
+                        </group>
+                        <group string="Differential Pay &amp; Staffing">
+                            <field name="differential_rate" widget="percentage"/>
+                            <field name="required_headcount"/>
+                            <field name="color" widget="color_picker"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <group string="Departmental Scope">
+                        <field name="department_ids" widget="many2many_tags" placeholder="Leave blank to apply to all departments"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Shift Template Action -->
+    <record id="action_hr_shift_template" model="ir.actions.act_window">
+        <field name="name">Shift Templates</field>
+        <field name="res_model">hr.shift.template</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Define standard shift templates (Morning, Afternoon, Night, Split)
+            </p>
+        </field>
+    </record>
+</odoo>

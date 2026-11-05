@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Master Roster List View -->
+    <record id="view_hr_shift_roster_list" model="ir.ui.view">
+        <field name="name">hr.shift.roster.list</field>
+        <field name="model">hr.shift.roster</field>
+        <field name="arch" type="xml">
+            <list string="Duty Rosters" decoration-warning="unassigned_shifts_count &gt; 0" decoration-danger="conflict_count &gt; 0" decoration-success="state == 'published'">
+                <field name="name"/>
+                <field name="title"/>
+                <field name="department_id"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="total_shifts_count" string="Total Shifts"/>
+                <field name="unassigned_shifts_count" string="Unassigned"/>
+                <field name="total_planned_hours" string="Total Hours"/>
+                <field name="conflict_count" string="Conflicts" widget="badge" decoration-danger="conflict_count &gt; 0" decoration-success="conflict_count == 0"/>
+                <field name="manager_id"/>
+                <field name="state" widget="badge" decoration-info="state in ('draft', 'confirmed')" decoration-success="state == 'published'" decoration-muted="state == 'closed'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Master Roster Form View -->
+    <record id="view_hr_shift_roster_form" model="ir.ui.view">
+        <field name="name">hr.shift.roster.form</field>
+        <field name="model">hr.shift.roster</field>
+        <field name="arch" type="xml">
+            <form string="Master Duty Roster">
+                <header>
+                    <button name="action_generate_slots" string="Generate Shift Slots" type="object" class="btn-secondary" invisible="state != 'draft'"/>
+                    <button name="action_auto_schedule" string="Smart Auto-Schedule" type="object" class="btn-primary" invisible="state not in ('draft', 'confirmed')"/>
+                    <button name="action_check_conflicts" string="Verify Conflicts" type="object" class="btn-secondary" invisible="state not in ('draft', 'confirmed')"/>
+                    <button name="action_confirm" string="Submit for Review" type="object" class="btn-secondary" invisible="state != 'draft'"/>
+                    <button name="action_publish" string="Publish Roster" type="object" class="btn-success" invisible="state != 'confirmed'"/>
+                    <button name="action_close" string="Archive / Close Roster" type="object" invisible="state != 'published'"/>
+                    <button name="action_cancel" string="Cancel" type="object" invisible="state in ('closed', 'cancelled')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,published,closed"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <span class="o_form_label">Master Duty Roster Plan</span>
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                        <h2>
+                            <field name="title" placeholder="e.g. Week 42 Roster - Emergency Care &amp; Nursing"/>
+                        </h2>
+                    </div>
+                    <group>
+                        <group string="Planning Scope">
+                            <field name="department_id"/>
+                            <field name="manager_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group string="Schedule Period">
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                        </group>
+                    </group>
+
+                    <!-- KPI Metric Ribbon -->
+                    <div class="alert alert-info d-flex justify-content-around py-2 my-3 text-center" role="alert">
+                        <div>
+                            <span class="text-muted d-block small">Total Shifts</span>
+                            <strong class="fs-5"><field name="total_shifts_count"/></strong>
+                        </div>
+                        <div>
+                            <span class="text-muted d-block small">Unassigned / Open Slots</span>
+                            <strong class="fs-5 text-warning"><field name="unassigned_shifts_count"/></strong>
+                        </div>
+                        <div>
+                            <span class="text-muted d-block small">Total Scheduled Hours</span>
+                            <strong class="fs-5 text-primary"><field name="total_planned_hours"/> hrs</strong>
+                        </div>
+                        <div>
+                            <span class="text-muted d-block small">Conflict Warnings</span>
+                            <strong class="fs-5 text-danger"><field name="conflict_count"/></strong>
+                        </div>
+                    </div>
+
+                    <notebook>
+                        <page string="Shift Schedule Roster Grid" name="roster_grid">
+                            <field name="shift_line_ids">
+                                <list editable="bottom" decoration-danger="has_conflict" decoration-warning="is_open_shift" decoration-success="state == 'confirmed'">
+                                    <field name="date"/>
+                                    <field name="shift_template_id"/>
+                                    <field name="employee_id"/>
+                                    <field name="planned_hours"/>
+                                    <field name="differential_rate" string="Diff %"/>
+                                    <field name="is_open_shift"/>
+                                    <field name="has_conflict" widget="boolean"/>
+                                    <field name="conflict_reason" invisible="not has_conflict"/>
+                                    <field name="state" widget="badge"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Planning Notes" name="notes">
+                            <field name="note" placeholder="Special requirements, holiday staffing guidelines, or standby duty rules..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Master Roster Search View -->
+    <record id="view_hr_shift_roster_search" model="ir.ui.view">
+        <field name="name">hr.shift.roster.search</field>
+        <field name="model">hr.shift.roster</field>
+        <field name="arch" type="xml">
+            <search string="Search Rosters">
+                <field name="name" string="Roster Ref / Title" filter_domain="['|', ('name', 'ilike', self), ('title', 'ilike', self)]"/>
+                <field name="department_id"/>
+                <field name="manager_id"/>
+                <separator/>
+                <filter string="Active Rosters" name="filter_active" domain="[('state', 'in', ('draft', 'confirmed', 'published'))]"/>
+                <filter string="Published &amp; Live" name="filter_published" domain="[('state', '=', 'published')]"/>
+                <filter string="Has Conflicts" name="filter_conflicts" domain="[('conflict_count', '&gt;', 0)]"/>
+                <group>
+                    <filter string="Department" name="group_by_dept" context="{'group_by': 'department_id'}"/>
+                    <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
+                    <filter string="Planner" name="group_by_manager" context="{'group_by': 'manager_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Master Roster Action -->
+    <record id="action_hr_shift_roster" model="ir.actions.act_window">
+        <field name="name">Duty Rosters</field>
+        <field name="res_model">hr.shift.roster</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_hr_shift_roster_search"/>
+        <field name="context">{'search_default_filter_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create and manage master weekly or monthly duty rosters
+            </p>
+        </field>
+    </record>
+</odoo>

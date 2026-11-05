@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Report Action -->
+    <record id="action_report_hr_shift_roster" model="ir.actions.report">
+        <field name="name">Duty Roster Schedule Matrix</field>
+        <field name="model">hr.shift.roster</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hr_shift_scheduling_roster.report_hr_shift_roster_template</field>
+        <field name="report_file">hr_shift_scheduling_roster.report_hr_shift_roster_template</field>
+        <field name="print_report_name">'Duty_Roster_' + (object.name or '').replace('/', '_')</field>
+        <field name="binding_model_id" ref="model_hr_shift_roster"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- QWeb Template -->
+    <template id="report_hr_shift_roster_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page" style="font-family: 'Segoe UI', Roboto, sans-serif; font-size: 13px; color: #1e293b;">
+
+                        <!-- Report Header Box -->
+                        <div style="border-bottom: 3px solid #0f172a; padding-bottom: 12px; margin-bottom: 20px;">
+                            <div class="row align-items-center">
+                                <div class="col-8">
+                                    <h2 style="color: #0f172a; font-weight: 800; margin: 0; font-size: 24px;">
+                                        DUTY ROSTER SCHEDULE MATRIX
+                                    </h2>
+                                    <div style="color: #64748b; font-size: 13px; margin-top: 4px;">
+                                        Department: <strong><span t-field="doc.department_id.name"/></strong> • Period: <span t-field="doc.date_start"/> to <span t-field="doc.date_end"/>
+                                    </div>
+                                </div>
+                                <div class="col-4 text-end">
+                                    <div style="font-size: 18px; font-weight: 700; color: #0284c7;">
+                                        <span t-field="doc.name"/>
+                                    </div>
+                                    <div style="font-size: 12px; color: #64748b;">
+                                        Status: <strong><span t-field="doc.state"/></strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- KPI Summary Ribbon -->
+                        <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; margin-bottom: 20px;">
+                            <div class="row text-center">
+                                <div class="col-3">
+                                    <div style="color: #64748b; font-size: 11px;">TOTAL SHIFTS</div>
+                                    <div style="font-size: 16px; font-weight: 700; color: #0f172a;"><span t-field="doc.total_shifts_count"/></div>
+                                </div>
+                                <div class="col-3">
+                                    <div style="color: #64748b; font-size: 11px;">OPEN / UNASSIGNED</div>
+                                    <div style="font-size: 16px; font-weight: 700; color: #f59e0b;"><span t-field="doc.unassigned_shifts_count"/></div>
+                                </div>
+                                <div class="col-3">
+                                    <div style="color: #64748b; font-size: 11px;">TOTAL PLANNED HOURS</div>
+                                    <div style="font-size: 16px; font-weight: 700; color: #0284c7;"><span t-field="doc.total_planned_hours"/> hrs</div>
+                                </div>
+                                <div class="col-3">
+                                    <div style="color: #64748b; font-size: 11px;">ROSTER PLANNER</div>
+                                    <div style="font-size: 14px; font-weight: 700; color: #0f172a;"><span t-field="doc.manager_id.name"/></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Schedule Table -->
+                        <table style="width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 25px;">
+                            <thead>
+                                <tr style="background-color: #0f172a; color: #ffffff;">
+                                    <th style="padding: 8px 10px; text-align: left;">Date</th>
+                                    <th style="padding: 8px 10px; text-align: left;">Shift Definition</th>
+                                    <th style="padding: 8px 10px; text-align: left;">Timing</th>
+                                    <th style="padding: 8px 10px; text-align: left;">Assigned Colleague</th>
+                                    <th style="padding: 8px 10px; text-align: right;">Net Hours</th>
+                                    <th style="padding: 8px 10px; text-align: right;">Differential %</th>
+                                    <th style="padding: 8px 10px; text-align: center;">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="doc.shift_line_ids" t-as="shift" style="border-bottom: 1px solid #e2e8f0;">
+                                    <td style="padding: 8px 10px;"><span t-field="shift.date"/></td>
+                                    <td style="padding: 8px 10px; font-weight: 600;"><span t-field="shift.shift_template_id.name"/></td>
+                                    <td style="padding: 8px 10px; color: #64748b;">
+                                        <span t-field="shift.shift_template_id.start_time" t-options="{'widget': 'float_time'}"/> - 
+                                        <span t-field="shift.shift_template_id.end_time" t-options="{'widget': 'float_time'}"/>
+                                    </td>
+                                    <td style="padding: 8px 10px;">
+                                        <t t-if="shift.employee_id">
+                                            <strong><span t-field="shift.employee_id.name"/></strong>
+                                        </t>
+                                        <t t-else="">
+                                            <span style="color: #dc2626; font-style: italic;">[OPEN SLOT]</span>
+                                        </t>
+                                    </td>
+                                    <td style="padding: 8px 10px; text-align: right;"><span t-field="shift.planned_hours"/> hrs</td>
+                                    <td style="padding: 8px 10px; text-align: right;">
+                                        <t t-if="shift.differential_rate &gt; 0">
+                                            <strong style="color: #16a34a;">+<span t-field="shift.differential_rate"/>%</strong>
+                                        </t>
+                                        <t t-else="">
+                                            <span style="color: #94a3b8;">0%</span>
+                                        </t>
+                                    </td>
+                                    <td style="padding: 8px 10px; text-align: center;">
+                                        <span t-field="shift.state"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- 3 Signatures -->
+                        <div style="margin-top: 35px;">
+                            <table style="width: 100%; border-collapse: collapse; text-align: center; font-size: 11px;">
+                                <tr>
+                                    <td style="width: 32%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 4px;">
+                                        <div style="color: #64748b; margin-bottom: 30px;">Prepared by (Roster Planner)</div>
+                                        <div style="border-top: 1px dashed #94a3b8; padding-top: 4px;">
+                                            <strong t-field="doc.manager_id.name"/><br/>
+                                            <span style="color: #64748b;">Duty Roster Coordinator</span>
+                                        </div>
+                                    </td>
+                                    <td style="width: 2%;"></td>
+                                    <td style="width: 32%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 4px;">
+                                        <div style="color: #64748b; margin-bottom: 30px;">Reviewed by (Department Head)</div>
+                                        <div style="border-top: 1px dashed #94a3b8; padding-top: 4px;">
+                                            <strong>Operations Manager</strong><br/>
+                                            <span style="color: #64748b;"><span t-field="doc.department_id.name"/></span>
+                                        </div>
+                                    </td>
+                                    <td style="width: 2%;"></td>
+                                    <td style="width: 32%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 4px;">
+                                        <div style="color: #64748b; margin-bottom: 30px;">Approved by (HR Operations)</div>
+                                        <div style="border-top: 1px dashed #94a3b8; padding-top: 4px;">
+                                            <strong>Director of Human Resources</strong><br/>
+                                            <span style="color: #64748b;">Authorized Official Schedule</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

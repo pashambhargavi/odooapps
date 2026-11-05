@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Root Menu -->
+    <menuitem id="menu_hr_shift_root"
+              name="Shift Roster"
+              web_icon="hr_shift_scheduling_roster,static/description/icon.png"
+              sequence="60"/>
+
+    <!-- Main Submenus -->
+    <menuitem id="menu_hr_shift_rosters_main"
+              name="Rosters"
+              parent="menu_hr_shift_root"
+              sequence="10"/>
+
+    <menuitem id="menu_hr_shift_roster_action"
+              name="Master Duty Rosters"
+              parent="menu_hr_shift_rosters_main"
+              action="action_hr_shift_roster"
+              sequence="10"/>
+
+    <menuitem id="menu_hr_shift_schedules_main"
+              name="Schedules"
+              parent="menu_hr_shift_root"
+              sequence="20"/>
+
+    <menuitem id="menu_hr_shift_calendar_action"
+              name="Duty Schedule Calendar"
+              parent="menu_hr_shift_schedules_main"
+              action="action_hr_shift_schedule"
+              sequence="10"/>
+
+    <menuitem id="menu_hr_shift_open_bidding_action"
+              name="Open Shift Bidding Pool"
+              parent="menu_hr_shift_schedules_main"
+              action="action_hr_shift_schedule_open"
+              sequence="20"/>
+
+    <menuitem id="menu_hr_shift_trades_main"
+              name="Trades &amp; Swaps"
+              parent="menu_hr_shift_root"
+              sequence="30"/>
+
+    <menuitem id="menu_hr_shift_swap_action"
+              name="Shift Trade Marketplace"
+              parent="menu_hr_shift_trades_main"
+              action="action_hr_shift_swap"
+              sequence="10"/>
+
+    <menuitem id="menu_hr_shift_config_main"
+              name="Configuration"
+              parent="menu_hr_shift_root"
+              sequence="100"/>
+
+    <menuitem id="menu_hr_shift_template_action"
+              name="Shift Templates"
+              parent="menu_hr_shift_config_main"
+              action="action_hr_shift_template"
+              sequence="10"/>
+</odoo>
