@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Course 1: OSHA 10-Hour General Industry Safety -->
+        <record id="course_osha_10" model="training.course">
+            <field name="name">OSHA 10-Hour General Industry Safety Certification</field>
+            <field name="code">SAF-OSHA-10</field>
+            <field name="category">safety</field>
+            <field name="duration_hours">10.0</field>
+            <field name="validity_months">24</field>
+            <field name="passing_score">80.0</field>
+            <field name="delivery_mode">hybrid</field>
+            <field name="training_provider">Occupational Safety and Health Administration (OSHA)</field>
+            <field name="instructor_name">Chief Safety Inspector R. Henderson</field>
+            <field name="description">Comprehensive workplace hazard identification, electrical safety, machine guarding, PPE compliance, and emergency egress protocols.</field>
+        </record>
+
+        <!-- Course 2: Good Manufacturing Practice (GMP) & Cleanroom Hygiene -->
+        <record id="course_gmp_compliance" model="training.course">
+            <field name="name">Good Manufacturing Practice (GMP) &amp; Cleanroom Hygiene</field>
+            <field name="code">GMP-CLN-01</field>
+            <field name="category">compliance</field>
+            <field name="duration_hours">8.0</field>
+            <field name="validity_months">12</field>
+            <field name="passing_score">85.0</field>
+            <field name="delivery_mode">in_person</field>
+            <field name="training_provider">Pharmaceutical &amp; Medical Device Quality Institute</field>
+            <field name="instructor_name">Dr. M. Vance, Lead Quality Assessor</field>
+            <field name="description">Mandatory cleanroom gowning, cross-contamination prevention, batch record documentation integrity, and FDA/EMA regulatory guidelines.</field>
+        </record>
+
+        <!-- Course 3: Powered Industrial Forklift Operator Certification -->
+        <record id="course_forklift_operator" model="training.course">
+            <field name="name">Powered Industrial Forklift Operator License &amp; Safety</field>
+            <field name="code">OPR-FORK-02</field>
+            <field name="category">technical</field>
+            <field name="duration_hours">6.0</field>
+            <field name="validity_months">36</field>
+            <field name="passing_score">80.0</field>
+            <field name="delivery_mode">in_person</field>
+            <field name="training_provider">Industrial Equipment Safety Council</field>
+            <field name="instructor_name">Master Trainer K. Bradley</field>
+            <field name="description">Pre-operational equipment inspection, safe load maneuvering, ramp stability, pedestrian clearance, and battery recharging safety.</field>
+        </record>
+
+        <!-- Course 4: ISO 9001:2015 Quality Internal Auditor -->
+        <record id="course_iso_auditor" model="training.course">
+            <field name="name">ISO 9001:2015 Quality Management Lead Auditor</field>
+            <field name="code">QMS-ISO-03</field>
+            <field name="category">quality</field>
+            <field name="duration_hours">16.0</field>
+            <field name="validity_months">24</field>
+            <field name="passing_score">80.0</field>
+            <field name="delivery_mode">online_live</field>
+            <field name="training_provider">International Quality Registrar Academy</field>
+            <field name="instructor_name">Lead Auditor S. Reynolds</field>
+            <field name="description">Audit planning, sampling techniques, objective evidence collection, non-conformance grading, and CAPA follow-up auditing.</field>
+        </record>
+
+        <!-- Course 5: Enterprise Cybersecurity & Phishing Defense -->
+        <record id="course_cybersecurity_awareness" model="training.course">
+            <field name="name">Annual Cybersecurity Defense &amp; Data Privacy Awareness</field>
+            <field name="code">CYB-SEC-01</field>
+            <field name="category">cybersecurity</field>
+            <field name="duration_hours">3.0</field>
+            <field name="validity_months">12</field>
+            <field name="passing_score">80.0</field>
+            <field name="delivery_mode">self_paced</field>
+            <field name="training_provider">Enterprise Information Security Directorate</field>
+            <field name="instructor_name">Chief Information Security Officer</field>
+            <field name="description">Phishing simulation defense, password credential hygiene, MFA compliance, social engineering detection, and confidential data safeguarding.</field>
+        </record>
+    </data>
+</odoo>

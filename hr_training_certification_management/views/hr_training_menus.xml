@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Top-Level Menu -->
+    <menuitem id="menu_hr_training_root"
+              name="Training &amp; Certification"
+              sequence="75"
+              web_icon="hr_training_certification_management,static/description/icon.png"
+              groups="group_training_user"/>
+
+    <!-- Operational Submenus -->
+    <menuitem id="menu_hr_training_operations"
+              name="Training Management"
+              parent="menu_hr_training_root"
+              sequence="10"/>
+
+    <menuitem id="menu_training_course_act"
+              name="Courses &amp; Certifications"
+              parent="menu_hr_training_operations"
+              action="action_training_course"
+              sequence="10"/>
+
+    <menuitem id="menu_training_session_act"
+              name="Sessions &amp; Batches"
+              parent="menu_hr_training_operations"
+              action="action_training_session"
+              sequence="20"/>
+
+    <menuitem id="menu_training_participation_act"
+              name="Certificates &amp; Records"
+              parent="menu_hr_training_operations"
+              action="action_training_participation"
+              sequence="30"/>
+
+    <!-- Compliance & Audit Submenus -->
+    <menuitem id="menu_hr_training_compliance"
+              name="Compliance &amp; Audits"
+              parent="menu_hr_training_root"
+              sequence="20"
+              groups="group_training_manager"/>
+
+    <menuitem id="menu_training_compliance_matrix_act"
+              name="Compliance Gap Matrix"
+              parent="menu_hr_training_compliance"
+              action="action_training_compliance_matrix"
+              sequence="10"/>
+
+    <!-- Filtered Actions for Quick Access -->
+    <record id="action_training_expiring_soon" model="ir.actions.act_window">
+        <field name="name">Expiring Certifications (&lt;30 Days)</field>
+        <field name="res_model">training.participation</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_training_participation_search"/>
+        <field name="context">{'search_default_filter_expiring': 1}</field>
+    </record>
+
+    <menuitem id="menu_training_expiring_soon_act"
+              name="Expiring Certifications"
+              parent="menu_hr_training_compliance"
+              action="action_training_expiring_soon"
+              sequence="20"/>
+
+    <record id="action_training_expired" model="ir.actions.act_window">
+        <field name="name">Expired Certifications (Non-Compliant)</field>
+        <field name="res_model">training.participation</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_training_participation_search"/>
+        <field name="context">{'search_default_filter_expired': 1}</field>
+    </record>
+
+    <menuitem id="menu_training_expired_act"
+              name="Expired Certifications"
+              parent="menu_hr_training_compliance"
+              action="action_training_expired"
+              sequence="30"/>
+</odoo>
+

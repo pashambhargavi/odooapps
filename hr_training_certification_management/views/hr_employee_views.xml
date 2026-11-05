@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_employee_form_inherit_training" model="ir.ui.view">
+        <field name="name">hr.employee.form.inherit.training</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_employee_certifications" type="object" class="oe_stat_button" icon="fa-certificate">
+                    <field name="valid_certification_count" widget="statinfo" string="Certifications"/>
+                </button>
+            </xpath>
+            <xpath expr="//sheet" position="before">
+                <field name="has_certification_warning" invisible="1"/>
+                <div class="alert alert-warning mb-0 text-center" role="alert" invisible="not has_certification_warning">
+                    ⚠️ <strong>Compliance Alert:</strong> This employee has training certifications that are either <strong>expiring within 30 days</strong> or have <strong>expired</strong>! Please schedule required refresher courses.
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>
+

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Paper Format: Landscape A4 -->
+    <record id="paperformat_certificate_landscape" model="report.paperformat">
+        <field name="name">Certificate Landscape A4</field>
+        <field name="default" eval="False"/>
+        <field name="format">A4</field>
+        <field name="orientation">Landscape</field>
+        <field name="margin_top">12</field>
+        <field name="margin_bottom">12</field>
+        <field name="margin_left">12</field>
+        <field name="margin_right">12</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">0</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <!-- Report Action -->
+    <record id="action_report_training_certificate" model="ir.actions.report">
+        <field name="name">Certificate of Completion PDF</field>
+        <field name="model">training.participation</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hr_training_certification_management.report_training_certificate_template</field>
+        <field name="report_file">hr_training_certification_management.report_training_certificate_template</field>
+        <field name="print_report_name">'Certificate - %s - %s' % (object.certificate_number or 'DRAFT', object.employee_id.name)</field>
+        <field name="binding_model_id" ref="model_training_participation"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_certificate_landscape"/>
+    </record>
+
+    <!-- QWeb Template -->
+    <template id="report_training_certificate_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <div class="page" style="width: 100%; height: 100%; padding: 25px; box-sizing: border-box; font-family: 'Times New Roman', serif;">
+                    
+                    <!-- Decorative Double Outer Border -->
+                    <div style="border: 8px solid #0f172a; padding: 6px; height: 96%; box-sizing: border-box;">
+                        <div style="border: 2px solid #0284c7; padding: 30px 40px; height: 100%; box-sizing: border-box; text-align: center; position: relative;">
+                            
+                            <!-- Header / Organization -->
+                            <div style="margin-bottom: 20px;">
+                                <h3 style="font-family: 'Arial', sans-serif; font-size: 16px; font-weight: 700; color: #0284c7; text-transform: uppercase; letter-spacing: 2px; margin: 0 0 5px 0;">
+                                    <span t-field="doc.company_id.name"/> • EHS &amp; WORKFORCE TRAINING INSTITUTE
+                                </h3>
+                                <p style="font-family: 'Arial', sans-serif; font-size: 11px; color: #64748b; margin: 0;">
+                                    Accredited Technical Safety, Good Manufacturing Practices &amp; Quality Certification Authority
+                                </p>
+                            </div>
+
+                            <!-- Main Title -->
+                            <h1 style="font-size: 38px; font-weight: 700; color: #0f172a; text-transform: uppercase; letter-spacing: 3px; margin: 15px 0 10px 0;">
+                                Certificate of Qualification
+                            </h1>
+                            <p style="font-style: italic; font-size: 16px; color: #475569; margin: 0 0 15px 0;">
+                                This certifies that
+                            </p>
+
+                            <!-- Recipient Name -->
+                            <h2 style="font-size: 34px; font-weight: 800; color: #0284c7; border-bottom: 2px solid #0284c7; display: inline-block; padding: 0 35px 6px 35px; margin: 0 0 15px 0;">
+                                <span t-field="doc.employee_id.name"/>
+                            </h2>
+
+                            <!-- Statement of Achievement -->
+                            <p style="font-family: 'Arial', sans-serif; font-size: 14px; color: #334155; line-height: 1.6; max-width: 780px; margin: 0 auto 20px auto;">
+                                Has successfully completed the rigorous instructional curriculum, practical safety assessment, and evaluation examination for the credential:
+                            </p>
+
+                            <!-- Course Title & Code Box -->
+                            <div style="background-color: #f8fafc; border: 1px solid #cbd5e1; border-left: 6px solid #0284c7; padding: 12px 25px; display: inline-block; margin-bottom: 25px;">
+                                <h3 style="font-size: 20px; font-weight: 700; color: #0f172a; margin: 0 0 4px 0;">
+                                    <span t-field="doc.course_id.name"/>
+                                </h3>
+                                <p style="font-family: 'Arial', sans-serif; font-size: 12px; color: #475569; margin: 0;">
+                                    Course Code: <strong><span t-field="doc.course_id.code"/></strong> | 
+                                    Category: <strong><span t-field="doc.course_id.category"/></strong> | 
+                                    Examination Score: <strong><span t-field="doc.score"/>%</strong> (Min Passing: <span t-field="doc.passing_score"/>%)
+                                </p>
+                            </div>
+
+                            <!-- Verification & Expiry Meta Table -->
+                            <table style="width: 85%; margin: 0 auto 35px auto; font-family: 'Arial', sans-serif; font-size: 12px; border-collapse: collapse; text-align: center;">
+                                <tr>
+                                    <td style="padding: 6px 12px; border: 1px solid #e2e8f0; background-color: #f1f5f9; font-weight: 700; color: #475569;">Certificate ID</td>
+                                    <td style="padding: 6px 12px; border: 1px solid #e2e8f0; background-color: #f1f5f9; font-weight: 700; color: #475569;">Issue Date</td>
+                                    <td style="padding: 6px 12px; border: 1px solid #e2e8f0; background-color: #f1f5f9; font-weight: 700; color: #475569;">Expiration Date</td>
+                                    <td style="padding: 6px 12px; border: 1px solid #e2e8f0; background-color: #f1f5f9; font-weight: 700; color: #475569;">Verification Status</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 8px 12px; border: 1px solid #e2e8f0; font-weight: 700; color: #0284c7;"><span t-field="doc.certificate_number"/></td>
+                                    <td style="padding: 8px 12px; border: 1px solid #e2e8f0;"><span t-field="doc.issue_date"/></td>
+                                    <td style="padding: 8px 12px; border: 1px solid #e2e8f0;">
+                                        <t t-if="doc.expiry_date">
+                                            <span t-field="doc.expiry_date"/>
+                                        </t>
+                                        <t t-else="">
+                                            Permanent / Lifetime
+                                        </t>
+                                    </td>
+                                    <td style="padding: 8px 12px; border: 1px solid #e2e8f0; color: #166534; font-weight: 700;">Verified &amp; Certified</td>
+                                </tr>
+                            </table>
+
+                            <!-- Signatory Authorization Blocks -->
+                            <div style="margin-top: 20px;">
+                                <table style="width: 90%; margin: 0 auto; text-align: center; font-family: 'Arial', sans-serif; font-size: 11px;">
+                                    <tr>
+                                        <td style="width: 30%; border-top: 1px solid #475569; padding-top: 6px;">
+                                            <strong><span t-field="doc.course_id.instructor_name"/></strong><br/>
+                                            <span style="color: #64748b;">Certified Lead Instructor</span>
+                                        </td>
+                                        <td style="width: 5%;"></td>
+                                        <td style="width: 30%; border-top: 1px solid #475569; padding-top: 6px;">
+                                            <strong>EHS &amp; Compliance Director</strong><br/>
+                                            <span style="color: #64748b;">Regulatory Compliance Authority</span>
+                                        </td>
+                                        <td style="width: 5%;"></td>
+                                        <td style="width: 30%; border-top: 1px solid #475569; padding-top: 6px;">
+                                            <strong>Managing Director</strong><br/>
+                                            <span style="color: #64748b;">Executive General Management</span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>
