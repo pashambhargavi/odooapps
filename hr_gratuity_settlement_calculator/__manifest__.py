@@ -1,0 +1,35 @@
+# -*- coding: utf-8 -*-
+{
+    'name': 'End of Service Gratuity & Final Settlement Calculator (UAE, Saudi KSA & GCC Labor Law)',
+    'version': '18.0.1.0.0',
+    'category': 'Human Resources',
+    'summary': 'UAE Labor Law (Decree 33), Saudi Labor Law (Articles 84 & 85) & GCC End-of-Service Gratuity, Leave Encashment, Exit Clearance & Accounting Accrual for Odoo Community',
+    'sequence': 20,
+    'author': 'Bhargavi Pasham',
+    'website': 'https://github.com/pashambhargavi/odooapps',
+    'license': 'LGPL-3',
+    # 'price': 149.00,
+    # 'currency': 'EUR',
+    'depends': [
+        'base',
+        'hr',
+        'account',
+        'mail',
+    ],
+    'data': [
+        'security/hr_gratuity_security.xml',
+        'security/ir.model.access.csv',
+        'data/hr_gratuity_data.xml',
+        'report/hr_gratuity_report.xml',
+        'views/hr_gratuity_rule_views.xml',
+        'views/hr_gratuity_settlement_views.xml',
+        'views/hr_employee_views.xml',
+        'views/hr_gratuity_menus.xml',
+    ],
+    'images': [
+        'static/description/banner.png',
+    ],
+    'installable': True,
+    'application': True,
+    'auto_install': False,
+}

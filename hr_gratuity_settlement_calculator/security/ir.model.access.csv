@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_gratuity_rule_user,hr.gratuity.rule.user,model_hr_gratuity_rule,group_gratuity_user,1,0,0,0
+access_hr_gratuity_rule_mgr,hr.gratuity.rule.mgr,model_hr_gratuity_rule,group_gratuity_manager,1,1,1,1
+access_hr_gratuity_settlement_user,hr.gratuity.settlement.user,model_hr_gratuity_settlement,group_gratuity_user,1,1,1,0
+access_hr_gratuity_settlement_mgr,hr.gratuity.settlement.mgr,model_hr_gratuity_settlement,group_gratuity_manager,1,1,1,1

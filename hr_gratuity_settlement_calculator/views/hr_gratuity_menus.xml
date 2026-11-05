@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_hr_gratuity_root"
+              name="End of Service"
+              parent="hr.menu_hr_root"
+              sequence="45"/>
+
+    <menuitem id="menu_hr_gratuity_settlements"
+              name="Final Settlements"
+              parent="menu_hr_gratuity_root"
+              action="action_hr_gratuity_settlement"
+              sequence="10"/>
+
+    <menuitem id="menu_hr_gratuity_rules"
+              name="Gratuity Rules"
+              parent="hr.menu_human_resources_configuration"
+              action="action_hr_gratuity_rule"
+              sequence="75"/>
+</odoo>
