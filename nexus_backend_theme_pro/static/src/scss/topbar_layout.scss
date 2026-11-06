@@ -1,0 +1,21 @@
+/* Mode 2: Classic Enterprise Topbar */
+body.nexus-layout-topbar {
+    .o_main_navbar {
+        background-color: var(--nexus-primary) !important;
+        border-bottom: 2px solid var(--nexus-accent);
+
+        .o_menu_brand {
+            font-weight: 800;
+            color: #FFFFFF !important;
+        }
+
+        .o_nav_entry {
+            color: rgba(255, 255, 255, 0.9) !important;
+
+            &:hover, &.active {
+                background-color: rgba(255, 255, 255, 0.15) !important;
+                color: #FFFFFF !important;
+            }
+        }
+    }
+}
