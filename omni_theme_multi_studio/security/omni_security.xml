@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="module_category_omni_theme" model="ir.module.category">
+        <field name="name">OmniTheme 10-in-1 Studio</field>
+        <field name="description">Manage company multi-theme defaults, styling, and user toggles.</field>
+        <field name="sequence">35</field>
+    </record>
+
+    <record id="group_omni_theme_user" model="res.groups">
+        <field name="name">OmniTheme User (Systray 10-Theme Toggle)</field>
+        <field name="category_id" ref="module_category_omni_theme"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <record id="group_omni_theme_manager" model="res.groups">
+        <field name="name">OmniTheme Administrator (Theme Engine &amp; Brand Studio)</field>
+        <field name="category_id" ref="module_category_omni_theme"/>
+        <field name="implied_ids" eval="[(4, ref('group_omni_theme_user')), (4, ref('base.group_system'))]"/>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+
+    <record id="base.group_user" model="res.groups">
+        <field name="implied_ids" eval="[(4, ref('omni_theme_multi_studio.group_omni_theme_user'))]"/>
+    </record>
+
+    <data noupdate="1">
+        <!-- Multi-Company Rule -->
+        <record id="rule_omni_theme_config_company" model="ir.rule">
+            <field name="name">OmniTheme Config: Multi-Company</field>
+            <field name="model_id" ref="model_omni_theme_config"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+    </data>
+</odoo>
