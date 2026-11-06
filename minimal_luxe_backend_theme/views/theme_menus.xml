@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_minimal_luxe_root"
+              name="Minimal Luxe Studio"
+              parent="base.menu_administration"
+              sequence="29"
+              groups="minimal_luxe_backend_theme.group_minimal_luxe_manager"/>
+
+    <menuitem id="menu_minimal_luxe_config"
+              name="Monochrome Profiles &amp; Zen Settings"
+              parent="menu_minimal_luxe_root"
+              action="action_minimal_luxe_config"
+              sequence="10"/>
+</odoo>

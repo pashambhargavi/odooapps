@@ -1,0 +1,26 @@
+/* Mobile Clean Viewport */
+@media (max-width: 768px) {
+    .o_luxe_mobile_bar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: var(--luxe-bg-base);
+        border-top: 1px solid var(--luxe-border-color);
+        display: flex;
+        justify-content: space-around;
+        padding: 8px 0;
+        z-index: 1050;
+
+        .mobile-item {
+            color: var(--luxe-text-muted);
+            text-decoration: none;
+            font-size: 11px;
+            font-weight: 500;
+
+            &.active {
+                color: var(--luxe-accent);
+            }
+        }
+    }
+}
