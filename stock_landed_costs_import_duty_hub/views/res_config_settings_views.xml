@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_inherit_landed_cost" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.landed.cost</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="90"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="Landed Costs Hub" string="Landed Costs Hub" name="stock_landed_costs_import_duty_hub">
+                    <block title="Landed Costs &amp; Import Duty Accounting" id="landed_costs_hub_block">
+                        <setting id="landed_costs_hub_setting" string="Landed Cost Accounting Journal" help="Default general journal for automated stock valuation adjustment entries.">
+                            <field name="default_landed_cost_journal_id"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+</odoo>
