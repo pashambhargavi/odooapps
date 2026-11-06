@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+    <!-- Header Color Systray Toggle -->
+    <t t-name="pristine_white_chroma_theme.ChromaToggle">
+        <div class="o_chroma_toggle d-flex align-items-center me-2" role="button" t-on-click="onClickCycleChroma" title="1-Click Switch Header &amp; Action Button Color">
+            <i class="fa fa-paint-brush text-white fs-6" style="padding: 6px; border-radius: 6px; background: rgba(255,255,255,0.18); cursor: pointer;"/>
+        </div>
+    </t>
+</templates>
