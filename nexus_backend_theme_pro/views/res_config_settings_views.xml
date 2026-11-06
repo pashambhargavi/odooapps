@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_inherit_nexus" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.nexus</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="95"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="Nexus Theme Studio" string="Nexus Theme Studio" name="nexus_backend_theme_pro">
+                    <block title="Nexus Pro: Multi-Layout &amp; Productivity Settings" id="nexus_theme_settings_block">
+                        <setting id="nexus_theme_profile_setting" string="Active Theme Profile" help="Select the default corporate theme configuration for your instance.">
+                            <field name="nexus_theme_config_id"/>
+                        </setting>
+
+                        <setting id="nexus_theme_layout_setting" string="Navigation Layout" help="Choose between SaaS Sidebar, Classic Topbar, or Slim Mini-Rail.">
+                            <field name="nexus_layout_mode" widget="radio"/>
+                        </setting>
+
+                        <setting id="nexus_theme_chatter_setting" string="Chatter Box Placement" help="Place chatter in a side-by-side right column or classic stacked bottom.">
+                            <field name="nexus_chatter_position" widget="radio"/>
+                        </setting>
+
+                        <setting id="nexus_theme_density_setting" string="List &amp; Table Data Density" help="Adjust row height for high-volume financial accounting or touch interfaces.">
+                            <field name="nexus_table_density" widget="radio"/>
+                        </setting>
+
+                        <setting id="nexus_theme_color_setting" string="Corporate Color Engine" help="Quick-apply one of 6 executive palettes.">
+                            <field name="nexus_color_preset" widget="radio"/>
+                            <div class="mt-2">
+                                <field name="nexus_primary_color" widget="color" class="me-2"/>
+                                <field name="nexus_accent_color" widget="color"/>
+                            </div>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+</odoo>

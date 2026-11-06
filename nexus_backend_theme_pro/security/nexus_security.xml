@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="module_category_nexus_theme" model="ir.module.category">
+        <field name="name">Nexus Pro Theme &amp; Productivity Studio</field>
+        <field name="description">Manage enterprise 3-in-1 layouts, side chatter toggles, data density and corporate palettes.</field>
+        <field name="sequence">27</field>
+    </record>
+
+    <record id="privilege_nexus_theme" model="res.groups.privilege">
+        <field name="name">Nexus Pro Theme Access</field>
+        <field name="category_id" ref="module_category_nexus_theme"/>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="group_nexus_theme_user" model="res.groups">
+        <field name="name">Nexus Theme User (Personal Chatter &amp; Layout Preference)</field>
+        <field name="privilege_id" ref="privilege_nexus_theme"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <record id="group_nexus_theme_manager" model="res.groups">
+        <field name="name">Nexus Theme Administrator (Brand &amp; System Layout Manager)</field>
+        <field name="privilege_id" ref="privilege_nexus_theme"/>
+        <field name="implied_ids" eval="[(4, ref('group_nexus_theme_user')), (4, ref('base.group_system'))]"/>
+        <field name="user_ids" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+
+    <record id="base.group_user" model="res.groups">
+        <field name="implied_ids" eval="[(4, ref('nexus_backend_theme_pro.group_nexus_theme_user'))]"/>
+    </record>
+
+    <data noupdate="1">
+        <!-- Multi-Company Rule -->
+        <record id="rule_nexus_theme_config_company" model="ir.rule">
+            <field name="name">Nexus Pro Theme Config: Multi-Company</field>
+            <field name="model_id" ref="model_nexus_theme_config"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+    </data>
+</odoo>
