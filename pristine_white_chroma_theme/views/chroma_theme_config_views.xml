@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- List View -->
+    <record id="view_chroma_theme_config_list" model="ir.ui.view">
+        <field name="name">chroma.theme.config.list</field>
+        <field name="model">chroma.theme.config</field>
+        <field name="arch" type="xml">
+            <tree string="Pristine Chroma Theme Profiles">
+                <field name="name"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="canvas_style" widget="badge"/>
+                <field name="chroma_preset" widget="badge"/>
+                <field name="header_bg" widget="color"/>
+                <field name="button_shape" widget="badge"/>
+                <field name="card_shadow" widget="badge"/>
+                <field name="is_active" widget="boolean_toggle"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_chroma_theme_config_form" model="ir.ui.view">
+        <field name="name">chroma.theme.config.form</field>
+        <field name="model">chroma.theme.config</field>
+        <field name="arch" type="xml">
+            <form string="Pristine Chroma Theme Profile">
+                <header>
+                    <button name="action_apply_preset" string="Re-Apply Vibrant Preset" type="object" class="btn-primary" icon="fa-paint-brush"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only" string="Theme Profile Name"/>
+                        <h1>
+                            <field name="name" placeholder="e.g. Pristine White Royal Indigo"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group string="Company &amp; Status">
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="is_active" widget="boolean_toggle"/>
+                            <field name="canvas_style" widget="radio"/>
+                        </group>
+                        <group string="Vibrant Header &amp; Button Styling">
+                            <field name="chroma_preset" widget="radio"/>
+                            <field name="header_bg" widget="color"/>
+                            <field name="accent_color" widget="color"/>
+                            <field name="button_shape" widget="radio"/>
+                            <field name="card_shadow" widget="radio"/>
+                            <field name="sticky_header"/>
+                            <field name="font_family"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_chroma_theme_config_search" model="ir.ui.view">
+        <field name="name">chroma.theme.config.search</field>
+        <field name="model">chroma.theme.config</field>
+        <field name="arch" type="xml">
+            <search string="Search Chroma Profiles">
+                <field name="name"/>
+                <field name="company_id"/>
+                <filter name="active_profiles" string="Active Profiles" domain="[('is_active', '=', True)]"/>
+                <separator/>
+                <group>
+                    <filter name="group_company" string="Company" context="{'group_by': 'company_id'}"/>
+                    <filter name="group_preset" string="Header Preset" context="{'group_by': 'chroma_preset'}"/>
+                    <filter name="group_canvas" string="Canvas Style" context="{'group_by': 'canvas_style'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action Window -->
+    <record id="action_chroma_theme_config" model="ir.actions.act_window">
+        <field name="name">Pristine Chroma Theme Profiles</field>
+        <field name="res_model">chroma.theme.config</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_active_profiles': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first Pristine White Chroma Theme Profile!
+            </p>
+            <p>
+                Configure 100% pure white paper-like canvases with vibrant colored headers, buttons, and badges.
+            </p>
+        </field>
+    </record>
+</odoo>
