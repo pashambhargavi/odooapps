@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_minimal_luxe_config_user,minimal.luxe.config.user,model_minimal_luxe_config,minimal_luxe_backend_theme.group_minimal_luxe_user,1,0,0,0
+access_minimal_luxe_config_manager,minimal.luxe.config.manager,model_minimal_luxe_config,minimal_luxe_backend_theme.group_minimal_luxe_manager,1,1,1,1
