@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="chroma_pristine_login_layout" inherit_id="web.login_layout" name="Pristine Chroma Executive Login Layout">
+        <xpath expr="//t[@t-call='web.frontend_layout']/div" position="replace">
+            <div class="container-fluid p-0 o_chroma_login_container" style="min-height: 100vh; display: flex; align-items: stretch; background-color: #FFFFFF; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+                <div class="row g-0 w-100 m-0">
+                    <!-- Left Brand Hero Column (Vibrant Chroma Gradient/Solid) -->
+                    <div class="col-12 col-lg-7 d-none d-lg-flex flex-column justify-content-between p-5 text-white" style="background-color: #4F46E5; border-right: 1px solid #E2E8F0;">
+                        <div>
+                            <div class="d-flex align-items-center mb-4">
+                                <span style="display: inline-block; background-color: #3730A3; color: #FFFFFF; font-weight: 700; font-size: 13px; padding: 6px 18px; border-radius: 20px; letter-spacing: 1.5px; text-transform: uppercase;">
+                                    ★ PRISTINE CHROMA ERP
+                                </span>
+                            </div>
+                            <h1 style="font-size: 42px; font-weight: 800; line-height: 1.15; margin-bottom: 20px; color: #FFFFFF;">
+                                Crisp Pure White Canvas &amp; Vibrant Action Studio
+                            </h1>
+                            <p style="font-size: 16px; color: #E0E7FF; max-width: 580px; line-height: 1.6;">
+                                Engineered for high-output daylight operations. Featuring 100% pure white paper-like views, razor-sharp black typography, and energetic chromatic action buttons.
+                            </p>
+                        </div>
+
+                        <!-- Feature Badges -->
+                        <div class="row g-3 my-4">
+                            <div class="col-6">
+                                <div style="background-color: #4338CA; border: 1px solid #6366F1; border-radius: 10px; padding: 18px;">
+                                    <div style="color: #FFFFFF; font-weight: 700; font-size: 14px; margin-bottom: 4px;">★ 100% Pure White Canvas</div>
+                                    <div style="color: #C7D2FE; font-size: 12px;">Zero grey cast. Immaculate paper-like readability on every view.</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div style="background-color: #4338CA; border: 1px solid #6366F1; border-radius: 10px; padding: 18px;">
+                                    <div style="color: #FCD34D; font-weight: 700; font-size: 14px; margin-bottom: 4px;">★ Vibrant Action Studio</div>
+                                    <div style="color: #C7D2FE; font-size: 12px;">6 Electric chromatic header and button presets with instant switching.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Copyright / Tech Info -->
+                        <div style="color: #C7D2FE; font-size: 13px;">
+                            Pristine White Chroma Theme &#8226; Compatible with Odoo v14 through v20 Community &amp; Enterprise
+                        </div>
+                    </div>
+
+                    <!-- Right Login Form Column (Pure Crisp White) -->
+                    <div class="col-12 col-lg-5 d-flex flex-column justify-content-center align-items-center p-4 p-md-5" style="background-color: #FFFFFF;">
+                        <div style="width: 100%; max-width: 420px; background-color: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 16px; padding: 40px 32px; box-shadow: 0 10px 30px #E2E8F0;">
+                            <div class="text-center mb-4">
+                                <h3 style="color: #0F172A; font-size: 24px; font-weight: 800; margin: 0 0 6px 0;">Authenticate</h3>
+                                <p style="color: #64748B; font-size: 13px; margin: 0;">Sign in to your enterprise workspace</p>
+                            </div>
+                            <t t-out="0"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_inherit_chroma" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.chroma</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="99"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <div class="app_settings_block" data-string="Pristine Chroma Studio" string="Pristine Chroma Studio" data-key="pristine_white_chroma_theme">
+                    <block title="Pristine White Canvas &amp; Vibrant Header Settings" id="chroma_theme_settings_block">
+                        <setting id="chroma_theme_profile_setting" string="Active Theme Profile" help="The active Pristine White Chroma profile applied to your company.">
+                            <field name="chroma_theme_config_id"/>
+                        </setting>
+
+                        <setting id="chroma_canvas_setting" string="Pure White Canvas Mode" help="Select between 100% pure white paper canvas or soft linen white.">
+                            <field name="chroma_canvas_style" widget="radio"/>
+                        </setting>
+
+                        <setting id="chroma_preset_setting" string="Vibrant Header &amp; Button Color" help="Select an electric chromatic preset: Indigo, Coral, Mint, Violet, Cyan, or Rose.">
+                            <field name="chroma_preset" widget="radio"/>
+                            <div class="mt-2">
+                                <field name="chroma_header_bg" widget="color"/>
+                            </div>
+                        </setting>
+
+                        <setting id="chroma_button_shape_setting" string="Button Corner Geometry" help="Modern 8px rounded, curved pill 20px, or sharp 4px precision.">
+                            <field name="chroma_button_shape" widget="radio"/>
+                        </setting>
+
+                        <setting id="chroma_card_shadow_setting" string="White Card Elevation &amp; Shadows" help="Soft subtle shadows, crisp 1px borders, or deep floating elevation.">
+                            <field name="chroma_card_shadow" widget="radio"/>
+                        </setting>
+                    </block>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

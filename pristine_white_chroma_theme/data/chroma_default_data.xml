@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="default_chroma_theme_config" model="chroma.theme.config">
+        <field name="name">Pristine White Royal Indigo Suite</field>
+        <field name="company_id" ref="base.main_company"/>
+        <field name="is_active">True</field>
+        <field name="canvas_style">pure_white</field>
+        <field name="chroma_preset">royal_indigo</field>
+        <field name="header_bg">#4F46E5</field>
+        <field name="accent_color">#6366F1</field>
+        <field name="button_shape">modern</field>
+        <field name="card_shadow">soft</field>
+        <field name="sticky_header">True</field>
+        <field name="font_family">inter</field>
+    </record>
+</odoo>
