@@ -1,0 +1,73 @@
+/* Pristine Pure White Canvas Across All Views */
+
+body.chroma-pristine-theme {
+    background-color: var(--chroma-canvas-bg) !important;
+    color: var(--chroma-text-main) !important;
+
+    .o_action_manager,
+    .o_content,
+    .o_control_panel {
+        background-color: #FFFFFF !important;
+    }
+
+    .o_control_panel {
+        border-bottom: 1px solid var(--chroma-border-color) !important;
+
+        .breadcrumb-item, .o_breadcrumb {
+            color: var(--chroma-text-main) !important;
+            font-weight: 700 !important;
+        }
+    }
+
+    /* Form Sheets: Crisp White Paper Elevation */
+    .o_form_sheet {
+        background-color: #FFFFFF !important;
+        border: 1px solid var(--chroma-border-color) !important;
+        border-radius: 10px !important;
+        box-shadow: var(--chroma-card-shadow) !important;
+    }
+
+    /* Kanban Stage Columns: Pristine White */
+    .o_kanban_view {
+        background-color: #FFFFFF !important;
+
+        .o_kanban_group {
+            background-color: #FAFAFA !important;
+            border: 1px solid var(--chroma-border-color) !important;
+            border-radius: 10px;
+
+            .o_kanban_record {
+                background-color: #FFFFFF !important;
+                border: 1px solid var(--chroma-border-color) !important;
+                border-radius: 8px !important;
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03) !important;
+
+                &:hover {
+                    border-color: var(--chroma-accent) !important;
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06) !important;
+                }
+            }
+        }
+    }
+
+    /* List & Table Views: Crisp White */
+    .o_list_table {
+        background-color: #FFFFFF !important;
+        border: 1px solid var(--chroma-border-color) !important;
+
+        thead th {
+            background-color: #FAFAFA !important;
+            color: var(--chroma-text-muted) !important;
+            border-bottom: 2px solid var(--chroma-border-color) !important;
+            font-weight: 700 !important;
+        }
+
+        tbody tr {
+            background-color: #FFFFFF !important;
+
+            &:hover {
+                background-color: #F8FAFC !important;
+            }
+        }
+    }
+}

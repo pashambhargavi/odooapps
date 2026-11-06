@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_chroma_theme_root"
+              name="Pristine Chroma Studio"
+              parent="base.menu_administration"
+              sequence="30"
+              groups="pristine_white_chroma_theme.group_chroma_theme_manager"/>
+
+    <menuitem id="menu_chroma_theme_config"
+              name="Canvas &amp; Vibrant Header Profiles"
+              parent="menu_chroma_theme_root"
+              action="action_chroma_theme_config"
+              sequence="10"/>
+</odoo>
