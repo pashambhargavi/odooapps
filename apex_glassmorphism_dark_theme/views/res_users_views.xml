@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_users_view_form_apex_preferences" model="ir.ui.view">
+        <field name="name">res.users.preferences.form.inherit.apex</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form_simple_modif"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='preferences_page']" position="inside">
+                <group string="Apex Cyber Neon Ambient" name="apex_preferences">
+                    <field name="apex_neon_preset" widget="radio"/>
+                    <field name="apex_glow_enabled"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Full User Form View -->
+    <record id="view_users_form_inherit_apex" model="ir.ui.view">
+        <field name="name">res.users.form.inherit.apex</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Apex Cyber Mood" name="apex_cyber_tab">
+                    <group>
+                        <group string="Personal Cyberpunk Lighting">
+                            <field name="apex_neon_preset"/>
+                            <field name="apex_glow_enabled"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>
