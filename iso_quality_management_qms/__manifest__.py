@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'ISO 9001:2015 Quality Management System (QMS, NCR, CAPA & 8D Hub)',
-    'version': '18.0.1.0.0',
+    'version': '17.0.1.0.0',
     'category': 'Manufacturing/Quality',
     'summary': 'Enterprise ISO 9001:2015, IATF 16949 & AS9100 QMS: Non-Conformance Reports (NCR), 8D CAPA, 5-Whys, Fishbone, Audits & FMEA Risk Matrix',
     'description': """
@@ -42,3 +42,4 @@ Key Features:
     'application': True,
     'auto_install': False,
 }
+

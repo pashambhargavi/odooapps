@@ -2,7 +2,7 @@
 
 {
     'name': 'Multi-Tier Approval Matrix & Workflow Governance',
-    'version': '18.0.1.0.0',
+    'version': '17.0.1.0.0',
     'category': 'Productivity',
     'summary': 'Dynamic Multi-Tier Approval Matrix for Sales, Purchases, Invoices & Internal Requests',
     'description': """
@@ -59,3 +59,4 @@ Key Features
     'application': True,
     'auto_install': False,
 }
+
