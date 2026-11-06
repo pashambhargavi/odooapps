@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_landed_cost_voucher" model="ir.actions.report">
+        <field name="name">Landed Cost Allocation Voucher</field>
+        <field name="model">stock.landed.cost.hub</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">stock_landed_costs_import_duty_hub.report_landed_cost_voucher_template</field>
+        <field name="report_file">stock_landed_costs_import_duty_hub.report_landed_cost_voucher_template</field>
+        <field name="print_report_name">'Landed_Cost_%s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_stock_landed_cost_hub"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_landed_cost_voucher_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #1E293B;">
+                        <div class="row mb-4">
+                            <div class="col-8">
+                                <h2 style="font-weight: 800; color: #0F172A;">Landed Cost Allocation Voucher</h2>
+                                <h4 style="color: #2563EB;"><t t-esc="doc.name"/></h4>
+                            </div>
+                            <div class="col-4 text-end">
+                                <span class="badge bg-primary fs-6 p-2"><t t-esc="doc.state.upper()"/></span>
+                                <div class="mt-2 text-muted"><strong>Date:</strong> <t t-esc="doc.date"/></div>
+                            </div>
+                        </div>
+
+                        <!-- Summary Table -->
+                        <div class="row mb-4">
+                            <div class="col-6">
+                                <strong>Company:</strong> <t t-esc="doc.company_id.name"/><br/>
+                                <strong>Receipts Covered:</strong>
+                                <t t-foreach="doc.picking_ids" t-as="p">
+                                    <span class="badge bg-secondary me-1"><t t-esc="p.name"/></span>
+                                </t>
+                            </div>
+                            <div class="col-6 text-end">
+                                <strong>Total Landed Cost:</strong>
+                                <h3 style="color: #059669; font-weight: 700;">
+                                    <t t-esc="doc.total_cost" t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/>
+                                </h3>
+                            </div>
+                        </div>
+
+                        <!-- Section 1: Charges & Duties -->
+                        <h5 style="border-bottom: 2px solid #E2E8F0; padding-bottom: 6px; font-weight: 700; color: #0F172A;">
+                            1. Incurred Logistics &amp; Customs Charges
+                        </h5>
+                        <table class="table table-sm table-striped mb-4">
+                            <thead>
+                                <tr style="background-color: #F8FAFC;">
+                                    <th>Cost Item</th>
+                                    <th>Split Method</th>
+                                    <th>Foreign Currency</th>
+                                    <th class="text-end">Amount (Company Cur.)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="doc.cost_line_ids" t-as="line">
+                                    <tr>
+                                        <td><strong><t t-esc="line.product_id.name"/></strong></td>
+                                        <td><t t-esc="dict(line._fields['split_method'].selection).get(line.split_method)"/></td>
+                                        <td>
+                                            <t t-if="line.foreign_currency_id">
+                                                <t t-esc="line.foreign_amount"/> <t t-esc="line.foreign_currency_id.name"/> @ <t t-esc="line.exchange_rate"/>
+                                            </t>
+                                            <t t-else="">-</t>
+                                        </td>
+                                        <td class="text-end">
+                                            <t t-esc="line.price_unit" t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+
+                        <!-- Section 2: Valuation Adjustments per Product -->
+                        <h5 style="border-bottom: 2px solid #E2E8F0; padding-bottom: 6px; font-weight: 700; color: #0F172A;">
+                            2. Product Valuation Adjustments &amp; Unit Cost Impact
+                        </h5>
+                        <table class="table table-sm table-bordered">
+                            <thead>
+                                <tr style="background-color: #F1F5F9;">
+                                    <th>Product</th>
+                                    <th>Stock Move</th>
+                                    <th class="text-end">Received Qty</th>
+                                    <th class="text-end">Original Cost</th>
+                                    <th class="text-end">Added Landed Cost</th>
+                                    <th class="text-end">Final Revalued Cost</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="doc.valuation_adjustment_lines" t-as="val">
+                                    <tr>
+                                        <td><strong><t t-esc="val.product_id.display_name"/></strong></td>
+                                        <td><t t-esc="val.stock_move_id.picking_id.name or val.product_id.name"/></td>
+                                        <td class="text-end"><t t-esc="val.quantity"/></td>
+                                        <td class="text-end"><t t-esc="val.former_cost" t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/></td>
+                                        <td class="text-end" style="color: #2563EB;">+<t t-esc="val.additional_landed_cost" t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/></td>
+                                        <td class="text-end" style="font-weight: 700; color: #059669;">
+                                            <t t-esc="val.final_unit_cost" t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+
+                        <div class="mt-5 pt-4 text-muted small text-center" style="border-top: 1px solid #E2E8F0;">
+                            Audited with Landed Costs &amp; Multi-Currency Import Duty Hub &#8226; Enterprise COGS &amp; Valuation Certified
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
