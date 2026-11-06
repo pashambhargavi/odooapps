@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_theme_apex_root"
+              name="Apex Cyber Theme"
+              parent="base.menu_administration"
+              sequence="6"
+              groups="apex_glassmorphism_dark_theme.group_theme_apex_manager"/>
+
+    <menuitem id="menu_theme_apex_profiles"
+              name="Neon Profiles &amp; Lighting"
+              parent="menu_theme_apex_root"
+              action="action_theme_apex_config"
+              sequence="10"/>
+</odoo>
