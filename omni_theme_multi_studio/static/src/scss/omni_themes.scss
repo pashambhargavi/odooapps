@@ -1,0 +1,133 @@
+/* ==========================================================================
+   OMNITHEME 10-IN-1 THEME PRESETS ENGINE
+   ========================================================================== */
+
+/* 1. Emerald Aurora (Nordic Teal & Fresh Mint) */
+:root[data-omni-theme="emerald_aurora"] {
+    --omni-navbar-bg: #064E3B;
+    --omni-navbar-text: #ECFDF5;
+    --omni-primary-btn: #10B981;
+    --omni-primary-btn-hover: #059669;
+    --omni-view-bg: #F0FDF4;
+    --omni-card-bg: #FFFFFF;
+    --omni-text-color: #0F172A;
+    --omni-border-color: #A7F3D0;
+    --omni-accent-glow: 0 0 15px rgba(16, 185, 129, 0.35);
+}
+
+/* 2. Cyberpunk Neon (Midnight & Electric Cyan) */
+:root[data-omni-theme="cyberpunk_neon"] {
+    --omni-navbar-bg: #0B0F19;
+    --omni-navbar-text: #00F0FF;
+    --omni-primary-btn: #00F0FF;
+    --omni-primary-btn-hover: #00C8D6;
+    --omni-view-bg: #070A10;
+    --omni-card-bg: #0F172A;
+    --omni-text-color: #F8FAFC;
+    --omni-border-color: #FF007F;
+    --omni-accent-glow: 0 0 18px rgba(0, 240, 255, 0.45);
+}
+
+/* 3. Royal Velvet (Imperial Amethyst & Sovereign Gold) */
+:root[data-omni-theme="royal_velvet"] {
+    --omni-navbar-bg: #3B0764;
+    --omni-navbar-text: #FAF5FF;
+    --omni-primary-btn: #EAB308;
+    --omni-primary-btn-hover: #CA8A04;
+    --omni-view-bg: #FAF5FF;
+    --omni-card-bg: #FFFFFF;
+    --omni-text-color: #1E1B4B;
+    --omni-border-color: #E9D5FF;
+    --omni-accent-glow: 0 0 15px rgba(234, 179, 8, 0.35);
+}
+
+/* 4. Sunset Horizon (Warm Tangerine & Amber Coral) */
+:root[data-omni-theme="sunset_horizon"] {
+    --omni-navbar-bg: #C2410C;
+    --omni-navbar-text: #FFF7ED;
+    --omni-primary-btn: #F97316;
+    --omni-primary-btn-hover: #EA580C;
+    --omni-view-bg: #FFFBF5;
+    --omni-card-bg: #FFFFFF;
+    --omni-text-color: #0F172A;
+    --omni-border-color: #FED7AA;
+    --omni-accent-glow: 0 0 15px rgba(249, 115, 22, 0.35);
+}
+
+/* 5. Pristine Paper (Pure Crisp White & Cobalt Blue) */
+:root[data-omni-theme="pristine_paper"] {
+    --omni-navbar-bg: #1E40AF;
+    --omni-navbar-text: #FFFFFF;
+    --omni-primary-btn: #2563EB;
+    --omni-primary-btn-hover: #1D4ED8;
+    --omni-view-bg: #FFFFFF;
+    --omni-card-bg: #FFFFFF;
+    --omni-text-color: #0F172A;
+    --omni-border-color: #E2E8F0;
+    --omni-accent-glow: 0 0 15px rgba(37, 99, 235, 0.3);
+}
+
+/* 6. Obsidian Luxe (Linear Monochromatic Black & Platinum) */
+:root[data-omni-theme="obsidian_luxe"] {
+    --omni-navbar-bg: #09090B;
+    --omni-navbar-text: #FAFAFA;
+    --omni-primary-btn: #D97706;
+    --omni-primary-btn-hover: #B45309;
+    --omni-view-bg: #121215;
+    --omni-card-bg: #18181B;
+    --omni-text-color: #FAFAFA;
+    --omni-border-color: #27272A;
+    --omni-accent-glow: 0 0 15px rgba(217, 119, 6, 0.35);
+}
+
+/* 7. Deep Oceanic (Bermuda Maritime Navy & Seafoam Turquoise) */
+:root[data-omni-theme="deep_oceanic"] {
+    --omni-navbar-bg: #0C4A6E;
+    --omni-navbar-text: #F0F9FF;
+    --omni-primary-btn: #06B6D4;
+    --omni-primary-btn-hover: #0891B2;
+    --omni-view-bg: #F0F9FF;
+    --omni-card-bg: #FFFFFF;
+    --omni-text-color: #0F172A;
+    --omni-border-color: #BAE6FD;
+    --omni-accent-glow: 0 0 15px rgba(6, 182, 212, 0.35);
+}
+
+/* 8. Crimson Apex (Executive Matte Burgundy & Scarlet) */
+:root[data-omni-theme="crimson_apex"] {
+    --omni-navbar-bg: #881337;
+    --omni-navbar-text: #FFF1F2;
+    --omni-primary-btn: #E11D48;
+    --omni-primary-btn-hover: #BE123C;
+    --omni-view-bg: #FFF1F2;
+    --omni-card-bg: #FFFFFF;
+    --omni-text-color: #0F172A;
+    --omni-border-color: #FECDD3;
+    --omni-accent-glow: 0 0 15px rgba(225, 29, 72, 0.35);
+}
+
+/* 9. Forest Zen (Organic Bamboo Sage & Matcha Green) */
+:root[data-omni-theme="forest_zen"] {
+    --omni-navbar-bg: #14532D;
+    --omni-navbar-text: #F7FEE7;
+    --omni-primary-btn: #65A30D;
+    --omni-primary-btn-hover: #4D7C0F;
+    --omni-view-bg: #FDFBF7;
+    --omni-card-bg: #FFFFFF;
+    --omni-text-color: #0F172A;
+    --omni-border-color: #D9F99D;
+    --omni-accent-glow: 0 0 15px rgba(101, 163, 13, 0.35);
+}
+
+/* 10. Modern Slate (Silicon Valley Slate & Electric Indigo) */
+:root[data-omni-theme="modern_slate"] {
+    --omni-navbar-bg: #1E293B;
+    --omni-navbar-text: #F8FAFC;
+    --omni-primary-btn: #6366F1;
+    --omni-primary-btn-hover: #4F46E5;
+    --omni-view-bg: #F8FAFC;
+    --omni-card-bg: #FFFFFF;
+    --omni-text-color: #0F172A;
+    --omni-border-color: #CBD5E1;
+    --omni-accent-glow: 0 0 15px rgba(99, 102, 241, 0.35);
+}
