@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_apex" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.apex</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="98"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="Apex Cyber Theme" string="Apex Cyber Theme" name="apex_glassmorphism_dark_theme">
+                    <block title="Neon Lighting &amp; Mood Presets" id="apex_lighting_section">
+                        <setting id="setting_apex_preset" help="Select an electric cyber neon accent with ambient glow.">
+                            <field name="apex_neon_preset"/>
+                            <div class="row mt8">
+                                <label for="apex_neon_color" class="col-lg-4 o_light_label" string="Neon Color"/>
+                                <field name="apex_neon_color" widget="color"/>
+                            </div>
+                        </setting>
+                    </block>
+
+                    <block title="Frosted Acrylic Glassmorphism" id="apex_glass_section">
+                        <setting id="setting_apex_glass" help="Configure background blur, surface borders, and glowing focus rings.">
+                            <div class="row">
+                                <label for="apex_glass_blur_strength" class="col-lg-4 o_light_label" string="Glass Blur"/>
+                                <field name="apex_glass_blur_strength"/>
+                            </div>
+                            <div class="row mt8">
+                                <label for="apex_neon_glow_strength" class="col-lg-4 o_light_label" string="Glow Intensity"/>
+                                <field name="apex_neon_glow_strength"/>
+                            </div>
+                            <div class="row mt8">
+                                <label for="apex_font_family" class="col-lg-4 o_light_label" string="Font Family"/>
+                                <field name="apex_font_family"/>
+                            </div>
+                        </setting>
+                        <setting id="setting_apex_interactivity" help="Interactive futuristic enhancements.">
+                            <div>
+                                <field name="apex_enable_glass_app_drawer" class="oe_inline"/>
+                                <label for="apex_enable_glass_app_drawer" string="Frosted Glass App Switcher"/>
+                            </div>
+                            <div class="mt4">
+                                <field name="apex_enable_glowing_inputs" class="oe_inline"/>
+                                <label for="apex_enable_glowing_inputs" string="Glowing Form Input Rings"/>
+                            </div>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+</odoo>

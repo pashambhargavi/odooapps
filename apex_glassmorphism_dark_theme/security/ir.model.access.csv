@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_theme_apex_config_user,theme.apex.config.user,model_theme_apex_config,group_theme_apex_user,1,0,0,0
+access_theme_apex_config_manager,theme.apex.config.manager,model_theme_apex_config,group_theme_apex_manager,1,1,1,1

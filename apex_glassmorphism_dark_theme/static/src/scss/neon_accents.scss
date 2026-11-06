@@ -1,0 +1,45 @@
+/* Cyber Neon Accents & Glowing Controls */
+body.o_apex_theme_active {
+    /* Neon Primary Buttons */
+    .btn-primary {
+        background-color: var(--apex-neon) !important;
+        border-color: var(--apex-neon) !important;
+        color: #050811 !important;
+        font-weight: 700 !important;
+        box-shadow: 0 0 15px var(--apex-neon-glow) !important;
+        transition: box-shadow 0.2s, transform 0.15s;
+
+        &:hover {
+            box-shadow: 0 0 25px var(--apex-neon) !important;
+            transform: scale(1.02);
+        }
+    }
+
+    /* Glowing Focus Rings on Inputs */
+    input.o_input,
+    select.o_input,
+    textarea.o_input {
+        background: rgba(15, 23, 42, 0.7) !important;
+        border: 1px solid var(--apex-glass-border) !important;
+        color: #FFFFFF !important;
+        border-radius: 8px !important;
+        transition: border-color 0.2s, box-shadow 0.2s;
+
+        &:focus {
+            border-color: var(--apex-neon) !important;
+            box-shadow: 0 0 12px var(--apex-neon-glow) !important;
+        }
+    }
+
+    /* Status Badges */
+    .badge {
+        border: 1px solid var(--apex-glass-border) !important;
+        backdrop-filter: blur(8px) !important;
+    }
+
+    /* Breadcrumbs */
+    .breadcrumb-item a {
+        color: var(--apex-neon) !important;
+        text-shadow: 0 0 8px var(--apex-neon-glow);
+    }
+}

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="apex_glass_login_layout" inherit_id="web.login_layout" name="Apex Glass Cyber Login Layout">
+        <xpath expr="//t[@t-call='web.frontend_layout']/div" position="replace">
+            <div class="container-fluid p-0 o_apex_login_container" style="min-height: 100vh; display: flex; align-items: stretch; background: radial-gradient(circle at 20% 30%, #0d1b2a 0%, #050811 100%); font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+                <div class="row g-0 w-100 m-0">
+                    <!-- Left Brand Hero Column -->
+                    <div class="col-12 col-lg-7 d-none d-lg-flex flex-column justify-content-between p-5 text-white" style="border-right: 1px solid rgba(0, 240, 255, 0.15);">
+                        <div>
+                            <div class="d-flex align-items-center mb-4">
+                                <span style="display: inline-block; background-color: rgba(0, 240, 255, 0.15); color: #00F0FF; font-weight: 800; font-size: 13px; padding: 6px 18px; border-radius: 20px; letter-spacing: 1.5px; border: 1px solid #00F0FF; box-shadow: 0 0 15px rgba(0, 240, 255, 0.3); text-transform: uppercase;">
+                                    ⚡ APEX CYBERNETIC ERP
+                                </span>
+                            </div>
+                            <h1 style="font-size: 42px; font-weight: 800; line-height: 1.15; margin-bottom: 20px; color: #FFFFFF; text-shadow: 0 0 20px rgba(0, 240, 255, 0.2);">
+                                Hyper-Fast Business Intelligence &amp; Autonomous Operations
+                            </h1>
+                            <p style="font-size: 16px; color: #94A3B8; max-width: 580px; line-height: 1.6;">
+                                Enter the next evolution of ERP. Featuring frosted acrylic glass cards, zero-latency workflows, and cyberpunk neon ambient lighting.
+                            </p>
+                        </div>
+
+                        <!-- Feature Badges -->
+                        <div class="row g-3 my-4">
+                            <div class="col-6">
+                                <div style="background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(16px); border: 1px solid rgba(0, 240, 255, 0.2); border-radius: 12px; padding: 20px; box-shadow: 0 0 15px rgba(0, 240, 255, 0.1);">
+                                    <div style="color: #00F0FF; font-weight: 700; font-size: 15px; margin-bottom: 4px;">⚡ Sub-Millisecond Cache</div>
+                                    <div style="color: #94A3B8; font-size: 13px;">Ultra-accelerated ledger posting &amp; multi-company sync.</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div style="background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(16px); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 12px; padding: 20px; box-shadow: 0 0 15px rgba(16, 185, 129, 0.1);">
+                                    <div style="color: #10B981; font-weight: 700; font-size: 15px; margin-bottom: 4px;">🛡️ Quantum Security Protocol</div>
+                                    <div style="color: #94A3B8; font-size: 13px;">Immutable audit trails &amp; multi-tier governance.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Copyright / Tech Info -->
+                        <div style="color: #64748B; font-size: 13px;">
+                            Apex Glassmorphism &amp; Cyber Neon Dark Theme &#8226; Compatible with Odoo v14 through v20
+                        </div>
+                    </div>
+
+                    <!-- Right Login Form Column -->
+                    <div class="col-12 col-lg-5 d-flex flex-column justify-content-center align-items-center p-4 p-md-5">
+                        <div style="width: 100%; max-width: 420px; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(20px); border: 1px solid rgba(0, 240, 255, 0.3); border-radius: 16px; padding: 40px 32px; box-shadow: 0 10px 35px rgba(0, 0, 0, 0.6), 0 0 25px rgba(0, 240, 255, 0.15);">
+                            <div class="text-center mb-4">
+                                <h3 style="color: #FFFFFF; font-size: 24px; font-weight: 800; margin: 0 0 6px 0; text-shadow: 0 0 10px rgba(0, 240, 255, 0.3);">Authenticate</h3>
+                                <p style="color: #94A3B8; font-size: 13px; margin: 0;">Sign in to your encrypted enterprise instance</p>
+                            </div>
+                            <t t-out="0"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>

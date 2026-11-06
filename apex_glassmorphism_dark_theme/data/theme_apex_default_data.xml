@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="default_theme_apex_config" model="theme.apex.config">
+        <field name="name">Default Apex Cyber Cyan Profile</field>
+        <field name="company_id" ref="base.main_company"/>
+        <field name="is_active">True</field>
+        <field name="neon_preset">electric_cyan</field>
+        <field name="neon_color">#00F0FF</field>
+        <field name="neon_glow_color">rgba(0, 240, 255, 0.4)</field>
+        <field name="glass_card_bg">rgba(15, 23, 42, 0.85)</field>
+        <field name="glass_surface_border">rgba(0, 240, 255, 0.25)</field>
+        <field name="glass_blur_strength">frosted_16px</field>
+        <field name="neon_glow_strength">medium</field>
+        <field name="enable_glass_app_drawer">True</field>
+        <field name="enable_glowing_inputs">True</field>
+        <field name="enable_sticky_glass_headers">True</field>
+        <field name="enable_glass_dock_mobile">True</field>
+        <field name="font_family">outfit</field>
+        <field name="login_headline">Apex Cybernetic ERP Portal</field>
+        <field name="login_subtext">Ultra-speed business computing and automated enterprise intelligence.</field>
+    </record>
+</odoo>
