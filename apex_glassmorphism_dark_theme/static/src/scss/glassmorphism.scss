@@ -1,0 +1,80 @@
+/* Frosted Glassmorphism Styles */
+body.o_apex_theme_active {
+    .o_action_manager,
+    .o_content,
+    .o_view_controller {
+        background: radial-gradient(circle at 15% 20%, #0d1b2a 0%, #050811 100%) !important;
+    }
+
+    /* Glass Form Sheet */
+    .o_form_sheet_bg {
+        background: transparent !important;
+    }
+
+    .o_form_sheet {
+        background: var(--apex-glass-bg) !important;
+        backdrop-filter: blur(var(--apex-glass-blur)) !important;
+        border: 1px solid var(--apex-glass-border) !important;
+        border-radius: var(--apex-card-radius) !important;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 15px var(--apex-neon-glow) !important;
+        color: var(--apex-text-primary) !important;
+    }
+
+    /* Floating Statusbar */
+    .o_form_statusbar {
+        background: rgba(15, 23, 42, 0.9) !important;
+        backdrop-filter: blur(12px) !important;
+        border-bottom: 1px solid var(--apex-glass-border) !important;
+    }
+
+    /* Glass Kanban Cards */
+    .o_kanban_view .o_kanban_record {
+        background: var(--apex-glass-bg) !important;
+        backdrop-filter: blur(10px) !important;
+        border: 1px solid var(--apex-glass-border) !important;
+        border-radius: 10px !important;
+        color: var(--apex-text-primary) !important;
+        transition: transform 0.2s, box-shadow 0.2s;
+
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4), 0 0 12px var(--apex-neon-glow) !important;
+        }
+    }
+
+    /* Glass List View */
+    .o_list_table {
+        background: var(--apex-glass-bg) !important;
+        backdrop-filter: blur(10px) !important;
+        border-radius: 10px !important;
+        color: var(--apex-text-primary) !important;
+
+        thead {
+            background: rgba(15, 23, 42, 0.95) !important;
+            border-bottom: 2px solid var(--apex-neon) !important;
+            color: var(--apex-neon) !important;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+
+            &:hover {
+                background: rgba(0, 240, 255, 0.08) !important;
+            }
+        }
+    }
+
+    /* Control Panel */
+    .o_control_panel {
+        background: rgba(10, 15, 30, 0.9) !important;
+        backdrop-filter: blur(12px) !important;
+        border-bottom: 1px solid var(--apex-glass-border) !important;
+    }
+
+    /* Top Navbar */
+    .o_main_navbar {
+        background: rgba(10, 15, 30, 0.95) !important;
+        backdrop-filter: blur(16px) !important;
+        border-bottom: 1px solid var(--apex-glass-border) !important;
+    }
+}

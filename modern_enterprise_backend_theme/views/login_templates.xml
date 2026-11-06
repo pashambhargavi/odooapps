@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <template id="modern_enterprise_login_layout" inherit_id="web.login_layout" name="Modern Enterprise Login Layout">
-        <xpath expr="//div[hasclass('container')]" position="replace">
+        <xpath expr="//t[@t-call='web.frontend_layout']/div" position="replace">
             <div class="container-fluid p-0 o_theme_login_container" style="min-height: 100vh; display: flex; align-items: stretch; background-color: #0F172A; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
                 <div class="row g-0 w-100 m-0">
                     <!-- Left Brand Hero Column -->

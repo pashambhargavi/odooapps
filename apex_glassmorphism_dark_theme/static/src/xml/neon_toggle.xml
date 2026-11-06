@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="apex_glassmorphism_dark_theme.NeonToggle">
+        <div class="o_apex_neon_toggle d-flex align-items-center px-2 cursor-pointer"
+             t-on-click="cycleMood"
+             title="Cycle Cyber Neon Ambient Glow"
+             style="cursor: pointer;">
+            <i class="fa fa-bolt fs-5" style="color: var(--apex-neon, #00F0FF); filter: drop-shadow(0 0 6px var(--apex-neon, #00F0FF));"/>
+        </div>
+    </t>
+</templates>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="module_category_theme_apex" model="ir.module.category">
+        <field name="name">Apex Glassmorphism &amp; Cyber UI</field>
+        <field name="description">Manage futuristic glassmorphism themes, cyber neon accents, and ambient lighting.</field>
+        <field name="sequence">26</field>
+    </record>
+
+    <record id="privilege_theme_apex" model="res.groups.privilege">
+        <field name="name">Apex Cyber Theme Access</field>
+        <field name="category_id" ref="module_category_theme_apex"/>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="group_theme_apex_user" model="res.groups">
+        <field name="name">Apex Theme User (Personal Neon Mood)</field>
+        <field name="privilege_id" ref="privilege_theme_apex"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <record id="group_theme_apex_manager" model="res.groups">
+        <field name="name">Apex Theme Administrator (Brand &amp; Lighting Manager)</field>
+        <field name="privilege_id" ref="privilege_theme_apex"/>
+        <field name="implied_ids" eval="[(4, ref('group_theme_apex_user')), (4, ref('base.group_system'))]"/>
+        <field name="user_ids" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+
+    <record id="base.group_user" model="res.groups">
+        <field name="implied_ids" eval="[(4, ref('apex_glassmorphism_dark_theme.group_theme_apex_user'))]"/>
+    </record>
+
+    <data noupdate="1">
+        <!-- Multi-Company Rule -->
+        <record id="rule_theme_apex_config_company" model="ir.rule">
+            <field name="name">Apex Theme Config: Multi-Company</field>
+            <field name="model_id" ref="model_theme_apex_config"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+    </data>
+</odoo>
