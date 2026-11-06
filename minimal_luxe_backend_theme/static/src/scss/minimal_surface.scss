@@ -1,0 +1,61 @@
+/* Minimal Luxe: Linear-Style Monochromatic Canvas */
+
+body.luxe-obsidian-dark {
+    background-color: var(--luxe-bg-base) !important;
+    color: var(--luxe-text-primary) !important;
+
+    .o_main_navbar {
+        background-color: var(--luxe-bg-base) !important;
+        border-bottom: 1px solid var(--luxe-border-color) !important;
+
+        .o_menu_brand {
+            font-weight: 700;
+            color: var(--luxe-text-primary) !important;
+            letter-spacing: 0.5px;
+        }
+
+        .o_nav_entry {
+            color: var(--luxe-text-muted) !important;
+            border-radius: var(--luxe-radius);
+
+            &:hover, &.active {
+                color: var(--luxe-text-primary) !important;
+                background-color: var(--luxe-bg-card) !important;
+            }
+        }
+    }
+
+    .o_action_manager {
+        background-color: var(--luxe-bg-base);
+    }
+
+    .o_control_panel {
+        background-color: var(--luxe-bg-base) !important;
+        border-bottom: 1px solid var(--luxe-border-color) !important;
+
+        .breadcrumb-item, .o_breadcrumb {
+            color: var(--luxe-text-primary) !important;
+        }
+    }
+
+    .o_form_sheet {
+        background-color: var(--luxe-bg-surface) !important;
+        border: 1px solid var(--luxe-border-color) !important;
+        border-radius: var(--luxe-radius) !important;
+        color: var(--luxe-text-primary) !important;
+    }
+
+    .btn-primary {
+        background-color: var(--luxe-accent) !important;
+        border-color: var(--luxe-accent) !important;
+        color: #FFFFFF !important;
+        border-radius: var(--luxe-radius) !important;
+    }
+
+    .btn-secondary {
+        background-color: var(--luxe-bg-card) !important;
+        border: 1px solid var(--luxe-border-color) !important;
+        color: var(--luxe-text-primary) !important;
+        border-radius: var(--luxe-radius) !important;
+    }
+}

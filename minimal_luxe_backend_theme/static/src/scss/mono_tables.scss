@@ -1,0 +1,32 @@
+/* High-Density Tabular Numbers & Hairline Borders */
+
+.o_list_table {
+    border: 1px solid var(--luxe-border-color) !important;
+    border-radius: var(--luxe-radius);
+
+    th {
+        font-size: 12px !important;
+        font-weight: 600 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5px !important;
+        color: var(--luxe-text-muted) !important;
+        background-color: var(--luxe-bg-card) !important;
+        border-bottom: 1px solid var(--luxe-border-color) !important;
+        padding: 6px 10px !important;
+    }
+
+    td {
+        padding: 6px 10px !important;
+        border-bottom: 1px solid var(--luxe-border-color) !important;
+        font-variant-numeric: tabular-nums;
+
+        &.o_monetary_cell, &.o_list_number {
+            font-family: var(--luxe-mono-font) !important;
+            font-size: 13px !important;
+        }
+    }
+
+    tbody tr:hover {
+        background-color: rgba(255, 255, 255, 0.03) !important;
+    }
+}
