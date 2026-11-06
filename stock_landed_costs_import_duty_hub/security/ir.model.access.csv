@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_stock_landed_cost_hub_user,stock.landed.cost.hub.user,model_stock_landed_cost_hub,group_landed_cost_user,1,1,1,0
+access_stock_landed_cost_hub_manager,stock.landed.cost.hub.manager,model_stock_landed_cost_hub,group_landed_cost_manager,1,1,1,1
+access_stock_landed_cost_hub_line_user,stock.landed.cost.hub.line.user,model_stock_landed_cost_hub_line,group_landed_cost_user,1,1,1,0
+access_stock_landed_cost_hub_line_manager,stock.landed.cost.hub.line.manager,model_stock_landed_cost_hub_line,group_landed_cost_manager,1,1,1,1
+access_stock_landed_cost_hub_val_user,stock.landed.cost.hub.valuation.user,model_stock_landed_cost_hub_valuation,group_landed_cost_user,1,1,1,0
+access_stock_landed_cost_hub_val_manager,stock.landed.cost.hub.valuation.manager,model_stock_landed_cost_hub_valuation,group_landed_cost_manager,1,1,1,1
