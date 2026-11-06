@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_theme" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.theme</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="99"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="Enterprise Theme" string="Enterprise Theme" name="modern_enterprise_backend_theme">
+                    <block title="Navigation Layout &amp; Architecture" id="theme_layout_section">
+                        <setting id="setting_theme_layout" help="Select between Enterprise Fullscreen App Drawer and Modern Left Collapsible Sidebar.">
+                            <field name="theme_layout_mode" widget="radio"/>
+                        </setting>
+                    </block>
+
+                    <block title="Branding &amp; Color Palettes" id="theme_colors_section">
+                        <setting id="setting_theme_palette" help="Pick an executive preset or configure custom HEX brand colors.">
+                            <field name="theme_color_preset"/>
+                            <div class="content-group mt16">
+                                <div class="row mt8">
+                                    <label for="theme_primary_color" class="col-lg-4 o_light_label" string="Primary Brand Color"/>
+                                    <field name="theme_primary_color" widget="color"/>
+                                </div>
+                                <div class="row mt8">
+                                    <label for="theme_navbar_bg_color" class="col-lg-4 o_light_label" string="Top Navbar Color"/>
+                                    <field name="theme_navbar_bg_color" widget="color"/>
+                                </div>
+                                <div class="row mt8">
+                                    <label for="theme_accent_color" class="col-lg-4 o_light_label" string="Accent Button Color"/>
+                                    <field name="theme_accent_color" widget="color"/>
+                                </div>
+                                <div class="row mt8">
+                                    <label for="theme_sidebar_bg_color" class="col-lg-4 o_light_label" string="Sidebar Background"/>
+                                    <field name="theme_sidebar_bg_color" widget="color"/>
+                                </div>
+                            </div>
+                        </setting>
+                    </block>
+
+                    <block title="Typography &amp; Table Display" id="theme_ui_section">
+                        <setting id="setting_theme_font" help="Choose typeface and interface radius.">
+                            <div class="row">
+                                <label for="theme_font_family" class="col-lg-4 o_light_label" string="Font Family"/>
+                                <field name="theme_font_family"/>
+                            </div>
+                            <div class="row mt8">
+                                <label for="theme_border_radius_size" class="col-lg-4 o_light_label" string="Corner Radius"/>
+                                <field name="theme_border_radius_size"/>
+                            </div>
+                        </setting>
+                        <setting id="setting_theme_table_ux" help="Enhanced data grid and form view navigation.">
+                            <div>
+                                <field name="theme_enable_sticky_list_headers" class="oe_inline"/>
+                                <label for="theme_enable_sticky_list_headers" string="Sticky List View Headers"/>
+                            </div>
+                            <div class="mt4">
+                                <field name="theme_enable_sticky_form_statusbar" class="oe_inline"/>
+                                <label for="theme_enable_sticky_form_statusbar" string="Sticky Form Statusbar"/>
+                            </div>
+                            <div class="mt4">
+                                <field name="theme_enable_list_zebra_striping" class="oe_inline"/>
+                                <label for="theme_enable_list_zebra_striping" string="Zebra Striped Rows"/>
+                            </div>
+                        </setting>
+                    </block>
+
+                    <block title="Executive Branded Login Screen" id="theme_login_section">
+                        <setting id="setting_theme_login" help="Replace default login with a high-end split screen.">
+                            <div class="row">
+                                <label for="theme_login_template" class="col-lg-4 o_light_label" string="Login Template"/>
+                                <field name="theme_login_template"/>
+                            </div>
+                            <div class="row mt8">
+                                <label for="theme_login_headline" class="col-lg-4 o_light_label" string="Welcome Headline"/>
+                                <field name="theme_login_headline"/>
+                            </div>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+</odoo>

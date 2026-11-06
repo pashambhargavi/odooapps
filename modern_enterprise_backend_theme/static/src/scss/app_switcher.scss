@@ -1,0 +1,94 @@
+/* Fullscreen Enterprise App Switcher Grid */
+.o_theme_app_switcher_overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9999;
+    background-color: rgba(15, 23, 42, 0.94);
+    backdrop-filter: blur(12px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 60px 20px 40px 20px;
+    overflow-y: auto;
+    box-sizing: border-box;
+    transition: opacity 0.25s ease-in-out;
+}
+
+.o_theme_app_switcher_header {
+    width: 100%;
+    max-width: 720px;
+    margin-bottom: 35px;
+    position: relative;
+}
+
+.o_theme_app_switcher_search {
+    width: 100%;
+    padding: 14px 24px;
+    font-size: 16px;
+    border-radius: 30px;
+    border: 1px solid #334155;
+    background-color: #1E293B;
+    color: #FFFFFF;
+    outline: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.o_theme_app_switcher_search:focus {
+    border-color: #38BDF8;
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25);
+}
+
+.o_theme_app_grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 25px;
+    width: 100%;
+    max-width: 960px;
+    justify-content: center;
+}
+
+.o_theme_app_item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    text-decoration: none !important;
+    padding: 12px 8px;
+    border-radius: 12px;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.o_theme_app_item:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    transform: translateY(-4px);
+}
+
+.o_theme_app_icon_wrapper {
+    width: 72px;
+    height: 72px;
+    border-radius: 18px;
+    background-color: #1E293B;
+    border: 1px solid #334155;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    transition: transform 0.2s;
+}
+
+.o_theme_app_item:hover .o_theme_app_icon_wrapper {
+    box-shadow: 0 6px 16px rgba(56, 189, 248, 0.35);
+}
+
+.o_theme_app_name {
+    color: #F8FAFC;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.3;
+}

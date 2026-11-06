@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="default_enterprise_theme_config" model="theme.config">
+        <field name="name">Default Enterprise Executive Navy</field>
+        <field name="company_id" ref="base.main_company"/>
+        <field name="is_active">True</field>
+        <field name="layout_mode">enterprise_top</field>
+        <field name="color_preset">executive_navy</field>
+        <field name="primary_color">#0F172A</field>
+        <field name="accent_color">#2563EB</field>
+        <field name="navbar_bg_color">#0F172A</field>
+        <field name="sidebar_bg_color">#1E293B</field>
+        <field name="active_item_color">#38BDF8</field>
+        <field name="font_family">inter</field>
+        <field name="border_radius_size">modern</field>
+        <field name="enable_sticky_list_headers">True</field>
+        <field name="enable_sticky_form_statusbar">True</field>
+        <field name="enable_list_zebra_striping">True</field>
+        <field name="login_template">modern_split</field>
+        <field name="login_headline">Welcome to Enterprise Operations</field>
+        <field name="login_subtext">Unified ERP, CRM, Inventory &amp; Financial Intelligence Platform</field>
+    </record>
+</odoo>

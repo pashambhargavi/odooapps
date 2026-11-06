@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_users_view_form_theme_preferences" model="ir.ui.view">
+        <field name="name">res.users.preferences.form.inherit.theme</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form_simple_modif"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='preferences_page']" position="inside">
+                <group string="Theme &amp; Visual Appearance" name="theme_preferences">
+                    <field name="theme_dark_mode" widget="radio"/>
+                    <field name="theme_density" widget="radio"/>
+                    <field name="theme_sidebar_collapsed"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Full User Form View -->
+    <record id="view_users_form_inherit_theme" model="ir.ui.view">
+        <field name="name">res.users.form.inherit.theme</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Theme Preferences" name="theme_preferences_tab">
+                    <group>
+                        <group string="Personal Appearance">
+                            <field name="theme_dark_mode"/>
+                            <field name="theme_density"/>
+                            <field name="theme_sidebar_collapsed"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

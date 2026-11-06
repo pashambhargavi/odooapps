@@ -1,0 +1,30 @@
+/* NextGen Enterprise Theme CSS Custom Properties */
+:root {
+    --theme-primary: #0F172A;
+    --theme-accent: #2563EB;
+    --theme-navbar-bg: #0F172A;
+    --theme-navbar-text: #FFFFFF;
+    --theme-sidebar-bg: #1E293B;
+    --theme-sidebar-text: #E2E8F0;
+    --theme-active-item: #38BDF8;
+    --theme-border-radius: 8px;
+    --theme-bg-body: #F1F5F9;
+    --theme-card-bg: #FFFFFF;
+    --theme-text-main: #1E293B;
+    --theme-text-muted: #64748B;
+    --theme-border-color: #E2E8F0;
+}
+
+/* Dark Mode Color Palette */
+body.o_theme_dark {
+    --theme-bg-body: #0B0F19;
+    --theme-card-bg: #131B2E;
+    --theme-text-main: #F8FAFC;
+    --theme-text-muted: #94A3B8;
+    --theme-border-color: #243048;
+    --theme-navbar-bg: #0B0F19;
+    --theme-sidebar-bg: #0F172A;
+
+    background-color: var(--theme-bg-body) !important;
+    color: var(--theme-text-main) !important;
+}

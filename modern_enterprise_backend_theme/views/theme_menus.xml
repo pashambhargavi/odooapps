@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Top-level or Sub-menu in Settings -->
+    <menuitem id="menu_theme_customizer_root"
+              name="Theme Customizer"
+              parent="base.menu_administration"
+              sequence="5"
+              groups="modern_enterprise_backend_theme.group_theme_manager"/>
+
+    <menuitem id="menu_theme_profiles"
+              name="Theme Profiles &amp; Branding"
+              parent="menu_theme_customizer_root"
+              action="action_theme_config"
+              sequence="10"/>
+</odoo>

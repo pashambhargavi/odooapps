@@ -1,0 +1,45 @@
+/* Sticky Table Headers, Form Statusbar & Zebra Striping */
+.o_list_table {
+    thead {
+        position: sticky;
+        top: 0;
+        z-index: 5;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+    }
+}
+
+/* Zebra Striping */
+body:not(.o_theme_dark) .o_list_table tbody tr:nth-child(even) {
+    background-color: #F8FAFC !important;
+}
+
+body.o_theme_dark .o_list_table tbody tr:nth-child(even) {
+    background-color: #101726 !important;
+}
+
+/* Sticky Form Statusbar */
+.o_form_view .o_form_statusbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+/* Rounded Modern Buttons */
+.btn {
+    border-radius: var(--theme-border-radius, 8px) !important;
+    font-weight: 600;
+    transition: all 0.15s ease-in-out;
+}
+
+.btn-primary {
+    background-color: var(--theme-accent, #2563EB) !important;
+    border-color: var(--theme-accent, #2563EB) !important;
+}
+
+/* Badges */
+.badge {
+    border-radius: 6px !important;
+    padding: 4px 8px !important;
+    font-weight: 600;
+}

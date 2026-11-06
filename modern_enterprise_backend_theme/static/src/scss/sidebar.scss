@@ -1,0 +1,69 @@
+/* Modern Collapsible Left Sidebar Layout */
+body.o_theme_sidebar_layout {
+    .o_web_client {
+        display: flex !important;
+        flex-direction: row !important;
+    }
+
+    .o_theme_sidebar_rail {
+        width: 240px;
+        min-width: 240px;
+        height: 100vh;
+        background-color: var(--theme-sidebar-bg);
+        color: var(--theme-sidebar-text);
+        display: flex;
+        flex-direction: column;
+        border-right: 1px solid rgba(255, 255, 255, 0.08);
+        transition: width 0.25s ease-in-out;
+        z-index: 1000;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.15);
+
+        &.collapsed {
+            width: 70px;
+            min-width: 70px;
+
+            .o_theme_sidebar_text,
+            .o_theme_brand_name {
+                display: none;
+            }
+        }
+    }
+
+    .o_theme_sidebar_header {
+        height: 56px;
+        display: flex;
+        align-items: center;
+        padding: 0 16px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .o_theme_sidebar_nav {
+        flex: 1;
+        overflow-y: auto;
+        padding: 12px 8px;
+    }
+
+    .o_theme_sidebar_item {
+        display: flex;
+        align-items: center;
+        padding: 10px 14px;
+        border-radius: 8px;
+        color: var(--theme-sidebar-text);
+        text-decoration: none;
+        margin-bottom: 4px;
+        transition: background-color 0.2s, color 0.2s;
+
+        &:hover,
+        &.active {
+            background-color: rgba(56, 189, 248, 0.12);
+            color: var(--theme-active-item);
+        }
+
+        i {
+            font-size: 16px;
+            width: 24px;
+            text-align: center;
+            margin-right: 12px;
+        }
+    }
+}

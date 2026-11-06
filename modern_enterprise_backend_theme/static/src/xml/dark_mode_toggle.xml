@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="modern_enterprise_backend_theme.DarkModeToggle">
+        <div class="o_theme_dark_mode_toggle d-flex align-items-center px-2 cursor-pointer"
+             t-on-click="toggle"
+             title="Toggle Light / Dark Mode"
+             style="cursor: pointer;">
+            <i t-if="state.isDark" class="fa fa-sun-o text-warning fs-5" title="Switch to Light Mode"/>
+            <i t-else="" class="fa fa-moon-o text-light fs-5" title="Switch to Dark Mode"/>
+        </div>
+    </t>
+</templates>

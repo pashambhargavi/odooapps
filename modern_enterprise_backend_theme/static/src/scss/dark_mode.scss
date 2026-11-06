@@ -1,0 +1,102 @@
+/* True Dark Mode Palette and Interface Styling */
+body.o_theme_dark {
+    /* Main Content Backgrounds */
+    .o_action_manager,
+    .o_content,
+    .o_view_controller {
+        background-color: #0B0F19 !important;
+    }
+
+    /* Form View Sheet */
+    .o_form_sheet_bg {
+        background-color: #0B0F19 !important;
+    }
+
+    .o_form_sheet {
+        background-color: #131B2E !important;
+        border: 1px solid #243048 !important;
+        color: #F8FAFC !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+    }
+
+    /* Form Statusbar */
+    .o_form_statusbar {
+        background-color: #162035 !important;
+        border-bottom: 1px solid #243048 !important;
+    }
+
+    /* Kanban Views & Cards */
+    .o_kanban_view .o_kanban_record {
+        background-color: #131B2E !important;
+        border: 1px solid #243048 !important;
+        color: #F8FAFC !important;
+    }
+
+    .o_kanban_group {
+        background-color: #0F172A !important;
+    }
+
+    /* List & Table Views */
+    .o_list_table {
+        background-color: #131B2E !important;
+        color: #F8FAFC !important;
+
+        thead {
+            background-color: #162035 !important;
+            color: #94A3B8 !important;
+            border-bottom: 2px solid #243048 !important;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid #1E293B !important;
+
+            &:hover {
+                background-color: #1B2640 !important;
+            }
+        }
+    }
+
+    /* Control Panel & Search Bar */
+    .o_control_panel {
+        background-color: #0F172A !important;
+        border-bottom: 1px solid #243048 !important;
+    }
+
+    .o_searchview {
+        background-color: #131B2E !important;
+        border: 1px solid #243048 !important;
+        color: #F8FAFC !important;
+    }
+
+    /* Form Inputs */
+    input.o_input,
+    select.o_input,
+    textarea.o_input {
+        background-color: #0F172A !important;
+        border: 1px solid #243048 !important;
+        color: #F8FAFC !important;
+
+        &:focus {
+            border-color: #38BDF8 !important;
+        }
+    }
+
+    /* Top Navbar */
+    .o_main_navbar {
+        background-color: #0B0F19 !important;
+        border-bottom: 1px solid #243048 !important;
+    }
+
+    /* Modals & Dialogs */
+    .modal-content {
+        background-color: #131B2E !important;
+        border: 1px solid #243048 !important;
+        color: #F8FAFC !important;
+    }
+
+    .modal-header,
+    .modal-footer {
+        background-color: #162035 !important;
+        border-color: #243048 !important;
+    }
+}
