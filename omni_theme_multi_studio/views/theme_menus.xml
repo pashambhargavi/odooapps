@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Direct Menu under Settings -->
+    <menuitem
+        id="menu_omni_theme_root"
+        name="OmniTheme 10-in-1 Studio"
+        parent="base.menu_administration"
+        sequence="25"
+        groups="group_omni_theme_manager"
+    />
+
+    <menuitem
+        id="menu_omni_theme_config"
+        name="Theme Profiles &amp; Defaults"
+        parent="menu_omni_theme_root"
+        action="action_omni_theme_config"
+        sequence="10"
+    />
+</odoo>
