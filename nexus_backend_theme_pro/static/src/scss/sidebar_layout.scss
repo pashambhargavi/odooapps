@@ -1,0 +1,37 @@
+/* Nexus Pro: 3-in-1 Adaptive Navigation Layouts */
+
+/* Mode 1: SaaS Collapsible Sidebar */
+body.nexus-layout-sidebar {
+    .o_main_navbar {
+        background-color: var(--nexus-header-bg) !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+        .o_menu_brand {
+            font-weight: 700;
+            color: #FFFFFF !important;
+            letter-spacing: 0.5px;
+        }
+
+        .o_nav_entry {
+            color: #E2E8F0 !important;
+            border-radius: var(--nexus-border-radius);
+            transition: all 0.2s ease;
+
+            &:hover {
+                background-color: rgba(255, 255, 255, 0.1) !important;
+                color: #FFFFFF !important;
+            }
+        }
+    }
+
+    .o_action_manager {
+        background-color: #F8FAFC;
+    }
+}
+
+/* Mode 3: Compact Mini-Rail */
+body.nexus-layout-minirail {
+    .o_main_navbar {
+        background-color: var(--nexus-header-bg) !important;
+    }
+}
