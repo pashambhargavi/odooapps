@@ -1,0 +1,182 @@
+/* ==========================================================================
+   OMNITHEME DYNAMIC COMPONENT STYLING
+   ========================================================================== */
+
+/* Main Navigation Bar */
+.o_main_navbar {
+    background-color: var(--omni-navbar-bg) !important;
+    color: var(--omni-navbar-text) !important;
+    border-bottom: 1px solid var(--omni-border-color) !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08) !important;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+
+    .o_nav_entry, .dropdown-toggle, .o_menu_brand {
+        color: var(--omni-navbar-text) !important;
+    }
+}
+
+/* App Switcher & Views Container */
+.o_action_manager, .o_content {
+    background-color: var(--omni-view-bg) !important;
+    transition: background-color 0.3s ease;
+}
+
+/* Control Panel */
+.o_control_panel {
+    background-color: var(--omni-card-bg) !important;
+    border-bottom: 1px solid var(--omni-border-color) !important;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Form Sheet & Cards */
+.o_form_view .o_form_sheet {
+    background-color: var(--omni-card-bg) !important;
+    border: 1px solid var(--omni-border-color) !important;
+    border-radius: 10px !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Primary Action Buttons */
+.btn-primary, .btn-primary:active, .btn-primary:focus {
+    background-color: var(--omni-primary-btn) !important;
+    border-color: var(--omni-primary-btn) !important;
+    border-radius: var(--omni-button-radius, 8px) !important;
+    box-shadow: var(--omni-accent-glow) !important;
+    color: #FFFFFF !important;
+    font-weight: 600 !important;
+    transition: all 0.2s ease-in-out !important;
+
+    &:hover {
+        background-color: var(--omni-primary-btn-hover) !important;
+        border-color: var(--omni-primary-btn-hover) !important;
+        transform: translateY(-1px);
+    }
+}
+
+/* Kanban Cards */
+.o_kanban_view .o_kanban_record {
+    background-color: var(--omni-card-bg) !important;
+    border: 1px solid var(--omni-border-color) !important;
+    border-radius: 8px !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover {
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+        border-color: var(--omni-primary-btn) !important;
+    }
+}
+
+/* List / Tree View */
+.o_list_view {
+    background-color: var(--omni-card-bg) !important;
+
+    thead tr {
+        background-color: var(--omni-view-bg) !important;
+        border-bottom: 2px solid var(--omni-border-color) !important;
+    }
+
+    tbody tr:hover {
+        background-color: var(--omni-view-bg) !important;
+    }
+}
+
+/* Systray OmniTheme Toggle Button & Dropdown */
+.o_omni_systray_item {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+
+    .omni_toggle_btn {
+        background-color: rgba(255, 255, 255, 0.15);
+        color: var(--omni-navbar-text);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 20px;
+        padding: 4px 12px;
+        font-size: 12px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.2s ease;
+
+        &:hover {
+            background-color: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+    }
+}
+
+/* Dropdown Menu for 10 Themes */
+.omni_theme_dropdown_menu {
+    min-width: 320px;
+    max-width: 360px;
+    padding: 12px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+    border: 1px solid #E2E8F0;
+    background-color: #FFFFFF;
+
+    .omni_dropdown_header {
+        font-weight: 700;
+        font-size: 13px;
+        color: #0F172A;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        padding-bottom: 8px;
+        margin-bottom: 8px;
+        border-bottom: 1px solid #F1F5F9;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .omni_theme_tile {
+        display: flex;
+        align-items: center;
+        padding: 8px 10px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.15s ease;
+        margin-bottom: 4px;
+
+        &:hover {
+            background-color: #F8FAFC;
+        }
+
+        &.active {
+            background-color: #EEF2FF;
+            border-left: 3px solid #6366F1;
+        }
+
+        .omni_tile_icon {
+            font-size: 16px;
+            margin-right: 10px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .omni_tile_info {
+            flex-grow: 1;
+
+            .omni_tile_name {
+                font-weight: 600;
+                font-size: 13px;
+                color: #0F172A;
+                line-height: 1.2;
+            }
+
+            .omni_tile_sub {
+                font-size: 11px;
+                color: #64748B;
+            }
+        }
+
+        .omni_tile_swatch {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            margin-left: 6px;
+        }
+    }
+}

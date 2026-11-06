@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_inherit_omni" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.omni</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="99"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="OmniTheme 10-in-1 Studio" string="OmniTheme 10-in-1 Studio" name="omni_theme_multi_studio">
+                    <block title="OmniTheme 10-in-1 Multi-Theme Engine" id="omni_theme_settings_block">
+                        <setting id="omni_theme_profile_setting" string="Active Studio Profile" help="The company profile governing fallback and corporate styling.">
+                            <field name="omni_theme_config_id"/>
+                        </setting>
+
+                        <setting id="omni_default_preset_setting" string="Company Default Theme Preset" help="Default theme applied to all new users and uncustomized sessions.">
+                            <field name="omni_default_theme_key" widget="radio"/>
+                        </setting>
+
+                        <setting id="omni_user_switcher_setting" string="Allow User Navbar Toggles" help="Allow employees to toggle themes individually via their top-right navbar menu.">
+                            <field name="omni_allow_user_switching"/>
+                        </setting>
+
+                        <setting id="omni_button_radius_setting" string="Global Button Corner Geometry" help="Choose modern rounded, curved pill, or sharp precision.">
+                            <field name="omni_button_border_radius" widget="radio"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+</odoo>

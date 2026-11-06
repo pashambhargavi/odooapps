@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Default Active Theme Configuration -->
+    <record id="default_omni_theme_config" model="omni.theme.config">
+        <field name="name">OmniTheme 10-in-1 Master Studio</field>
+        <field name="company_id" ref="base.main_company"/>
+        <field name="is_active">True</field>
+        <field name="theme_key">emerald_aurora</field>
+        <field name="allow_user_switching">True</field>
+        <field name="navbar_bg">#064E3B</field>
+        <field name="navbar_text">#ECFDF5</field>
+        <field name="primary_color">#10B981</field>
+        <field name="view_bg">#F0FDF4</field>
+        <field name="card_bg">#FFFFFF</field>
+        <field name="border_color">#A7F3D0</field>
+        <field name="font_family">inter</field>
+        <field name="button_border_radius">rounded_8</field>
+    </record>
+</odoo>
