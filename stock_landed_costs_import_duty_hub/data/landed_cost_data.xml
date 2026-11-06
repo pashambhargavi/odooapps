@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Sequence for Landed Costs -->
+    <record id="seq_stock_landed_cost_hub" model="ir.sequence">
+        <field name="name">Landed Cost Hub Reference</field>
+        <field name="code">stock.landed.cost.hub</field>
+        <field name="prefix">LC/%(year)s/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <!-- Default Service Products for Landed Costing -->
+    <record id="product_landed_cost_sea_freight" model="product.product">
+        <field name="name">International Sea Freight</field>
+        <field name="type">service</field>
+        <field name="default_code">SRV-FREIGHT-SEA</field>
+    </record>
+
+    <record id="product_landed_cost_import_duty" model="product.product">
+        <field name="name">Customs Import Duty &amp; Tariffs</field>
+        <field name="type">service</field>
+        <field name="default_code">SRV-DUTY-CUSTOMS</field>
+    </record>
+
+    <record id="product_landed_cost_terminal_handling" model="product.product">
+        <field name="name">Terminal Handling Charges (THC)</field>
+        <field name="type">service</field>
+        <field name="default_code">SRV-PORT-THC</field>
+    </record>
+
+    <record id="product_landed_cost_inland_transport" model="product.product">
+        <field name="name">Inland Trucking &amp; Port Drayage</field>
+        <field name="type">service</field>
+        <field name="default_code">SRV-LOG-TRUCK</field>
+    </record>
+
+    <record id="product_landed_cost_clearing_fee" model="product.product">
+        <field name="name">Customs Broker &amp; Clearing Fee</field>
+        <field name="type">service</field>
+        <field name="default_code">SRV-BROKER-CLEAR</field>
+    </record>
+</odoo>
