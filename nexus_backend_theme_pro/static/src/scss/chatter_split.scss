@@ -1,0 +1,51 @@
+/* Smart Split Chatter Placement (Benchmark: Spiffy Theme Backend) */
+
+body.nexus-chatter-sided {
+    @media (min-width: 1200px) {
+        .o_form_view_container {
+            display: flex !important;
+            flex-direction: row !important;
+            align-items: stretch !important;
+            height: 100% !important;
+            overflow: hidden !important;
+
+            .o_form_sheet_bg {
+                flex: 1 1 62% !important;
+                max-width: 65% !important;
+                overflow-y: auto !important;
+                border-right: 1px solid #E2E8F0;
+                padding-bottom: 60px;
+            }
+
+            .o-mail-ChatterContainer,
+            .o_ChatterContainer,
+            .o_form_view .o_form_renderer + .o-mail-Form-chatter {
+                flex: 1 1 38% !important;
+                max-width: 38% !important;
+                background-color: #F8FAFC !important;
+                overflow-y: auto !important;
+                height: 100% !important;
+                border-left: 1px solid #CBD5E1;
+                padding: 16px 20px !important;
+            }
+        }
+    }
+}
+
+body.nexus-chatter-bottom {
+    .o_form_view_container {
+        display: block !important;
+
+        .o_form_sheet_bg {
+            width: 100% !important;
+            max-width: 100% !important;
+        }
+
+        .o-mail-ChatterContainer,
+        .o_ChatterContainer {
+            width: 100% !important;
+            max-width: 1140px !important;
+            margin: 0 auto;
+        }
+    }
+}

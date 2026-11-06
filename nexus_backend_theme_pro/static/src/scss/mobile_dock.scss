@@ -1,0 +1,38 @@
+/* Mobile Floating Action Dock */
+@media (max-width: 768px) {
+    .o_nexus_mobile_dock {
+        position: fixed;
+        bottom: 12px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: calc(100% - 24px);
+        max-width: 480px;
+        background-color: var(--nexus-header-bg);
+        border-radius: 28px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        padding: 8px 16px;
+        z-index: 1050;
+
+        .dock-item {
+            color: #E2E8F0;
+            text-align: center;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+
+            i {
+                display: block;
+                font-size: 18px;
+                margin-bottom: 2px;
+            }
+
+            &.active {
+                color: var(--nexus-accent);
+            }
+        }
+    }
+}

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Direct Menu under Settings -->
+    <menuitem id="menu_nexus_theme_root"
+              name="Nexus Theme Studio"
+              parent="base.menu_administration"
+              sequence="28"
+              groups="nexus_backend_theme_pro.group_nexus_theme_manager"/>
+
+    <menuitem id="menu_nexus_theme_config"
+              name="Theme Profiles &amp; Layouts"
+              parent="menu_nexus_theme_root"
+              action="action_nexus_theme_config"
+              sequence="10"/>
+</odoo>
