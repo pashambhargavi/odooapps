@@ -1,0 +1,32 @@
+/* ==========================================================================
+   OMNITHEME MOBILE & TABLET RESPONSIVE DOCK
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    .o_main_navbar {
+        padding: 0 10px;
+
+        .omni_toggle_btn {
+            padding: 3px 8px;
+            font-size: 11px;
+
+            .omni_btn_label {
+                display: none;
+            }
+        }
+    }
+
+    .omni_theme_dropdown_menu {
+        position: fixed !important;
+        top: auto !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        border-radius: 16px 16px 0 0 !important;
+        max-height: 80vh;
+        overflow-y: auto;
+        box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.25);
+    }
+}
