@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+    <!-- Zen Mode Systray Toggle -->
+    <t t-name="minimal_luxe_backend_theme.LuxeZenToggle">
+        <div class="o_luxe_zen_toggle d-flex align-items-center me-2" role="button" t-on-click="onClickToggleZen" title="1-Click Zen Focus Mode (Distraction-Free)">
+            <i class="fa fa-eye text-white fs-6" style="padding: 6px; border-radius: 4px; background: rgba(255,255,255,0.06); cursor: pointer;"/>
+        </div>
+    </t>
+
+    <!-- Luxury Accent Systray Cycle -->
+    <t t-name="minimal_luxe_backend_theme.LuxeAccentToggle">
+        <div class="o_luxe_accent_toggle d-flex align-items-center me-2" role="button" t-on-click="onClickCycleAccent" title="1-Click Luxury Accent Switcher (Gold/Titanium/Platinum)">
+            <i class="fa fa-diamond text-warning fs-6" style="padding: 6px; border-radius: 4px; background: rgba(255,255,255,0.06); cursor: pointer;"/>
+        </div>
+    </t>
+</templates>
