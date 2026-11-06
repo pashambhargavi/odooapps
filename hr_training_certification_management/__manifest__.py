@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Training & Certification Management (Compliance Matrix, OSHA/GMP Tracking & Digital Certificates)',
-    'version': '15.0.1.0.0',
+    'version': '14.0.1.0.0',
     'category': 'Human Resources/Employees',
     'summary': 'Mandatory Compliance Training Matrix, Certification Renewals, OSHA/GMP Tracking, Skill Badges & Digital Certificate Issuance',
     'description': """
@@ -45,6 +45,7 @@ Key Features:
     'application': True,
     'auto_install': False,
 }
+
 
 
 

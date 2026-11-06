@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Employee Shift Scheduling, Duty Roster & Attendance Planning Hub',
-    'version': '15.0.1.0.0',
+    'version': '14.0.1.0.0',
     'category': 'Human Resources/Employees',
     'summary': 'Enterprise Visual Shift Planner, Weekly/Monthly Duty Rosters, Conflict Detection, Open Shift Bidding, Shift Swaps & Overtime Differential Pay',
     'description': """
@@ -42,6 +42,7 @@ Key Features:
     'application': True,
     'auto_install': False,
 }
+
 
 
 

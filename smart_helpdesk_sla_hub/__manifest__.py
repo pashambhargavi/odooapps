@@ -2,7 +2,7 @@
 
 {
     'name': 'Smart Helpdesk, SLA Policy & Customer Support Hub',
-    'version': '15.0.1.0.0',
+    'version': '14.0.1.0.0',
     'category': 'Services/Helpdesk',
     'summary': 'Enterprise-Grade Helpdesk Tickets, Dynamic SLA Policies, Support Teams, Sales/Invoice Integration & Service Reports',
     'description': """
@@ -56,6 +56,7 @@ Key Features
     'application': True,
     'auto_install': False,
 }
+
 
 
 

@@ -2,7 +2,7 @@
 
 {
     'name': 'Subscription, Recurring Billing & Contract Management Hub',
-    'version': '15.0.1.0.0',
+    'version': '14.0.1.0.0',
     'category': 'Sales/Subscriptions',
     'summary': 'Automated Recurring Billing, Subscription Lifecycle, Contract Renewal Engine, MRR/ARR Metrics & 1-Click Invoice Generation',
     'description': """
@@ -70,6 +70,7 @@ Key Features & Business Benefits
     'application': True,
     'auto_install': False,
 }
+
 
 
 
