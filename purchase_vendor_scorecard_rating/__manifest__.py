@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Vendor Scorecard, Supplier Performance & ISO 9001 Rating Hub',
-    'version': '17.0.1.0.0',
+    'version': '16.0.1.0.0',
     'category': 'Purchases',
     'summary': 'Automated On-Time Delivery (OTD), Quality Acceptance Rate, ISO 9001 Clause 8.4 Rating Rubric, Supplier Tiers & Audit Scorecards for Odoo Community',
     'sequence': 15,
@@ -35,4 +35,5 @@
     'application': True,
     'auto_install': False,
 }
+
 

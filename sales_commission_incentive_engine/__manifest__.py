@@ -2,7 +2,7 @@
 
 {
     'name': 'Sales Commission, Multi-Tier Incentive & Partner Affiliate Hub',
-    'version': '17.0.1.0.0',
+    'version': '16.0.1.0.0',
     'category': 'Sales/Sales',
     'summary': 'Dynamic Sales Rep Commissions, Manager Overrides, Margin-Based Incentives, Worksheets & Automated Vendor Bill Settlement',
     'description': """
@@ -63,4 +63,5 @@ Key Features
     'application': True,
     'auto_install': False,
 }
+
 

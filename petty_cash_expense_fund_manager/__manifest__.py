@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Petty Cash, Multi-Custodian Imprest Fund & Expense Manager',
-    'version': '17.0.1.0.0',
+    'version': '16.0.1.0.0',
     'category': 'Accounting/Invoicing',
     'summary': 'Multi-Custodian Petty Cash Boxes, Imprest Float Cycles, Denomination Tally Sheets, Expense Vouchers & Bank Replenishments for Odoo Community',
     'sequence': 12,
@@ -33,4 +33,5 @@
     'application': True,
     'auto_install': False,
 }
+
 

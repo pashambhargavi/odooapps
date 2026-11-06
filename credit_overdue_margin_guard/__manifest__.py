@@ -2,7 +2,7 @@
 
 {
     'name': 'Customer Credit, Overdue Aging & Margin Risk Guard',
-    'version': '17.0.1.0.0',
+    'version': '16.0.1.0.0',
     'category': 'Sales/Sales',
     'summary': 'Enforce Customer Credit Limits, Overdue Invoice Aging Blocks, Minimum Profit Margin % & Finance Override Workflows',
     'description': """
@@ -54,4 +54,5 @@ Key Features
     'application': True,
     'auto_install': False,
 }
+
 

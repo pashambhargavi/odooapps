@@ -2,7 +2,7 @@
 
 {
     'name': 'Fixed Asset Management & Depreciation Hub',
-    'version': '17.0.1.0.0',
+    'version': '16.0.1.0.0',
     'category': 'Accounting/Accounting',
     'summary': 'Fixed asset register, linear & declining-balance depreciation boards, automatic monthly posting, '
                'vendor-bill asset capture and disposal entries for Odoo Community',
@@ -46,4 +46,5 @@ auditable fixed asset register to Odoo Community:
     'application': True,
     'auto_install': False,
 }
+
 

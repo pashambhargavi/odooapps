@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Consignment Stock, Vendor Consignment & Customer Consignment Hub',
-    'version': '17.0.1.0.0',
+    'version': '16.0.1.0.0',
     'category': 'Inventory/Inventory',
     'summary': 'Vendor Consignment (Inward) & Customer Consignment (Outward) Agreements, Periodic Consumption Self-Billing, Consignment Inventory Statements & Physical Audit Reconciliation for Odoo Community',
     'sequence': 18,
@@ -34,4 +34,5 @@
     'application': True,
     'auto_install': False,
 }
+
 

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'NextGen Enterprise Backend Theme & Modern UI Hub',
-    'version': '17.0.1.0.0',
+    'version': '16.0.1.0.0',
     'category': 'Themes/Backend',
     'summary': 'Enterprise App Switcher, Dark Mode, Collapsible Left Sidebar, Brand Color Customizer, Sticky Headers & Mobile UX for Community & Enterprise',
     'description': """
@@ -57,4 +57,5 @@ Key Capabilities:
     'application': True,
     'auto_install': False,
 }
+
 
