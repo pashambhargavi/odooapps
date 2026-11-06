@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="omni_theme_multi_studio.OmniSystrayToggle">
+        <div class="o_omni_systray_item dropdown">
+            <button class="omni_toggle_btn dropdown-toggle"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                    title="OmniTheme 10-in-1 Switcher">
+                <span class="omni_btn_icon" t-esc="state.activeIcon"/>
+                <span class="omni_btn_label ms-1" t-esc="state.activeName"/>
+            </button>
+            <div class="dropdown-menu dropdown-menu-end omni_theme_dropdown_menu">
+                <div class="omni_dropdown_header">
+                    <span>✦ OmniTheme 10-in-1 Studio</span>
+                    <span class="badge bg-primary" style="font-size: 10px;">Instant Toggle</span>
+                </div>
+                <t t-foreach="state.themes" t-as="theme" t-key="theme.key">
+                    <div class="omni_theme_tile"
+                         t-att-class="{ 'active': state.activeKey === theme.key }"
+                         t-on-click="() => this.switchTheme(theme.key)">
+                        <span class="omni_tile_icon" t-esc="theme.icon"/>
+                        <div class="omni_tile_info">
+                            <div class="omni_tile_name" t-esc="theme.name"/>
+                            <div class="omni_tile_sub" t-esc="theme.subtitle"/>
+                        </div>
+                        <div class="omni_tile_swatch" t-attf-style="background-color: #{theme.navbar_bg};" title="Navbar"/>
+                        <div class="omni_tile_swatch" t-attf-style="background-color: #{theme.primary_color};" title="Primary Accent"/>
+                    </div>
+                </t>
+            </div>
+        </div>
+    </t>
+</templates>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="omni_theme_login_layout" inherit_id="web.login_layout" name="OmniTheme Executive Multi-Theme Login Layout">
+        <xpath expr="//t[@t-call='web.frontend_layout']/div" position="replace">
+            <div class="container-fluid p-0 o_omni_login_container" style="min-height: 100vh; display: flex; align-items: stretch; background-color: #064E3B; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+                <div class="row g-0 w-100 m-0">
+                    <!-- Left Brand Hero Column (OmniTheme 10-in-1 Showcase) -->
+                    <div class="col-12 col-lg-7 d-none d-lg-flex flex-column justify-content-between p-5 text-white" style="background-color: #064E3B; border-right: 1px solid #047857;">
+                        <div>
+                            <div class="d-flex align-items-center mb-4">
+                                <span style="display: inline-block; background-color: #047857; color: #ECFDF5; font-weight: 700; font-size: 13px; padding: 6px 18px; border-radius: 20px; letter-spacing: 1.5px; text-transform: uppercase; border: 1px solid #10B981;">
+                                    ✦ OMNITHEME 10-IN-1 STUDIO
+                                </span>
+                            </div>
+                            <h1 style="font-size: 42px; font-weight: 800; line-height: 1.15; margin-bottom: 20px; color: #FFFFFF;">
+                                10 Enterprise Themes.<br/>Instant 1-Click Toggle.
+                            </h1>
+                            <p style="font-size: 16px; color: #D1FAE5; max-width: 580px; line-height: 1.6;">
+                                Switch between Nordic Emerald, Cyberpunk Neon, Royal Velvet, Sunset Horizon, Pristine White, Obsidian Luxe, Deep Oceanic, Crimson Apex, Forest Zen, and Modern Slate with zero page reload.
+                            </p>
+                        </div>
+
+                        <!-- 10 Theme Mini Swatches Badge Row -->
+                        <div class="p-3 my-4" style="background-color: #04382A; border: 1px solid #065F46; border-radius: 12px;">
+                            <div style="font-size: 12px; font-weight: 700; color: #A7F3D0; text-transform: uppercase; margin-bottom: 12px; letter-spacing: 1px;">
+                                Included 10-Theme Roster
+                            </div>
+                            <div class="d-flex flex-wrap gap-2">
+                                <span class="badge" style="background-color: #064E3B; color: #A7F3D0; border: 1px solid #10B981; padding: 6px 12px;">🌿 Emerald Aurora</span>
+                                <span class="badge" style="background-color: #0B0F19; color: #00F0FF; border: 1px solid #00F0FF; padding: 6px 12px;">⚡ Cyberpunk Neon</span>
+                                <span class="badge" style="background-color: #3B0764; color: #FAF5FF; border: 1px solid #EAB308; padding: 6px 12px;">👑 Royal Velvet</span>
+                                <span class="badge" style="background-color: #C2410C; color: #FFF7ED; border: 1px solid #F97316; padding: 6px 12px;">🌅 Sunset Horizon</span>
+                                <span class="badge" style="background-color: #1E40AF; color: #FFFFFF; border: 1px solid #93C5FD; padding: 6px 12px;">📄 Pristine Paper</span>
+                                <span class="badge" style="background-color: #18181B; color: #FAFAFA; border: 1px solid #D97706; padding: 6px 12px;">💎 Obsidian Luxe</span>
+                                <span class="badge" style="background-color: #0C4A6E; color: #F0F9FF; border: 1px solid #06B6D4; padding: 6px 12px;">🌊 Deep Oceanic</span>
+                                <span class="badge" style="background-color: #881337; color: #FFF1F2; border: 1px solid #E11D48; padding: 6px 12px;">🔥 Crimson Apex</span>
+                                <span class="badge" style="background-color: #14532D; color: #F7FEE7; border: 1px solid #65A30D; padding: 6px 12px;">🎋 Forest Zen</span>
+                                <span class="badge" style="background-color: #1E293B; color: #F8FAFC; border: 1px solid #6366F1; padding: 6px 12px;">🚀 Modern Slate</span>
+                            </div>
+                        </div>
+
+                        <!-- Copyright / Tech Info -->
+                        <div style="color: #6EE7B7; font-size: 13px;">
+                            OmniTheme 10-in-1 Backend Studio &#8226; Compatible with Odoo v14 through v20 Community &amp; Enterprise
+                        </div>
+                    </div>
+
+                    <!-- Right Login Form Column -->
+                    <div class="col-12 col-lg-5 d-flex flex-column justify-content-center align-items-center p-4 p-md-5" style="background-color: #FFFFFF;">
+                        <div style="width: 100%; max-width: 420px; background-color: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 16px; padding: 40px 32px; box-shadow: 0 10px 30px #E2E8F0;">
+                            <div class="text-center mb-4">
+                                <span style="font-size: 32px;">🎨</span>
+                                <h3 style="color: #0F172A; font-size: 24px; font-weight: 800; margin: 10px 0 6px 0;">Welcome Back</h3>
+                                <p style="color: #64748B; font-size: 13px; margin: 0;">Sign in to your customized OmniTheme workspace</p>
+                            </div>
+                            <t t-out="0"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>
