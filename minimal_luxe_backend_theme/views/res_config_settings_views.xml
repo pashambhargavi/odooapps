@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_inherit_luxe" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.luxe</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="98"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="Minimal Luxe Studio" string="Minimal Luxe Studio" name="minimal_luxe_backend_theme">
+                    <block title="Minimal Luxe: Linear Monochrome &amp; Zen Studio" id="minimal_luxe_settings_block">
+                        <setting id="luxe_theme_profile_setting" string="Active Theme Profile" help="The active Minimal Luxe profile applied to your instance.">
+                            <field name="luxe_theme_config_id"/>
+                        </setting>
+
+                        <setting id="luxe_theme_mode_setting" string="Base Monochrome Canvas" help="Obsidian Black, Crisp Chalk White, or Studio Zinc.">
+                            <field name="luxe_theme_mode" widget="radio"/>
+                        </setting>
+
+                        <setting id="luxe_luxury_accent_setting" string="Luxury Metal Accent" help="24K Sovereign Gold, Titanium, Platinum Ice, Emerald, or Rose Gold.">
+                            <field name="luxe_luxury_accent" widget="radio"/>
+                        </setting>
+
+                        <setting id="luxe_zen_mode_setting" string="Zen Focus Mode" help="Allow users to fade out all sidebars and distractions.">
+                            <field name="luxe_zen_mode_enabled"/>
+                        </setting>
+
+                        <setting id="luxe_hairline_setting" string="Precision Hairline Borders" help="Render razor-thin 1px borders inspired by Linear.">
+                            <field name="luxe_hairline_border"/>
+                        </setting>
+
+                        <setting id="luxe_font_setting" string="Typography Suite" help="Select high-density monospace font pairing for financial figures.">
+                            <field name="luxe_font_preset"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+</odoo>
