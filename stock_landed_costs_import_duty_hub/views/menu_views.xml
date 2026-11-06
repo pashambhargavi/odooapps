@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Menu in Inventory > Operations -->
+    <menuitem
+        id="menu_stock_landed_cost_hub_operations"
+        name="Landed Costs &amp; Duties"
+        parent="stock.menu_stock_warehouse_mgmt"
+        action="action_stock_landed_cost_hub"
+        sequence="20"
+        groups="group_landed_cost_user"
+    />
+</odoo>
