@@ -1,0 +1,58 @@
+/* Apex Frosted Glass App Switcher Drawer */
+.o_apex_app_drawer_overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9999;
+    background: rgba(5, 8, 17, 0.88);
+    backdrop-filter: blur(20px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 60px 20px;
+    box-sizing: border-box;
+}
+
+.o_apex_search_box {
+    width: 100%;
+    max-width: 680px;
+    padding: 16px 26px;
+    font-size: 16px;
+    border-radius: 30px;
+    background: rgba(15, 23, 42, 0.75);
+    border: 1px solid var(--apex-neon, #00F0FF);
+    box-shadow: 0 0 20px var(--apex-neon-glow, rgba(0, 240, 255, 0.3));
+    color: #FFFFFF;
+    outline: none;
+    margin-bottom: 40px;
+}
+
+.o_apex_grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(115px, 1fr));
+    gap: 25px;
+    width: 100%;
+    max-width: 980px;
+}
+
+.o_apex_tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 14px 10px;
+    border-radius: 14px;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    cursor: pointer;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+
+    &:hover {
+        transform: translateY(-4px);
+        border-color: var(--apex-neon, #00F0FF);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 16px var(--apex-neon-glow);
+    }
+}
