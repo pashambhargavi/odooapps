@@ -1,0 +1,39 @@
+/* Vibrant Action Buttons & Crisp Secondary Buttons */
+
+body.chroma-pristine-theme {
+    .btn-primary {
+        background-color: var(--chroma-header-bg) !important;
+        border-color: var(--chroma-header-bg) !important;
+        color: #FFFFFF !important;
+        font-weight: 700 !important;
+        border-radius: var(--chroma-btn-radius) !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12) !important;
+        transition: all 0.2s ease;
+
+        &:hover {
+            background-color: var(--chroma-accent) !important;
+            border-color: var(--chroma-accent) !important;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18) !important;
+        }
+    }
+
+    .btn-secondary {
+        background-color: #FFFFFF !important;
+        border: 1px solid #CBD5E1 !important;
+        color: #1E293B !important;
+        font-weight: 600 !important;
+        border-radius: var(--chroma-btn-radius) !important;
+        transition: all 0.2s ease;
+
+        &:hover {
+            border-color: var(--chroma-accent) !important;
+            color: var(--chroma-header-bg) !important;
+            background-color: #F8FAFC !important;
+        }
+    }
+
+    .badge.bg-primary {
+        background-color: var(--chroma-header-bg) !important;
+    }
+}
