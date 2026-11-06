@@ -2,7 +2,7 @@
 
 {
     'name': 'WhatsApp 1-Click Omnichannel Messaging & Customer Chat Hub',
-    'version': '16.0.1.0.0',
+    'version': '15.0.1.0.0',
     'category': 'Sales/WhatsApp',
     'summary': '1-Click Direct WhatsApp Chat for Orders, Invoices, Delivery Slips, Dynamic Templates & Audit Logs (No Meta API Fees Required)',
     'description': """
@@ -69,5 +69,6 @@ Key Features & Business Benefits
     'application': True,
     'auto_install': False,
 }
+
 
 

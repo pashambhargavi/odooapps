@@ -2,7 +2,7 @@
 
 {
     'name': 'RMA, Customer Returns & Quality Inspection Hub',
-    'version': '16.0.1.0.0',
+    'version': '15.0.1.0.0',
     'category': 'Inventory/Inventory',
     'summary': 'End-to-End RMA Return Merchandise Authorization, Quality Inspection, Automated Credit Notes, Replacement Deliveries & Printable Return Slips for Odoo Community',
     'description': """
@@ -50,5 +50,6 @@ This comprehensive hub empowers support, warehouse, and accounting teams with:
     'application': True,
     'auto_install': False,
 }
+
 
 

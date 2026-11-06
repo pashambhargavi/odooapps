@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Customer Payment Follow-Up, Overdue Aging & Automated Dunning Hub',
-    'version': '16.0.1.0.0',
+    'version': '15.0.1.0.0',
     'category': 'Accounting/Invoicing',
     'summary': 'Automated Multi-Stage Payment Reminders, Overdue Aging Analysis, Dunning Escalations & Statement of Account PDFs for Odoo Community',
     'sequence': 10,
@@ -36,5 +36,6 @@
     'application': True,
     'auto_install': False,
 }
+
 
 
