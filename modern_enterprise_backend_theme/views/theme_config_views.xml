@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- List View -->
+    <record id="view_theme_config_list" model="ir.ui.view">
+        <field name="name">theme.config.list</field>
+        <field name="model">theme.config</field>
+        <field name="arch" type="xml">
+            <tree string="Enterprise Theme Profiles">
+                <field name="name"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="layout_mode" widget="badge" decoration-info="layout_mode == 'enterprise_top'" decoration-primary="layout_mode == 'modern_sidebar'"/>
+                <field name="color_preset" widget="badge"/>
+                <field name="primary_color" widget="color"/>
+                <field name="navbar_bg_color" widget="color"/>
+                <field name="font_family"/>
+                <field name="login_template"/>
+                <field name="is_active" widget="boolean_toggle"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_theme_config_form" model="ir.ui.view">
+        <field name="name">theme.config.form</field>
+        <field name="model">theme.config</field>
+        <field name="arch" type="xml">
+            <form string="Enterprise Theme Profile">
+                <header>
+                    <button name="action_apply_preset" string="Re-Apply Color Preset" type="object" class="btn-secondary" icon="fa-refresh"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only" string="Theme Profile Name"/>
+                        <h1>
+                            <field name="name" placeholder="e.g. Executive Corporate Theme"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group string="Company &amp; Status">
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="is_active" widget="boolean_toggle"/>
+                            <field name="layout_mode" widget="radio"/>
+                        </group>
+                        <group string="Color Presets &amp; Palette">
+                            <field name="color_preset" widget="radio"/>
+                            <field name="primary_color" widget="color"/>
+                            <field name="accent_color" widget="color"/>
+                            <field name="navbar_bg_color" widget="color"/>
+                            <field name="sidebar_bg_color" widget="color"/>
+                            <field name="active_item_color" widget="color"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Typography &amp; UI Styling" name="typography">
+                            <group>
+                                <group string="Font &amp; Shape">
+                                    <field name="font_family"/>
+                                    <field name="border_radius_size"/>
+                                </group>
+                                <group string="Data Grid &amp; Form UX">
+                                    <field name="enable_sticky_list_headers"/>
+                                    <field name="enable_sticky_form_statusbar"/>
+                                    <field name="enable_list_zebra_striping"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Branded Login Screen" name="login_screen">
+                            <group>
+                                <group string="Login Template">
+                                    <field name="login_template"/>
+                                </group>
+                                <group string="Login Content &amp; Messaging">
+                                    <field name="login_headline"/>
+                                    <field name="login_subtext"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_theme_config_search" model="ir.ui.view">
+        <field name="name">theme.config.search</field>
+        <field name="model">theme.config</field>
+        <field name="arch" type="xml">
+            <search string="Search Theme Configurations">
+                <field name="name"/>
+                <field name="company_id"/>
+                <filter string="Active Themes" name="active_themes" domain="[('is_active', '=', True)]"/>
+                <separator/>
+                <filter string="Enterprise Topbar" name="topbar_layout" domain="[('layout_mode', '=', 'enterprise_top')]"/>
+                <filter string="Modern Sidebar" name="sidebar_layout" domain="[('layout_mode', '=', 'modern_sidebar')]"/>
+                <group>
+                    <filter string="Layout Style" name="group_layout" context="{'group_by': 'layout_mode'}"/>
+                    <filter string="Color Preset" name="group_preset" context="{'group_by': 'color_preset'}"/>
+                    <filter string="Company" name="group_company" context="{'group_by': 'company_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_theme_config" model="ir.actions.act_window">
+        <field name="name">Enterprise Theme Profiles</field>
+        <field name="res_model">theme.config</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_theme_config_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create and customize your Enterprise Theme Profile!
+            </p>
+            <p>
+                Configure color presets, topbar or sidebar layouts, dark mode palettes, and branded login screens.
+            </p>
+        </field>
+    </record>
+</odoo>
+
