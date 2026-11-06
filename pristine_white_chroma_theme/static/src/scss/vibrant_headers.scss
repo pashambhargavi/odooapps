@@ -1,0 +1,31 @@
+/* Vibrant Chromatic Header Engine */
+
+body.chroma-pristine-theme {
+    .o_main_navbar {
+        background-color: var(--chroma-header-bg) !important;
+        border-bottom: 2px solid var(--chroma-accent) !important;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+
+        .o_menu_brand {
+            font-weight: 800;
+            color: #FFFFFF !important;
+            letter-spacing: 0.5px;
+        }
+
+        .o_nav_entry {
+            color: rgba(255, 255, 255, 0.92) !important;
+            font-weight: 600;
+            border-radius: var(--chroma-btn-radius);
+            transition: all 0.2s ease;
+
+            &:hover, &.active {
+                background-color: rgba(255, 255, 255, 0.18) !important;
+                color: #FFFFFF !important;
+            }
+        }
+
+        .o_user_menu .dropdown-toggle {
+            color: #FFFFFF !important;
+        }
+    }
+}
