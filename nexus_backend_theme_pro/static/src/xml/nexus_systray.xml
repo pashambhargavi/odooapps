@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+    <!-- Chatter Position Systray Toggle -->
+    <t t-name="nexus_backend_theme_pro.NexusChatterToggle">
+        <div class="o_nexus_chatter_toggle d-flex align-items-center me-2" role="button" t-on-click="onClickToggleChatter" title="1-Click Toggle: Side-by-Side vs Bottom Chatter">
+            <i class="fa fa-columns text-white fs-6" style="padding: 6px; border-radius: 6px; background: rgba(255,255,255,0.1); cursor: pointer;"/>
+        </div>
+    </t>
+
+    <!-- Navigation Layout Systray Toggle -->
+    <t t-name="nexus_backend_theme_pro.NexusLayoutToggle">
+        <div class="o_nexus_layout_toggle d-flex align-items-center me-2" role="button" t-on-click="onClickCycleLayout" title="1-Click Switch: Sidebar / Topbar / Mini-Rail">
+            <i class="fa fa-th-large text-white fs-6" style="padding: 6px; border-radius: 6px; background: rgba(255,255,255,0.1); cursor: pointer;"/>
+        </div>
+    </t>
+</templates>

@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_nexus_theme_config_user,nexus.theme.config.user,model_nexus_theme_config,nexus_backend_theme_pro.group_nexus_theme_user,1,0,0,0
+access_nexus_theme_config_manager,nexus.theme.config.manager,model_nexus_theme_config,nexus_backend_theme_pro.group_nexus_theme_manager,1,1,1,1
