@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="default_minimal_luxe_config" model="minimal.luxe.config">
+        <field name="name">Minimal Luxe Obsidian Suite</field>
+        <field name="company_id" ref="base.main_company"/>
+        <field name="is_active">True</field>
+        <field name="theme_mode">obsidian_dark</field>
+        <field name="luxury_accent">sovereign_gold</field>
+        <field name="accent_hex">#D97706</field>
+        <field name="zen_mode_enabled">True</field>
+        <field name="hairline_border">True</field>
+        <field name="font_preset">inter_jetbrains</field>
+    </record>
+</odoo>

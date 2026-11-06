@@ -1,0 +1,21 @@
+:root {
+    --luxe-bg-base: #09090B;
+    --luxe-bg-surface: #121215;
+    --luxe-bg-card: #18181B;
+    --luxe-border-color: #27272A;
+    --luxe-text-primary: #FAFAFA;
+    --luxe-text-muted: #A1A1AA;
+    --luxe-accent: #D97706;
+    --luxe-accent-subtle: #451A03;
+    --luxe-radius: 6px;
+    --luxe-mono-font: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+body.luxe-chalk-light {
+    --luxe-bg-base: #FAFAFA;
+    --luxe-bg-surface: #FFFFFF;
+    --luxe-bg-card: #F4F4F5;
+    --luxe-border-color: #E4E4E7;
+    --luxe-text-primary: #09090B;
+    --luxe-text-muted: #71717A;
+}

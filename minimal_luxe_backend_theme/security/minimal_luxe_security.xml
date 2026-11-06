@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="module_category_minimal_luxe" model="ir.module.category">
+        <field name="name">Minimal Luxe Theme &amp; Zen Studio</field>
+        <field name="description">Manage linear monochrome themes, luxury metal accents, and zen focus mode.</field>
+        <field name="sequence">28</field>
+    </record>
+
+    <record id="privilege_minimal_luxe" model="res.groups.privilege">
+        <field name="name">Minimal Luxe Theme Access</field>
+        <field name="category_id" ref="module_category_minimal_luxe"/>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="group_minimal_luxe_user" model="res.groups">
+        <field name="name">Minimal Luxe User (Personal Zen Mode &amp; Accent)</field>
+        <field name="privilege_id" ref="privilege_minimal_luxe"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <record id="group_minimal_luxe_manager" model="res.groups">
+        <field name="name">Minimal Luxe Administrator (Brand &amp; Style Manager)</field>
+        <field name="privilege_id" ref="privilege_minimal_luxe"/>
+        <field name="implied_ids" eval="[(4, ref('group_minimal_luxe_user')), (4, ref('base.group_system'))]"/>
+        <field name="user_ids" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+
+    <record id="base.group_user" model="res.groups">
+        <field name="implied_ids" eval="[(4, ref('minimal_luxe_backend_theme.group_minimal_luxe_user'))]"/>
+    </record>
+
+    <data noupdate="1">
+        <!-- Multi-Company Rule -->
+        <record id="rule_minimal_luxe_config_company" model="ir.rule">
+            <field name="name">Minimal Luxe Config: Multi-Company</field>
+            <field name="model_id" ref="model_minimal_luxe_config"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+    </data>
+</odoo>

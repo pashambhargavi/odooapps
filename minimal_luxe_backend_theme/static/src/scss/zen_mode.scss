@@ -1,0 +1,25 @@
+/* Zen Focus Mode: 1-Click Distraction Elimination */
+
+body.luxe-zen-mode-active {
+    .o_main_navbar {
+        opacity: 0.25;
+        transition: opacity 0.3s ease;
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+
+    .o_control_panel {
+        padding-top: 4px !important;
+        padding-bottom: 4px !important;
+    }
+
+    .o_form_view_container {
+        padding: 0 !important;
+    }
+
+    .o_form_sheet {
+        box-shadow: 0 0 40px rgba(0, 0, 0, 0.4) !important;
+    }
+}
