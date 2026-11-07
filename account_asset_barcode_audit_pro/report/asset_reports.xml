@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_asset_barcode_labels" model="ir.actions.report">
+        <field name="name">Asset Barcode &amp; QR Labels</field>
+        <field name="model">account.asset.pro</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">account_asset_barcode_audit_pro.report_asset_barcode_labels</field>
+        <field name="report_file">account_asset_barcode_audit_pro.report_asset_barcode_labels</field>
+        <field name="print_report_name">'Asset_Label_%s' % (object.code)</field>
+        <field name="binding_model_id" ref="model_account_asset_pro"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="action_report_asset_depreciation" model="ir.actions.report">
+        <field name="name">Fixed Asset Depreciation Schedule</field>
+        <field name="model">account.asset.pro</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">account_asset_barcode_audit_pro.report_asset_depreciation</field>
+        <field name="report_file">account_asset_barcode_audit_pro.report_asset_depreciation</field>
+        <field name="print_report_name">'Asset_Schedule_%s' % (object.code)</field>
+        <field name="binding_model_id" ref="model_account_asset_pro"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

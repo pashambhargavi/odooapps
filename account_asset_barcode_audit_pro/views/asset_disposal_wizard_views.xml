@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_asset_disposal_wizard_form" model="ir.ui.view">
+        <field name="name">asset.disposal.wizard.form</field>
+        <field name="model">asset.disposal.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Asset Disposal &amp; Retirement">
+                <sheet>
+                    <div class="alert alert-warning" role="alert">
+                        <strong>Warning:</strong> Disposing an asset will write off its remaining Net Book Value, reverse accumulated depreciation, and generate balanced general ledger journal entries.
+                    </div>
+                    <group>
+                        <group string="Asset Under Disposal">
+                            <field name="asset_id" readonly="1"/>
+                            <field name="residual_value"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                        <group string="Disposal Settlement">
+                            <field name="disposal_date"/>
+                            <field name="disposal_type"/>
+                            <field name="sale_amount" invisible="disposal_type != 'sale'"/>
+                            <field name="gain_or_loss"/>
+                        </group>
+                    </group>
+                    <group string="Accounting Reconciliation">
+                        <group>
+                            <field name="journal_id"/>
+                            <field name="customer_id" invisible="disposal_type != 'sale'"/>
+                        </group>
+                        <group>
+                            <field name="account_gain_loss_id"/>
+                        </group>
+                    </group>
+                    <group string="Justification &amp; Authority">
+                        <field name="notes" placeholder="Enter board resolution, write-off authorization, or casualty police report details..."/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_confirm_disposal" string="Confirm Disposal &amp; Post Entries" type="object" class="btn-danger"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>
