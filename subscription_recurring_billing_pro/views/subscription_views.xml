@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_subscription_pro_list" model="ir.ui.view">
+        <field name="name">subscription.pro.list</field>
+        <field name="model">subscription.pro</field>
+        <field name="arch" type="xml">
+            <list string="Subscriptions" decoration-success="state == 'active'" decoration-info="state == 'trial'" decoration-warning="state == 'paused'" decoration-muted="state == 'cancelled'">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="plan_id"/>
+                <field name="start_date"/>
+                <field name="next_invoice_date"/>
+                <field name="recurring_total" sum="Total Recurring"/>
+                <field name="recurring_mrr" sum="Total MRR"/>
+                <field name="currency_id" column_invisible="True"/>
+                <field name="user_id"/>
+                <field name="state" widget="badge" decoration-success="state == 'active'" decoration-info="state == 'trial'" decoration-warning="state == 'paused'" decoration-danger="state in ('expired', 'cancelled')"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_subscription_pro_form" model="ir.ui.view">
+        <field name="name">subscription.pro.form</field>
+        <field name="model">subscription.pro</field>
+        <field name="arch" type="xml">
+            <form string="Subscription Contract">
+                <header>
+                    <button name="action_start" string="Activate Subscription" type="object" class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_generate_invoice" string="Generate Invoice Now" type="object" class="btn-primary" invisible="state not in ('trial', 'active')"/>
+                    <button name="action_pause" string="Pause Subscription" type="object" invisible="state != 'active'"/>
+                    <button name="action_resume" string="Resume Subscription" type="object" invisible="state != 'paused'"/>
+                    <button name="action_cancel" string="Cancel Contract" type="object" class="btn-secondary" invisible="state in ('draft', 'cancelled')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,active,cancelled"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" icon="fa-pencil-square-o" type="object" name="action_view_invoices">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value"><field name="invoice_count"/></span>
+                                <span class="o_stat_text">Invoices</span>
+                            </div>
+                        </button>
+                        <button class="oe_stat_button" icon="fa-line-chart">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value"><field name="recurring_mrr" widget="monetary"/></span>
+                                <span class="o_stat_text">Monthly MRR</span>
+                            </div>
+                        </button>
+                        <button class="oe_stat_button" icon="fa-calendar">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value"><field name="recurring_arr" widget="monetary"/></span>
+                                <span class="o_stat_text">Annual ARR</span>
+                            </div>
+                        </button>
+                    </div>
+
+                    <div class="oe_title">
+                        <label for="name" string="Subscription Agreement"/>
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group string="Subscriber &amp; Plan">
+                            <field name="partner_id"/>
+                            <field name="plan_id"/>
+                            <field name="user_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                        <group string="Contract Schedule">
+                            <field name="start_date"/>
+                            <field name="trial_end_date" invisible="not trial_end_date"/>
+                            <field name="next_invoice_date"/>
+                            <field name="end_date"/>
+                            <field name="auto_renew"/>
+                            <field name="close_reason_id" invisible="state != 'cancelled'"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Recurring Plan Items" name="lines">
+                            <field name="line_ids" readonly="state in ('expired', 'cancelled')">
+                                <list string="Recurring Items" editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="name"/>
+                                    <field name="quantity"/>
+                                    <field name="price_unit"/>
+                                    <field name="subtotal" sum="Total"/>
+                                    <field name="currency_id" column_invisible="True"/>
+                                </list>
+                            </field>
+                            <group class="oe_subtotal_footer">
+                                <field name="recurring_total" widget="monetary"/>
+                                <field name="recurring_mrr" widget="monetary"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_subscription_pro_search" model="ir.ui.view">
+        <field name="name">subscription.pro.search</field>
+        <field name="model">subscription.pro</field>
+        <field name="arch" type="xml">
+            <search string="Search Subscriptions">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="plan_id"/>
+                <field name="user_id"/>
+                <filter string="Active Contracts" name="filter_active" domain="[('state', '=', 'active')]"/>
+                <filter string="In Trial" name="filter_trial" domain="[('state', '=', 'trial')]"/>
+                <filter string="Paused" name="filter_paused" domain="[('state', '=', 'paused')]"/>
+                <filter string="Cancelled / Churned" name="filter_cancelled" domain="[('state', '=', 'cancelled')]"/>
+                <separator/>
+                <group>
+                    <filter string="Customer" name="group_partner" context="{'group_by': 'partner_id'}"/>
+                    <filter string="Plan" name="group_plan" context="{'group_by': 'plan_id'}"/>
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Salesperson" name="group_user" context="{'group_by': 'user_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_subscription_pro" model="ir.actions.act_window">
+        <field name="name">Subscriptions</field>
+        <field name="res_model">subscription.pro</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_subscription_pro_search"/>
+        <field name="context">{'search_default_filter_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first Recurring Subscription Contract!
+            </p>
+            <p>
+                Manage recurring SaaS plans, contracts, automatic invoicing cycles, and real-time MRR/ARR analytics.
+            </p>
+        </field>
+    </record>
+</odoo>
