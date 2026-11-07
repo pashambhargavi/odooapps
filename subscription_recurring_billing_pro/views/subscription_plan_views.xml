@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_subscription_plan_pro_list" model="ir.ui.view">
+        <field name="name">subscription.plan.pro.list</field>
+        <field name="model">subscription.plan.pro</field>
+        <field name="arch" type="xml">
+            <tree string="Subscription Plans">
+                <field name="name"/>
+                <field name="billing_interval"/>
+                <field name="billing_interval_count"/>
+                <field name="trial_period_days"/>
+                <field name="auto_renew"/>
+                <field name="invoicing_journal_id"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_subscription_plan_pro_form" model="ir.ui.view">
+        <field name="name">subscription.plan.pro.form</field>
+        <field name="model">subscription.plan.pro</field>
+        <field name="arch" type="xml">
+            <form string="Subscription Plan">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="Plan Title"/>
+                        <h1>
+                            <field name="name" placeholder="e.g. Enterprise Cloud SaaS (Monthly), Standard Maintenance Plan"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Billing Frequency">
+                            <label for="billing_interval" string="Billing Cycle"/>
+                            <div class="o_row">
+                                <field name="billing_interval_count" class="oe_inline"/>
+                                <field name="billing_interval" class="oe_inline"/>
+                            </div>
+                            <field name="trial_period_days"/>
+                            <field name="grace_period_days"/>
+                            <field name="auto_renew"/>
+                        </group>
+                        <group string="Accounting &amp; Entity">
+                            <field name="invoicing_journal_id"/>
+                            <field name="active"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_subscription_plan_pro" model="ir.actions.act_window">
+        <field name="name">Subscription Plans</field>
+        <field name="res_model">subscription.plan.pro</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Define your first Subscription Billing Plan!
+            </p>
+            <p>
+                Configure monthly, quarterly, or annual billing cycles, trial days, and invoicing journals for recurring contracts.
+            </p>
+        </field>
+    </record>
+</odoo>
