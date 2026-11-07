@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Top-Level App Menu -->
+    <menuitem id="menu_inter_company_root"
+              name="Inter-Company Hub"
+              web_icon="inter_company_auto_sync_hub,static/description/icon.png"
+              sequence="45"/>
+
+    <menuitem id="menu_inter_company_rules"
+              name="Sync Rules &amp; Matrix"
+              parent="menu_inter_company_root"
+              action="action_inter_company_rule"
+              sequence="10"/>
+
+    <menuitem id="menu_inter_company_logs"
+              name="Transaction Execution Logs"
+              parent="menu_inter_company_root"
+              action="action_inter_company_log"
+              sequence="20"/>
+
+    <!-- Quick Link in Accounting Configuration -->
+    <menuitem id="menu_inter_company_accounting_config"
+              name="Inter-Company Rules"
+              parent="account.menu_finance_configuration"
+              action="action_inter_company_rule"
+              sequence="95"/>
+</odoo>
