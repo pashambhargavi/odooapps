@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Top-Level Root Menu -->
+    <menuitem id="menu_asset_root"
+              name="Fixed Assets Pro"
+              web_icon="account_asset_barcode_audit_pro,static/description/icon.png"
+              sequence="55"
+              groups="group_asset_user"/>
+
+    <!-- Assets Operations -->
+    <menuitem id="menu_asset_pro_root"
+              name="Assets"
+              parent="menu_asset_root"
+              sequence="10"/>
+
+    <menuitem id="menu_asset_pro_list"
+              name="Fixed Assets Register"
+              parent="menu_asset_pro_root"
+              action="action_account_asset_pro"
+              sequence="10"/>
+
+    <!-- Physical Audits -->
+    <menuitem id="menu_asset_audit_root"
+              name="Physical Audits"
+              parent="menu_asset_root"
+              sequence="20"/>
+
+    <menuitem id="menu_asset_audit_session"
+              name="Barcode Audit Sessions"
+              parent="menu_asset_audit_root"
+              action="action_asset_audit_session"
+              sequence="10"/>
+
+    <!-- Configuration -->
+    <menuitem id="menu_asset_config_root"
+              name="Configuration"
+              parent="menu_asset_root"
+              sequence="50"
+              groups="group_asset_manager"/>
+
+    <menuitem id="menu_asset_category"
+              name="Asset Categories"
+              parent="menu_asset_config_root"
+              action="action_account_asset_pro_category"
+              sequence="10"/>
+
+    <!-- Integration under Accounting Menu -->
+    <menuitem id="menu_accounting_asset_pro"
+              name="Fixed Assets Register"
+              parent="account.menu_finance_entries"
+              action="action_account_asset_pro"
+              sequence="30"
+              groups="group_asset_user"/>
+</odoo>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_asset_depreciation">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <div class="page" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #1E293B; font-size: 13px;">
+                    <!-- Executive Header -->
+                    <div style="border-bottom: 3px solid #6366F1; padding-bottom: 12px; margin-bottom: 20px;">
+                        <table style="width: 100%;">
+                            <tr>
+                                <td style="vertical-align: top;">
+                                    <h2 style="margin: 0; color: #0F172A; font-weight: bold; font-size: 24px;">
+                                        FIXED ASSET DEPRECIATION SCHEDULE
+                                    </h2>
+                                    <div style="color: #64748B; font-size: 13px; margin-top: 4px;">
+                                        Statutory Accounting &amp; Net Book Value (NBV) Ledger
+                                    </div>
+                                </td>
+                                <td style="text-align: right; vertical-align: top;">
+                                    <div style="font-size: 16px; font-weight: bold; color: #6366F1;">
+                                        <span t-field="doc.code"/>
+                                    </div>
+                                    <div style="color: #64748B; font-size: 12px;">
+                                        Generated: <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M')"/>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- Asset Summary Card -->
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 25px; background-color: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px;">
+                        <tr>
+                            <td style="padding: 10px 15px; width: 25%; font-weight: bold; color: #475569;">Asset Description:</td>
+                            <td style="padding: 10px 15px; width: 25%; font-weight: bold; color: #0F172A;"><span t-field="doc.name"/></td>
+                            <td style="padding: 10px 15px; width: 25%; font-weight: bold; color: #475569;">Asset Category:</td>
+                            <td style="padding: 10px 15px; width: 25%; color: #0F172A;"><span t-field="doc.category_id.name"/></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px 15px; font-weight: bold; color: #475569;">Acquisition Date:</td>
+                            <td style="padding: 10px 15px; color: #0F172A;"><span t-field="doc.acquisition_date"/></td>
+                            <td style="padding: 10px 15px; font-weight: bold; color: #475569;">Depreciation Method:</td>
+                            <td style="padding: 10px 15px; color: #0F172A;"><span t-field="doc.method"/> (<span t-field="doc.method_number"/> periods)</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px 15px; font-weight: bold; color: #475569;">Gross Purchase Cost:</td>
+                            <td style="padding: 10px 15px; font-weight: bold; color: #0F172A;"><span t-field="doc.original_value" t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/></td>
+                            <td style="padding: 10px 15px; font-weight: bold; color: #475569;">Current Net Book Value:</td>
+                            <td style="padding: 10px 15px; font-weight: bold; color: #6366F1;"><span t-field="doc.value_residual" t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px 15px; font-weight: bold; color: #475569;">Physical Location:</td>
+                            <td style="padding: 10px 15px; color: #0F172A;"><span t-field="doc.location_name"/></td>
+                            <td style="padding: 10px 15px; font-weight: bold; color: #475569;">Custodian:</td>
+                            <td style="padding: 10px 15px; color: #0F172A;"><span t-field="doc.custodian_name"/></td>
+                        </tr>
+                    </table>
+
+                    <!-- Depreciation Lines Table -->
+                    <h4 style="color: #0F172A; font-weight: bold; border-bottom: 2px solid #E2E8F0; padding-bottom: 6px; margin-bottom: 12px;">
+                        Periodic Depreciation Amortization Schedule
+                    </h4>
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px; font-size: 12px;">
+                        <thead>
+                            <tr style="background-color: #0F172A; color: #FFFFFF;">
+                                <th style="padding: 8px 10px; text-align: center; width: 8%;">Period</th>
+                                <th style="padding: 8px 10px; text-align: left; width: 18%;">Schedule Date</th>
+                                <th style="padding: 8px 10px; text-align: right; width: 22%;">Depreciation Amount</th>
+                                <th style="padding: 8px 10px; text-align: right; width: 24%;">Accumulated Depreciation</th>
+                                <th style="padding: 8px 10px; text-align: right; width: 28%;">Remaining Net Book Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="doc.depreciation_line_ids" t-as="line">
+                                <tr style="border-bottom: 1px solid #E2E8F0;" t-att-style="'background-color: #F1F5F9;' if line.sequence % 2 == 0 else ''">
+                                    <td style="padding: 7px 10px; text-align: center;"><span t-field="line.sequence"/></td>
+                                    <td style="padding: 7px 10px;"><span t-field="line.depreciation_date"/></td>
+                                    <td style="padding: 7px 10px; text-align: right; font-weight: bold; color: #0F172A;">
+                                        <span t-field="line.amount" t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/>
+                                    </td>
+                                    <td style="padding: 7px 10px; text-align: right; color: #64748B;">
+                                        <span t-field="line.depreciated_value" t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/>
+                                    </td>
+                                    <td style="padding: 7px 10px; text-align: right; font-weight: bold; color: #6366F1;">
+                                        <span t-field="line.remaining_value" t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+
+                    <!-- Authorization & Sign-off Block -->
+                    <div style="margin-top: 50px;">
+                        <table style="width: 100%;">
+                            <tr>
+                                <td style="width: 45%; border-top: 1px solid #94A3B8; padding-top: 8px; text-align: center; color: #475569;">
+                                    Prepared By: Asset Accountant
+                                </td>
+                                <td style="width: 10%;"></td>
+                                <td style="width: 45%; border-top: 1px solid #94A3B8; padding-top: 8px; text-align: center; color: #475569;">
+                                    Approved By: Chief Financial Officer (CFO)
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

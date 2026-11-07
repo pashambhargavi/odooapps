@@ -1,0 +1,12 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_asset_category_user,account.asset.pro.category.user,model_account_asset_pro_category,group_asset_user,1,0,0,0
+access_asset_category_manager,account.asset.pro.category.manager,model_account_asset_pro_category,group_asset_manager,1,1,1,1
+access_asset_pro_user,account.asset.pro.user,model_account_asset_pro,group_asset_user,1,1,1,0
+access_asset_pro_manager,account.asset.pro.manager,model_account_asset_pro,group_asset_manager,1,1,1,1
+access_asset_line_user,account.asset.pro.depreciation.line.user,model_account_asset_pro_depreciation_line,group_asset_user,1,1,1,0
+access_asset_line_manager,account.asset.pro.depreciation.line.manager,model_account_asset_pro_depreciation_line,group_asset_manager,1,1,1,1
+access_asset_audit_user,asset.audit.session.user,model_asset_audit_session,group_asset_user,1,1,1,0
+access_asset_audit_manager,asset.audit.session.manager,model_asset_audit_session,group_asset_manager,1,1,1,1
+access_asset_audit_line_user,asset.audit.session.line.user,model_asset_audit_session_line,group_asset_user,1,1,1,1
+access_asset_audit_line_manager,asset.audit.session.line.manager,model_asset_audit_session_line,group_asset_manager,1,1,1,1
+access_asset_disposal_wizard,asset.disposal.wizard,model_asset_disposal_wizard,group_asset_user,1,1,1,1

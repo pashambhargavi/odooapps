@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_account_asset_pro_list" model="ir.ui.view">
+        <field name="name">account.asset.pro.list</field>
+        <field name="model">account.asset.pro</field>
+        <field name="arch" type="xml">
+            <list string="Fixed Assets Register" decoration-muted="state == 'close'" decoration-danger="state == 'disposed'" decoration-info="state == 'draft'" decoration-success="state == 'open'">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="category_id"/>
+                <field name="barcode"/>
+                <field name="location_name"/>
+                <field name="custodian_name"/>
+                <field name="acquisition_date"/>
+                <field name="original_value" sum="Total Gross Cost"/>
+                <field name="total_depreciated" sum="Total Depreciated"/>
+                <field name="value_residual" sum="Total Net Book Value"/>
+                <field name="currency_id" column_invisible="True"/>
+                <field name="audit_status" widget="badge" decoration-success="audit_status == 'verified'" decoration-danger="audit_status == 'missing'" decoration-warning="audit_status == 'wrong_location'"/>
+                <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-success="state == 'open'" decoration-warning="state == 'paused'" decoration-muted="state == 'close'" decoration-danger="state == 'disposed'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_account_asset_pro_form" model="ir.ui.view">
+        <field name="name">account.asset.pro.form</field>
+        <field name="model">account.asset.pro</field>
+        <field name="arch" type="xml">
+            <form string="Fixed Asset">
+                <header>
+                    <button name="action_confirm" string="Confirm &amp; Run" type="object" class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="compute_depreciation_board" string="Compute Depreciation" type="object" class="btn-secondary" invisible="state not in ('draft', 'open')"/>
+                    <button name="action_post_depreciation_lines" string="Post Due Entries" type="object" class="btn-primary" invisible="state not in ('open', 'paused')"/>
+                    <button name="action_open_disposal_wizard" string="Dispose / Retire" type="object" class="btn-danger" invisible="state not in ('open', 'paused')"/>
+                    <button name="action_pause" string="Pause Depreciation" type="object" invisible="state != 'open'"/>
+                    <button name="action_resume" string="Resume Depreciation" type="object" invisible="state != 'paused'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,open,close"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" icon="fa-balance-scale" type="action">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value"><field name="value_residual" widget="monetary"/></span>
+                                <span class="o_stat_text">Net Book Value</span>
+                            </div>
+                        </button>
+                        <button class="oe_stat_button" icon="fa-line-chart" type="action">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value"><field name="total_depreciated" widget="monetary"/></span>
+                                <span class="o_stat_text">Accum. Deprec.</span>
+                            </div>
+                        </button>
+                    </div>
+
+                    <div class="oe_title">
+                        <label for="name" string="Asset Name / Description"/>
+                        <h1>
+                            <field name="name" placeholder="e.g. CNC Milling Machine 5-Axis, Dell Precision 5820 Workstation"/>
+                        </h1>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="badge rounded-pill text-bg-secondary"><field name="code"/></span>
+                            <span class="badge rounded-pill text-bg-info"><field name="barcode"/></span>
+                        </div>
+                    </div>
+
+                    <group>
+                        <group string="Acquisition &amp; Valuation">
+                            <field name="category_id"/>
+                            <field name="acquisition_date"/>
+                            <field name="first_depreciation_date"/>
+                            <field name="vendor_id"/>
+                            <field name="invoice_id"/>
+                            <field name="original_value"/>
+                            <field name="salvage_value"/>
+                            <field name="depreciable_value"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group string="Barcode &amp; Physical Tracking">
+                            <field name="barcode"/>
+                            <field name="serial_no"/>
+                            <field name="model_no"/>
+                            <field name="location_name"/>
+                            <field name="custodian_name"/>
+                            <field name="audit_status" widget="badge" decoration-success="audit_status == 'verified'" decoration-danger="audit_status == 'missing'" decoration-warning="audit_status == 'wrong_location'"/>
+                            <field name="last_audit_date"/>
+                            <field name="last_audit_session_id"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Depreciation Board" name="depreciation_board">
+                            <field name="depreciation_line_ids" readonly="state in ('close', 'disposed')">
+                                <list string="Depreciation Lines" decoration-success="move_check">
+                                    <field name="sequence"/>
+                                    <field name="depreciation_date"/>
+                                    <field name="amount" sum="Total Period Depreciation"/>
+                                    <field name="depreciated_value"/>
+                                    <field name="remaining_value"/>
+                                    <field name="move_id"/>
+                                    <field name="move_check" widget="boolean_toggle"/>
+                                    <button name="action_post_line" type="object" string="Post" icon="fa-check" invisible="move_check" class="btn-sm btn-link"/>
+                                </list>
+                            </field>
+                        </page>
+
+                        <page string="Depreciation Schedule Parameters" name="parameters">
+                            <group>
+                                <group string="Method">
+                                    <field name="method"/>
+                                    <label for="method_number" string="Duration"/>
+                                    <div class="o_row">
+                                        <field name="method_number"/>
+                                        <field name="method_period"/>
+                                    </div>
+                                    <field name="method_progress_factor" invisible="method != 'degressive'"/>
+                                    <field name="prorata"/>
+                                </group>
+                                <group string="General Ledger Accounts">
+                                    <field name="journal_id"/>
+                                    <field name="account_asset_id"/>
+                                    <field name="account_depreciation_id"/>
+                                    <field name="account_expense_id"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Retirement &amp; Disposal Audit" name="disposal_audit" invisible="state != 'disposed'">
+                            <group>
+                                <group string="Disposal Settlement">
+                                    <field name="disposal_date"/>
+                                    <field name="disposal_amount"/>
+                                    <field name="disposal_move_id"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_account_asset_pro_search" model="ir.ui.view">
+        <field name="name">account.asset.pro.search</field>
+        <field name="model">account.asset.pro</field>
+        <field name="arch" type="xml">
+            <search string="Search Fixed Assets">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="barcode"/>
+                <field name="serial_no"/>
+                <field name="location_name"/>
+                <field name="custodian_name"/>
+                <field name="category_id"/>
+                <filter string="Running Assets" name="filter_running" domain="[('state', '=', 'open')]"/>
+                <filter string="Draft Assets" name="filter_draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Fully Depreciated" name="filter_closed" domain="[('state', '=', 'close')]"/>
+                <filter string="Disposed / Retired" name="filter_disposed" domain="[('state', '=', 'disposed')]"/>
+                <separator/>
+                <filter string="Audit: Verified" name="filter_verified" domain="[('audit_status', '=', 'verified')]"/>
+                <filter string="Audit: Missing" name="filter_missing" domain="[('audit_status', '=', 'missing')]"/>
+                <filter string="Audit: Wrong Location" name="filter_wrong_loc" domain="[('audit_status', '=', 'wrong_location')]"/>
+                <group>
+                    <filter string="Category" name="group_category" context="{'group_by': 'category_id'}"/>
+                    <filter string="Physical Location" name="group_location" context="{'group_by': 'location_name'}"/>
+                    <filter string="Custodian" name="group_custodian" context="{'group_by': 'custodian_name'}"/>
+                    <filter string="Status" name="group_status" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_account_asset_pro" model="ir.actions.act_window">
+        <field name="name">Fixed Assets Register</field>
+        <field name="res_model">account.asset.pro</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_account_asset_pro_search"/>
+        <field name="context">{'search_default_filter_running': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Register your first capital Fixed Asset!
+            </p>
+            <p>
+                Track gross cost, generate automated Straight-Line or Declining Balance depreciation schedules, and print barcode/QR audit labels.
+            </p>
+        </field>
+    </record>
+</odoo>
