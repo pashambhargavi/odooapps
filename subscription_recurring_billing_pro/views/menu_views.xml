@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Top-Level Root Menu -->
+    <menuitem id="menu_subscription_root"
+              name="Subscriptions Pro"
+              web_icon="subscription_recurring_billing_pro,static/description/icon.png"
+              sequence="35"
+              groups="group_subscription_user"/>
+
+    <!-- Main Operations -->
+    <menuitem id="menu_subscription_main"
+              name="Subscriptions"
+              parent="menu_subscription_root"
+              sequence="10"/>
+
+    <menuitem id="menu_subscription_contracts"
+              name="All Subscriptions"
+              parent="menu_subscription_main"
+              action="action_subscription_pro"
+              sequence="10"/>
+
+    <!-- Configuration -->
+    <menuitem id="menu_subscription_config"
+              name="Configuration"
+              parent="menu_subscription_root"
+              sequence="50"
+              groups="group_subscription_manager"/>
+
+    <menuitem id="menu_subscription_plans"
+              name="Subscription Plans"
+              parent="menu_subscription_config"
+              action="action_subscription_plan_pro"
+              sequence="10"/>
+
+    <!-- Integration in Sales Menu -->
+    <menuitem id="menu_sale_subscription_pro"
+              name="Subscriptions"
+              parent="sale.sale_menu_root"
+              action="action_subscription_pro"
+              sequence="15"
+              groups="group_subscription_user"/>
+</odoo>
