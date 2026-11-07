@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_subscription_contract">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <div class="page" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #1E293B; font-size: 13px;">
+                    <!-- Contract Header -->
+                    <div style="border-bottom: 3px solid #6366F1; padding-bottom: 12px; margin-bottom: 20px;">
+                        <table style="width: 100%;">
+                            <tr>
+                                <td style="vertical-align: top;">
+                                    <h2 style="margin: 0; color: #0F172A; font-weight: bold; font-size: 24px;">
+                                        RECURRING SUBSCRIPTION CONTRACT
+                                    </h2>
+                                    <div style="color: #64748B; font-size: 13px; margin-top: 4px;">
+                                        Master Services &amp; SaaS Subscription Agreement
+                                    </div>
+                                </td>
+                                <td style="text-align: right; vertical-align: top;">
+                                    <div style="font-size: 16px; font-weight: bold; color: #6366F1;">
+                                        <span t-field="doc.name"/>
+                                    </div>
+                                    <div style="color: #64748B; font-size: 12px;">
+                                        Start Date: <span t-field="doc.start_date"/>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- Contract Parties Grid -->
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 25px; background-color: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px;">
+                        <tr>
+                            <td style="padding: 10px 15px; width: 25%; font-weight: bold; color: #475569;">Service Provider:</td>
+                            <td style="padding: 10px 15px; width: 25%; font-weight: bold; color: #0F172A;"><span t-field="doc.company_id.name"/></td>
+                            <td style="padding: 10px 15px; width: 25%; font-weight: bold; color: #475569;">Subscriber (Customer):</td>
+                            <td style="padding: 10px 15px; width: 25%; font-weight: bold; color: #0F172A;"><span t-field="doc.partner_id.name"/></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px 15px; font-weight: bold; color: #475569;">Subscription Plan:</td>
+                            <td style="padding: 10px 15px; color: #0F172A;"><span t-field="doc.plan_id.name"/></td>
+                            <td style="padding: 10px 15px; font-weight: bold; color: #475569;">Billing Cycle:</td>
+                            <td style="padding: 10px 15px; color: #0F172A;"><span t-field="doc.plan_id.billing_interval"/></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px 15px; font-weight: bold; color: #475569;">Monthly MRR:</td>
+                            <td style="padding: 10px 15px; font-weight: bold; color: #6366F1;"><span t-field="doc.recurring_mrr" t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/></td>
+                            <td style="padding: 10px 15px; font-weight: bold; color: #475569;">Annual ARR:</td>
+                            <td style="padding: 10px 15px; font-weight: bold; color: #10B981;"><span t-field="doc.recurring_arr" t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px 15px; font-weight: bold; color: #475569;">Next Invoicing Date:</td>
+                            <td style="padding: 10px 15px; color: #0F172A;"><span t-field="doc.next_invoice_date"/></td>
+                            <td style="padding: 10px 15px; font-weight: bold; color: #475569;">Auto-Renewal:</td>
+                            <td style="padding: 10px 15px; color: #0F172A;"><span t-esc="'Enabled (Evergreen)' if doc.auto_renew else 'Fixed Term'"/></td>
+                        </tr>
+                    </table>
+
+                    <!-- Recurring Line Items Table -->
+                    <h4 style="color: #0F172A; font-weight: bold; border-bottom: 2px solid #E2E8F0; padding-bottom: 6px; margin-bottom: 12px;">
+                        Recurring Plan Services &amp; Line Items
+                    </h4>
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 25px; font-size: 12px;">
+                        <thead>
+                            <tr style="background-color: #0F172A; color: #FFFFFF;">
+                                <th style="padding: 8px 10px; text-align: left; width: 45%;">Service / Item Description</th>
+                                <th style="padding: 8px 10px; text-align: right; width: 15%;">Quantity</th>
+                                <th style="padding: 8px 10px; text-align: right; width: 20%;">Unit Price</th>
+                                <th style="padding: 8px 10px; text-align: right; width: 20%;">Recurring Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="doc.line_ids" t-as="line">
+                                <tr style="border-bottom: 1px solid #E2E8F0;">
+                                    <td style="padding: 8px 10px; color: #0F172A; font-weight: bold;"><span t-field="line.name"/></td>
+                                    <td style="padding: 8px 10px; text-align: right; color: #475569;"><span t-field="line.quantity"/></td>
+                                    <td style="padding: 8px 10px; text-align: right; color: #475569;"><span t-field="line.price_unit" t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/></td>
+                                    <td style="padding: 8px 10px; text-align: right; font-weight: bold; color: #6366F1;">
+                                        <span t-field="line.subtotal" t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                        <tfoot>
+                            <tr style="background-color: #F8FAFC; font-weight: bold;">
+                                <td colspan="3" style="padding: 10px; text-align: right; color: #0F172A;">Total Recurring Per Cycle:</td>
+                                <td style="padding: 10px; text-align: right; color: #6366F1; font-size: 14px;">
+                                    <span t-field="doc.recurring_total" t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                    <!-- Legal & Terms -->
+                    <div style="font-size: 10px; color: #64748B; line-height: 1.5; margin-bottom: 30px; border-top: 1px solid #CBD5E1; padding-top: 10px;">
+                        <p style="margin: 0 0 6px 0;"><strong>Terms &amp; Conditions:</strong> Invoices are generated automatically on each scheduled renewal date. Payment is due within the configured plan grace period. Either party may cancel the contract prior to the next billing date.</p>
+                    </div>
+
+                    <!-- Signatures -->
+                    <div style="margin-top: 40px;">
+                        <table style="width: 100%;">
+                            <tr>
+                                <td style="width: 45%; border-top: 1px solid #94A3B8; padding-top: 8px; text-align: center; color: #475569;">
+                                    Authorized Signature: <span t-field="doc.company_id.name"/>
+                                </td>
+                                <td style="width: 10%;"></td>
+                                <td style="width: 45%; border-top: 1px solid #94A3B8; padding-top: 8px; text-align: center; color: #475569;">
+                                    Accepted By: <span t-field="doc.partner_id.name"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>
