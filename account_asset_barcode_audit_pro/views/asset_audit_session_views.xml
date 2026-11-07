@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_asset_audit_session_list" model="ir.ui.view">
+        <field name="name">asset.audit.session.list</field>
+        <field name="model">asset.audit.session</field>
+        <field name="arch" type="xml">
+            <tree string="Physical Asset Audit Sessions" decoration-info="state == 'draft'" decoration-warning="state == 'in_progress'" decoration-success="state == 'done'">
+                <field name="name"/>
+                <field name="audit_date"/>
+                <field name="auditor_id"/>
+                <field name="target_location"/>
+                <field name="total_expected"/>
+                <field name="total_verified"/>
+                <field name="total_missing"/>
+                <field name="total_discrepant"/>
+                <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-warning="state == 'in_progress'" decoration-success="state == 'done'"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_asset_audit_session_form" model="ir.ui.view">
+        <field name="name">asset.audit.session.form</field>
+        <field name="model">asset.audit.session</field>
+        <field name="arch" type="xml">
+            <form string="Physical Asset Audit Session">
+                <header>
+                    <button name="action_start_audit" string="Start Audit Session" type="object" class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_complete_audit" string="Finalize &amp; Reconcile Audit" type="object" class="btn-primary" invisible="state != 'in_progress'"/>
+                    <button name="action_reconcile_locations" string="Auto-Update Discrepant Locations" type="object" class="btn-secondary" invisible="state not in ('in_progress', 'done')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,in_progress,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" icon="fa-cubes">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value"><field name="total_expected"/></span>
+                                <span class="o_stat_text">Expected</span>
+                            </div>
+                        </button>
+                        <button class="oe_stat_button" icon="fa-check-circle" style="color: #10B981;">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value" style="color: #10B981;"><field name="total_verified"/></span>
+                                <span class="o_stat_text">Verified</span>
+                            </div>
+                        </button>
+                        <button class="oe_stat_button" icon="fa-exclamation-triangle" style="color: #EF4444;">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value" style="color: #EF4444;"><field name="total_missing"/></span>
+                                <span class="o_stat_text">Missing</span>
+                            </div>
+                        </button>
+                        <button class="oe_stat_button" icon="fa-map-marker" style="color: #F59E0B;">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value" style="color: #F59E0B;"><field name="total_discrepant"/></span>
+                                <span class="o_stat_text">Discrepant</span>
+                            </div>
+                        </button>
+                    </div>
+
+                    <div class="oe_title">
+                        <label for="name" string="Audit Session Reference"/>
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group string="Audit Parameters">
+                            <field name="audit_date"/>
+                            <field name="auditor_id"/>
+                            <field name="target_location"/>
+                            <field name="category_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group string="Live Barcode / QR Scanner Input" invisible="state != 'in_progress'">
+                            <div class="o_row">
+                                <field name="barcode_scan_input" placeholder="Scan Barcode / QR label..." class="oe_inline"/>
+                                <button name="action_scan_barcode" string="Scan / Enter" type="object" class="btn-success btn-sm"/>
+                            </div>
+                            <p class="text-muted small">
+                                Compatible with USB/Bluetooth laser barcode scanners, handheld rugged terminals, and mobile device cameras.
+                            </p>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Physical Audit Inspection Lines" name="audit_lines">
+                            <field name="line_ids">
+                                <tree string="Audit Lines" decoration-success="status == 'verified'" decoration-danger="status == 'missing'" decoration-warning="status == 'wrong_location'" decoration-muted="status == 'pending'">
+                                    <field name="asset_id"/>
+                                    <field name="barcode"/>
+                                    <field name="expected_location"/>
+                                    <field name="scanned_location"/>
+                                    <field name="scan_datetime"/>
+                                    <field name="status" widget="badge" decoration-success="status == 'verified'" decoration-danger="status == 'missing'" decoration-warning="status == 'wrong_location'" decoration-muted="status == 'pending'" decoration-info="status == 'unregistered'"/>
+                                    <field name="notes"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_asset_audit_session" model="ir.actions.act_window">
+        <field name="name">Barcode Audit Sessions</field>
+        <field name="res_model">asset.audit.session</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Start a new Physical Asset Barcode Audit Session!
+            </p>
+            <p>
+                Scan physical asset tags across warehouses, rooms, or floors to verify custody, detect missing items, and resolve location discrepancies.
+            </p>
+        </field>
+    </record>
+</odoo>
