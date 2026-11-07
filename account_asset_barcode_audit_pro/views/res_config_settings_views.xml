@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_asset" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.asset</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="85"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="Fixed Assets Pro" string="Fixed Assets Pro" name="account_asset_barcode_audit_pro">
+                    <block title="Fixed Asset &amp; Barcode Audit Configuration" id="asset_settings">
+                        <setting string="Automatic Schedule Posting" help="Automatically post due depreciation journal entries on the scheduled date via daily automated cron.">
+                            <field name="asset_auto_post_depreciation"/>
+                        </setting>
+                        <setting string="Strict Physical Audit Verification" help="Require physical barcode scan confirmation prior to permitting asset location or custodian reallocations.">
+                            <field name="asset_strict_audit_mode"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+</odoo>
