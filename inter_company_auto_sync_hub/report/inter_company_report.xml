@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_inter_company_rule" model="ir.actions.report">
+        <field name="name">Inter-Company Rule &amp; Audit Statement</field>
+        <field name="model">inter.company.rule</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">inter_company_auto_sync_hub.report_inter_company_template</field>
+        <field name="report_file">inter_company_auto_sync_hub.report_inter_company_template</field>
+        <field name="print_report_name">'Inter_Company_Rule_%s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_inter_company_rule"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_inter_company_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #1E293B;">
+                        <div class="row mb-4">
+                            <div class="col-8">
+                                <h2 style="font-weight: 800; color: #0F172A;">Inter-Company Synchronization Policy</h2>
+                                <h4 style="color: #0284C7;"><t t-esc="doc.name"/></h4>
+                            </div>
+                            <div class="col-4 text-end">
+                                <span class="badge bg-primary fs-6 p-2"><t t-esc="'ACTIVE' if doc.active else 'INACTIVE'"/></span>
+                                <div class="mt-2 text-muted"><strong>Elimination Code:</strong> <t t-esc="doc.elimination_code or '-'"/></div>
+                            </div>
+                        </div>
+
+                        <!-- Entity Matrix -->
+                        <div class="row mb-4">
+                            <div class="col-6">
+                                <div class="p-3 bg-light rounded border">
+                                    <h5 style="color: #0F172A; font-weight: 700;">Source Entity</h5>
+                                    <strong>Company:</strong> <t t-esc="doc.company_id.name"/><br/>
+                                    <strong>Sister Partner in Source:</strong> <t t-esc="doc.partner_id.name"/>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="p-3 bg-light rounded border">
+                                    <h5 style="color: #0F172A; font-weight: 700;">Target Sister Entity</h5>
+                                    <strong>Company:</strong> <t t-esc="doc.target_company_id.name"/><br/>
+                                    <strong>Source Partner in Target:</strong> <t t-esc="doc.target_partner_id.name if doc.target_partner_id else '-'"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Configured Rules -->
+                        <h5 style="border-bottom: 2px solid #E2E8F0; padding-bottom: 6px; font-weight: 700; color: #0F172A;">
+                            Document Mirroring Policies
+                        </h5>
+                        <table class="table table-sm table-bordered mb-4">
+                            <thead>
+                                <tr style="background-color: #F8FAFC;">
+                                    <th>Policy Direction</th>
+                                    <th>Status</th>
+                                    <th>Auto-Validation</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Purchase Order &#8594; Sales Order</td>
+                                    <td><t t-esc="'ENABLED' if doc.sync_po_to_so else 'DISABLED'"/></td>
+                                    <td><t t-esc="'Auto-Confirm SO' if doc.auto_confirm_so else 'Draft SO'"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Sales Order &#8594; Purchase Order</td>
+                                    <td><t t-esc="'ENABLED' if doc.sync_so_to_po else 'DISABLED'"/></td>
+                                    <td><t t-esc="'Auto-Confirm PO' if doc.auto_confirm_po else 'Draft PO'"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Customer Invoice &#8594; Vendor Bill</td>
+                                    <td><t t-esc="'ENABLED' if doc.sync_invoice_to_bill else 'DISABLED'"/></td>
+                                    <td><t t-esc="'Auto-Post Bill' if doc.auto_validate_bill else 'Draft Bill'"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Delivery Order &#8594; Stock Receipt</td>
+                                    <td><t t-esc="'ENABLED' if doc.sync_delivery_to_receipt else 'DISABLED'"/></td>
+                                    <td><t t-esc="'Auto-Validate Receipt' if doc.auto_validate_receipt else 'Ready State'"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- Transfer Pricing -->
+                        <h5 style="border-bottom: 2px solid #E2E8F0; padding-bottom: 6px; font-weight: 700; color: #0F172A;">
+                            Transfer Pricing Governance
+                        </h5>
+                        <div class="p-3 mb-4 bg-light rounded border">
+                            <strong>Pricing Rule:</strong> <t t-esc="dict(doc._fields['pricing_rule'].selection).get(doc.pricing_rule)"/><br/>
+                            <t t-if="doc.pricing_rule == 'cost_plus_margin'">
+                                <strong>Markup Percentage:</strong> <t t-esc="doc.margin_percent"/>%
+                            </t>
+                            <t t-if="doc.pricing_rule == 'discount_from_list'">
+                                <strong>Catalog Discount:</strong> <t t-esc="doc.discount_percent"/>%
+                            </t>
+                            <t t-if="doc.pricing_rule == 'custom_pricelist'">
+                                <strong>Target Pricelist:</strong> <t t-esc="doc.pricelist_id.name"/>
+                            </t>
+                        </div>
+
+                        <!-- Execution Logs -->
+                        <h5 style="border-bottom: 2px solid #E2E8F0; padding-bottom: 6px; font-weight: 700; color: #0F172A;">
+                            Recent Synchronized Transactions
+                        </h5>
+                        <table class="table table-sm table-striped">
+                            <thead>
+                                <tr style="background-color: #F1F5F9;">
+                                    <th>Date</th>
+                                    <th>Source Ref</th>
+                                    <th>Mirrored Ref</th>
+                                    <th class="text-end">Amount</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="doc.log_ids[:10]" t-as="log">
+                                    <tr>
+                                        <td><t t-esc="log.create_date"/></td>
+                                        <td><t t-esc="log.source_doc_ref"/> (<t t-esc="log.source_doc_type"/>)</td>
+                                        <td><t t-esc="log.target_doc_ref"/> (<t t-esc="log.target_doc_type"/>)</td>
+                                        <td class="text-end"><t t-esc="log.amount" t-options="{'widget': 'monetary', 'display_currency': log.currency_id}"/></td>
+                                        <td><t t-esc="log.state.upper()"/></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+
+                        <div class="mt-5 pt-4 text-muted small text-center" style="border-top: 1px solid #E2E8F0;">
+                            Audited with Inter-Company Automated Transactions &amp; Mirroring Hub &#8226; Certified Group Governance
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

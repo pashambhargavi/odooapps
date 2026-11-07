@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_intercompany" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.intercompany</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="90"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('settings')]" position="inside">
+                <div class="app_settings_block" data-string="Inter-Company Hub" string="Inter-Company Hub" data-key="inter_company_auto_sync_hub">
+                    <h2>Inter-Company Document Synchronization</h2>
+                    <div class="row mt16 o_settings_container" id="intercompany_settings">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="intercompany_auto_sync_enabled"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <span class="o_form_label">Automated Mirroring</span>
+                                <div class="text-muted">
+                                    Enable automated reciprocal document generation for Purchase Orders, Sales Orders, Invoices, and Stock Pickings across group entities.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

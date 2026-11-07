@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="module_category_inter_company" model="ir.module.category">
+        <field name="name">Inter-Company Automation Hub</field>
+        <field name="description">Manage reciprocal transaction rules, automated document mirroring, and transfer pricing.</field>
+        <field name="sequence">50</field>
+    </record>
+
+    <record id="group_inter_company_user" model="res.groups">
+        <field name="name">Inter-Company User</field>
+        <field name="category_id" ref="module_category_inter_company"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <record id="group_inter_company_manager" model="res.groups">
+        <field name="name">Inter-Company Administrator</field>
+        <field name="category_id" ref="module_category_inter_company"/>
+        <field name="implied_ids" eval="[(4, ref('group_inter_company_user')), (4, ref('base.group_system'))]"/>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+
+    <data noupdate="1">
+        <record id="rule_inter_company_rule_multi_company" model="ir.rule">
+            <field name="name">Inter-Company Rule Multi-Company</field>
+            <field name="model_id" ref="model_inter_company_rule"/>
+            <field name="domain_force">['|', ('company_id', 'in', company_ids), ('target_company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="rule_inter_company_log_multi_company" model="ir.rule">
+            <field name="name">Inter-Company Log Multi-Company</field>
+            <field name="model_id" ref="model_inter_company_log"/>
+            <field name="domain_force">['|', ('source_company_id', 'in', company_ids), ('target_company_id', 'in', company_ids)]</field>
+        </record>
+    </data>
+</odoo>

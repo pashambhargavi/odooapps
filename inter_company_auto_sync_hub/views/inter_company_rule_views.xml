@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Inter-Company Rule List View -->
+    <record id="view_inter_company_rule_tree" model="ir.ui.view">
+        <field name="name">inter.company.rule.list</field>
+        <field name="model">inter.company.rule</field>
+        <field name="arch" type="xml">
+            <list string="Inter-Company Sync Rules">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="company_id"/>
+                <field name="target_company_id"/>
+                <field name="partner_id"/>
+                <field name="pricing_rule"/>
+                <field name="sync_po_to_so" widget="boolean_toggle"/>
+                <field name="sync_invoice_to_bill" widget="boolean_toggle"/>
+                <field name="sync_delivery_to_receipt" widget="boolean_toggle"/>
+                <field name="active" widget="boolean_toggle"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Inter-Company Rule Form View -->
+    <record id="view_inter_company_rule_form" model="ir.ui.view">
+        <field name="name">inter.company.rule.form</field>
+        <field name="model">inter.company.rule</field>
+        <field name="arch" type="xml">
+            <form string="Inter-Company Sync Rule">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_logs" type="object" class="oe_stat_button" icon="fa-history">
+                            <field name="log_count" widget="statinfo" string="Sync Logs"/>
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+                    <div class="oe_title">
+                        <label for="name" string="Rule Name"/>
+                        <h1>
+                            <field name="name" placeholder="e.g. US Parent to EU Subsidiary Automated Trade"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group string="Entity Architecture">
+                            <field name="company_id" options="{'no_create': True}"/>
+                            <field name="partner_id" options="{'no_create': True}"/>
+                            <field name="active" invisible="1"/>
+                        </group>
+                        <group string="Target Sister Entity">
+                            <field name="target_company_id" options="{'no_create': True}"/>
+                            <field name="target_partner_id" options="{'no_create': True}"/>
+                            <field name="elimination_code" placeholder="e.g. IC-ELIM-01"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Document Mirroring Rules" name="doc_rules">
+                            <group>
+                                <group string="Procurement &amp; Sales Mirroring">
+                                    <field name="sync_po_to_so"/>
+                                    <field name="auto_confirm_so" invisible="not sync_po_to_so"/>
+                                    <field name="sync_so_to_po"/>
+                                    <field name="auto_confirm_po" invisible="not sync_so_to_po"/>
+                                </group>
+                                <group string="Invoicing &amp; Logistics Sync">
+                                    <field name="sync_invoice_to_bill"/>
+                                    <field name="auto_validate_bill" invisible="not sync_invoice_to_bill"/>
+                                    <field name="sync_delivery_to_receipt"/>
+                                    <field name="auto_validate_receipt" invisible="not sync_delivery_to_receipt"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Transfer Pricing &amp; Margins" name="pricing_rules">
+                            <group>
+                                <group string="Pricing Calculation Engine">
+                                    <field name="pricing_rule" widget="radio"/>
+                                </group>
+                                <group string="Margin / Discount Parameters">
+                                    <field name="margin_percent" invisible="pricing_rule != 'cost_plus_margin'"/>
+                                    <field name="discount_percent" invisible="pricing_rule != 'discount_from_list'"/>
+                                    <field name="pricelist_id" invisible="pricing_rule != 'custom_pricelist'"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Recent Execution Logs" name="logs_tab">
+                            <field name="log_ids" readonly="1">
+                                <tree string="Execution Logs" limit="15">
+                                    <field name="create_date" string="Timestamp"/>
+                                    <field name="source_doc_type"/>
+                                    <field name="source_doc_ref"/>
+                                    <field name="target_doc_type"/>
+                                    <field name="target_doc_ref"/>
+                                    <field name="amount" widget="monetary"/>
+                                    <field name="state" widget="badge" decoration-success="state == 'success'" decoration-warning="state == 'warning'" decoration-danger="state == 'error'"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Inter-Company Rule Search View -->
+    <record id="view_inter_company_rule_search" model="ir.ui.view">
+        <field name="name">inter.company.rule.search</field>
+        <field name="model">inter.company.rule</field>
+        <field name="arch" type="xml">
+            <search string="Search Inter-Company Rules">
+                <field name="name"/>
+                <field name="company_id"/>
+                <field name="target_company_id"/>
+                <field name="partner_id"/>
+                <filter string="Archived" name="archived" domain="[('active', '=', False)]"/>
+                <separator/>
+                <group>
+                    <filter string="Source Entity" name="grp_source" context="{'group_by': 'company_id'}"/>
+                    <filter string="Target Sister Entity" name="grp_target" context="{'group_by': 'target_company_id'}"/>
+                    <filter string="Pricing Rule" name="grp_pricing" context="{'group_by': 'pricing_rule'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Inter-Company Logs List View -->
+    <record id="view_inter_company_log_tree" model="ir.ui.view">
+        <field name="name">inter.company.log.list</field>
+        <field name="model">inter.company.log</field>
+        <field name="arch" type="xml">
+            <list string="Transaction Logs" create="0" edit="0">
+                <field name="create_date" string="Date"/>
+                <field name="rule_id"/>
+                <field name="source_company_id"/>
+                <field name="source_doc_type"/>
+                <field name="source_doc_ref"/>
+                <field name="target_company_id"/>
+                <field name="target_doc_type"/>
+                <field name="target_doc_ref"/>
+                <field name="amount" widget="monetary"/>
+                <field name="currency_id" column_invisible="True"/>
+                <field name="state" widget="badge" decoration-success="state == 'success'" decoration-warning="state == 'warning'" decoration-danger="state == 'error'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Inter-Company Log Form View -->
+    <record id="view_inter_company_log_form" model="ir.ui.view">
+        <field name="name">inter.company.log.form</field>
+        <field name="model">inter.company.log</field>
+        <field name="arch" type="xml">
+            <form string="Inter-Company Audit Log" create="0" edit="0">
+                <sheet>
+                    <group>
+                        <group string="Originating Document">
+                            <field name="rule_id"/>
+                            <field name="source_company_id"/>
+                            <field name="source_doc_type"/>
+                            <field name="source_doc_ref"/>
+                        </group>
+                        <group string="Mirrored Target Document">
+                            <field name="target_company_id"/>
+                            <field name="target_doc_type"/>
+                            <field name="target_doc_ref"/>
+                            <field name="amount" widget="monetary"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="state" widget="badge" decoration-success="state == 'success'" decoration-warning="state == 'warning'" decoration-danger="state == 'error'"/>
+                        </group>
+                    </group>
+                    <group string="Audit Execution Details">
+                        <field name="details" readonly="1" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Window Action: Rules -->
+    <record id="action_inter_company_rule" model="ir.actions.act_window">
+        <field name="name">Inter-Company Sync Rules</field>
+        <field name="res_model">inter.company.rule</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Define your first Inter-Company Synchronization Rule!
+            </p>
+            <p>
+                Configure automated reciprocal Purchase Orders, Sales Orders, Customer Invoices, and Stock Pickings between sister companies.
+            </p>
+        </field>
+    </record>
+
+    <!-- Window Action: Logs -->
+    <record id="action_inter_company_log" model="ir.actions.act_window">
+        <field name="name">Transaction Execution Logs</field>
+        <field name="res_model">inter.company.log</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>
