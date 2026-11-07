@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_inter_company_rule_user,inter.company.rule.user,model_inter_company_rule,inter_company_auto_sync_hub.group_inter_company_user,1,0,0,0
+access_inter_company_rule_manager,inter.company.rule.manager,model_inter_company_rule,inter_company_auto_sync_hub.group_inter_company_manager,1,1,1,1
+access_inter_company_log_user,inter.company.log.user,model_inter_company_log,inter_company_auto_sync_hub.group_inter_company_user,1,0,0,0
+access_inter_company_log_manager,inter.company.log.manager,model_inter_company_log,inter_company_auto_sync_hub.group_inter_company_manager,1,1,1,1
